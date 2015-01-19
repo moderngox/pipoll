@@ -1,9 +1,11 @@
-package com.pipoll;
+package com.pipoll.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.pipoll.R;
 
 
 public class MainActivity extends Activity {

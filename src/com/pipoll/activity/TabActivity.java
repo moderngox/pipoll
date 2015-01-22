@@ -18,11 +18,11 @@ import com.pipoll.fragment.PollListFragment;
 import com.pipoll.fragment.ProfileFragment;
 import com.pipoll.fragment.TopTrendsFragment;
 
+@SuppressWarnings("deprecation")
 public class TabActivity extends FragmentActivity {
 	private static final int TAB_COUNT = 4;
 	private ViewPager mViewPager;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -68,7 +68,9 @@ public class TabActivity extends FragmentActivity {
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		// Create a tab listener that is called when the user changes tabs.
+		@SuppressWarnings("unused")
 		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+			@SuppressWarnings("unused")
 			public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
 				// show the given tab
 			}

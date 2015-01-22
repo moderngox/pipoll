@@ -13,9 +13,6 @@ import com.andtinder.model.CardModel;
 import com.andtinder.model.CardModel.OnCardDimissedListener;
 import com.andtinder.view.CardContainer;
 import com.pipoll.R;
-import com.pipoll.R.drawable;
-import com.pipoll.R.id;
-import com.pipoll.R.layout;
 import com.pipoll.adapter.CustomCardStackAdapter;
 
 public class CardActivity extends Activity {
@@ -49,13 +46,13 @@ public class CardActivity extends Activity {
 	}
 
 	private class CardDismissedListenerImpl implements CardModel.OnCardDimissedListener {
-		private Context mContext;
+		// private Context mContext;
 		private ArrayList<CardModel> mCards = new ArrayList<CardModel>();
 
 		private int currentIndex;
 
 		CardDismissedListenerImpl(Context c, ArrayList<CardModel> cards) {
-			mContext = c;
+			// mContext = c;
 			mCards = cards;
 			currentIndex = cards.size() - 1;
 

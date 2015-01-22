@@ -1,8 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Pipoll</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">336627273204303</string>
+    <string name="title_activity_tab">TabActivity</string>
+    <string name="title_activity_card">CardActivity</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="image_card">image card</string>
 
 </resources>

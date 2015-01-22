@@ -4,3 +4,4 @@
 bin
 gen
 /lint.xml
+*.properties

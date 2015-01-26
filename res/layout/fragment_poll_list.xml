@@ -7,6 +7,47 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="poll list fragment here" />
+        android:text="poll list fragment starts here" />
+
+    <com.pipoll.customview.PollListViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/poll_view_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/image_border" >
+
+        <!-- <android.support.v4.view.PagerTabStrip
+            android:id="@+id/poll_pager_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp" /> -->
+    </com.pipoll.customview.PollListViewPager>
+
+    <!--<android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/poll_view_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/image_border" >
+
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/poll_pager_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp" />
+    </android.support.v4.view.ViewPager>-->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="poll list fragment ends here" />
 
 </LinearLayout>

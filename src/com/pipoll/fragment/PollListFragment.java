@@ -1,17 +1,24 @@
 package com.pipoll.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pipoll.R;
+import com.pipoll.customview.PollListViewPager;
 
 public class PollListFragment extends Fragment {
 
 	TextView mTextView;
+	//ViewPager mPollViewPager; 
+	PollListViewPager mPollViewPager;
 
 	// public static ProfileFragment newInstance(UUID crimeId) {
 	// Bundle args = new Bundle();
@@ -46,6 +53,39 @@ public class PollListFragment extends Fragment {
 
 		return v;
 	}
+	
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		 mPollViewPager = (PollListViewPager) view.findViewById(R.id.poll_view_pager);
+		 mPollViewPager.setAdapter(new PollAdapter(getChildFragmentManager()));
+	}
+	
+	public static class PollAdapter extends FragmentPagerAdapter {
+
+        public PollAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+//            Bundle args = new Bundle();
+//            args.putInt(NotificationFragment.POSITION_KEY, position);
+            //return NotificationFragment.newInstance(args);
+        	return NotificationFragment.newInstance();
+        }
+        
+        @Override
+		public CharSequence getPageTitle(int position) {
+			return "Sondage #" + position;
+		}
+    }
+	
 	//
 	// @Override
 	// public void onActivityResult(int requestCode, int resultCode, Intent data) {

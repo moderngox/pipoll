@@ -4,8 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +58,10 @@ public class PollListFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 		 mPollViewPager = (PollListViewPager) view.findViewById(R.id.poll_view_pager);
 		 mPollViewPager.setAdapter(new PollAdapter(getChildFragmentManager()));
+		 
 	}
 	
-	public static class PollAdapter extends FragmentPagerAdapter {
+	public static class PollAdapter extends FragmentStatePagerAdapter {
 
         public PollAdapter(FragmentManager fm) {
             super(fm);
@@ -77,7 +77,7 @@ public class PollListFragment extends Fragment {
 //            Bundle args = new Bundle();
 //            args.putInt(NotificationFragment.POSITION_KEY, position);
             //return NotificationFragment.newInstance(args);
-        	return NotificationFragment.newInstance();
+        	return PollFragment.newInstance();
         }
         
         @Override

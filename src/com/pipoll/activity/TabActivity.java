@@ -31,6 +31,7 @@ public class TabActivity extends FragmentActivity {
 		mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
 		FragmentManager fm = getSupportFragmentManager();
+
 		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
 			@Override
 			public int getCount() {
@@ -59,6 +60,15 @@ public class TabActivity extends FragmentActivity {
 			public CharSequence getPageTitle(int position) {
 				String res = "super titre " + position;
 				return res;
+			}
+		});
+
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				// When swiping between pages, select the
+				// corresponding tab.
+				getActionBar().setSelectedNavigationItem(position);
 			}
 		});
 
@@ -106,8 +116,7 @@ public class TabActivity extends FragmentActivity {
 
 		// Add 3 tabs, specifying the tab's text and TabListener
 		for (int i = 0; i < 3; i++) {
-			actionBar.addTab(actionBar.newTab()
-					.setText(mViewPager.getAdapter().getPageTitle(i))
+			actionBar.addTab(actionBar.newTab().setText(mViewPager.getAdapter().getPageTitle(i))
 					.setTabListener(tabListener));
 		}
 

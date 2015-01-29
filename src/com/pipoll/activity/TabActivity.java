@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -18,6 +18,10 @@ import com.pipoll.fragment.PollListFragment;
 import com.pipoll.fragment.ProfileFragment;
 import com.pipoll.fragment.TopTrendsFragment;
 
+/**
+ * @author Bulbi
+ * 
+ */
 @SuppressWarnings("deprecation")
 public class TabActivity extends FragmentActivity {
 	private static final int TAB_COUNT = 4;
@@ -28,10 +32,12 @@ public class TabActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_tab);
-		mViewPager = (ViewPager) findViewById(R.id.viewPager);
+		mViewPager = (ViewPager) findViewById(R.id.view_pager_tab);
 
 		FragmentManager fm = getSupportFragmentManager();
-		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+
+		// mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
+		mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
 			@Override
 			public int getCount() {
 				return TAB_COUNT;
@@ -43,22 +49,36 @@ public class TabActivity extends FragmentActivity {
 				// return ProfileFragment.newInstance(crimeId);
 				switch (pos) {
 				case 0:
+					getActionBar().setTitle(R.string.tab_poll_list_name);
 					return PollListFragment.newInstance();
 				case 1:
+					getActionBar().setTitle(R.string.tab_notification_name);
 					return NotificationFragment.newInstance();
 				case 2:
+					getActionBar().setTitle(R.string.tab_top_trends_name);
 					return TopTrendsFragment.newInstance();
 				case 3:
+					getActionBar().setTitle(R.string.tab_profile_name);
 					return ProfileFragment.newInstance();
 				default:
+					getActionBar().setTitle(R.string.tab_poll_list_name);
 					return PollListFragment.newInstance();
 				}
 			}
 
 			@Override
 			public CharSequence getPageTitle(int position) {
-				String res = "super titre " + position;
+				String res = "Tab " + position;
 				return res;
+			}
+		});
+
+		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				// When swiping between pages, select the
+				// corresponding tab.
+				getActionBar().setSelectedNavigationItem(position);
 			}
 		});
 
@@ -85,7 +105,6 @@ public class TabActivity extends FragmentActivity {
 
 			@Override
 			public void onTabSelected(Tab tab, android.app.FragmentTransaction ft) {
-				// TODO Auto-generated method stub
 				// When the tab is selected, switch to the
 				// corresponding page in the ViewPager.
 				mViewPager.setCurrentItem(tab.getPosition());
@@ -93,19 +112,17 @@ public class TabActivity extends FragmentActivity {
 
 			@Override
 			public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// Nothing to do
 			}
 
 			@Override
 			public void onTabReselected(Tab tab, android.app.FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
+				// Nothing to do
 			}
 		};
 
 		// Add 3 tabs, specifying the tab's text and TabListener
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			actionBar.addTab(actionBar.newTab()
 					.setText(mViewPager.getAdapter().getPageTitle(i))
 					.setTabListener(tabListener));

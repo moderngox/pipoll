@@ -17,5 +17,5 @@ public interface ITrend {
 
 	List<Trend> getTrends();
 
-	List<Trend> getTrends4Like(Like chosenLike);
+	List<Trend> getTrends4Like(Like userLike);
 }

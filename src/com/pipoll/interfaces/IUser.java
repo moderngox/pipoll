@@ -9,7 +9,6 @@ import com.facebook.Session;
 import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
 import com.pipoll.data.User;
-import com.pipoll.taskmaker.UserTaskMaker.TaskCallback;
 
 /**
  * @author moderngox
@@ -23,4 +22,5 @@ public interface IUser {
 	List<Like> getUserLikes(Session fbSession, TaskCallback taskCallback);
 
 	List<Poll> getUserPolls(String userID);
+
 }

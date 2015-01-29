@@ -3,8 +3,6 @@
  */
 package com.pipoll.data;
 
-import java.util.List;
-
 /**
  * @author moderngox
  * 
@@ -12,9 +10,9 @@ import java.util.List;
  */
 public class Poll {
 
-	private String id, theme, image;
+	private String id, theme;
 	private int upvotes, downvotes;
-	private List<Trend> trendNews; // recent and relevant trends about the theme
+	private Trend trend; // recent and relevant trend about the theme
 	private Category category;
 	private long createdAt, updatedAt;
 
@@ -32,14 +30,6 @@ public class Poll {
 
 	public void setTheme(String theme) {
 		this.theme = theme;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public int getUpvotes() {
@@ -74,12 +64,12 @@ public class Poll {
 		this.updatedAt = updatedAt;
 	}
 
-	public List<Trend> getTrendNews() {
-		return trendNews;
+	public Trend getTrend() {
+		return trend;
 	}
 
-	public void setTrendNews(List<Trend> trendNews) {
-		this.trendNews = trendNews;
+	public void setTrend(Trend trend) {
+		this.trend = trend;
 	}
 
 	public Category getCategory() {

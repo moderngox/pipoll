@@ -22,6 +22,7 @@ import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
 import com.pipoll.data.User;
 import com.pipoll.interfaces.IUser;
+import com.pipoll.interfaces.TaskCallback;
 import com.pipoll.utils.ObjectMapper;
 
 /**
@@ -29,12 +30,7 @@ import com.pipoll.utils.ObjectMapper;
  * 
  *         Instanciate and use this class whenever you need to make a generic task related to @User
  */
-public class UserTaskMaker implements IUser {
-
-	public interface TaskCallback {
-
-		public void onSuccess();
-	}
+public class UserService implements IUser {
 
 	private TaskCallback mCallback;
 
@@ -44,7 +40,7 @@ public class UserTaskMaker implements IUser {
 
 	private Activity activity;
 
-	public UserTaskMaker(Activity activity) {
+	public UserService(Activity activity) {
 		this.activity = activity;
 	}
 
@@ -55,7 +51,7 @@ public class UserTaskMaker implements IUser {
 	}
 
 	@Override
-	public List<Like> getUserLikes(Session fbSession, TaskCallback taskCallback) {
+	public List<Like> getUserLikes(final Session fbSession, TaskCallback taskCallback) {
 		mCallback = taskCallback;
 		final List<Like> userLikes = new ArrayList<Like>();
 		Request.Callback callback = new Request.Callback() {
@@ -68,7 +64,7 @@ public class UserTaskMaker implements IUser {
 					for (int i = 0; i < jsonLikes.length(); i++) {
 
 						JSONObject jsonLike = jsonLikes.getJSONObject(i);
-						Like userLike = ObjectMapper.mapLike(jsonLike);
+						final Like userLike = ObjectMapper.mapLike(jsonLike);
 						userLikes.add(userLike);
 					}
 				} catch (JSONException e) {

@@ -22,9 +22,9 @@ import com.facebook.widget.LoginButton;
 import com.pipoll.R;
 import com.pipoll.data.FBCategory;
 import com.pipoll.data.Like;
-import com.pipoll.taskmaker.CategoryTaskMaker;
-import com.pipoll.taskmaker.UserTaskMaker;
-import com.pipoll.taskmaker.UserTaskMaker.TaskCallback;
+import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.taskmaker.CategoryService;
+import com.pipoll.taskmaker.UserService;
 
 /**
  * @author moderngox
@@ -92,15 +92,16 @@ public class LoginFragment extends Fragment {
 		uiHelper.onActivityResult(requestCode, resultCode, data);
 		Session session = Session.getActiveSession();
 
-		UserTaskMaker userTaskMaker = new UserTaskMaker(getActivity());
-		CategoryTaskMaker catTaskMaker = new CategoryTaskMaker(getActivity());
+		UserService userTaskMaker = new UserService(getActivity());
+		CategoryService catTaskMaker = new CategoryService(getActivity());
 		userLikes = userTaskMaker.getUserLikes(session, new TaskCallback() {
 
 			@Override
 			public void onSuccess() {
 
 				for (Like userLike : userLikes) {
-					responseText += userLike.getName() + " - " + userLike.getCategory() + "\n";
+					responseText += userLike.getName() + " - " + userLike.getCategory()
+							+ " - " + userLike.getImage() + "\n";
 				}
 				likes.setText(responseText);
 				likes.setVisibility(View.VISIBLE);

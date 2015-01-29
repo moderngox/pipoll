@@ -28,4 +28,17 @@ public class AppController extends Application {
 	// Category
 	public static final String CATEGORY_ID_TAG = "categoryID";
 	public static final String CATEGORY_TAG = "category";
+
+	private static AppController mInstance;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		mInstance = this;
+	}
+
+	public static synchronized AppController getInstance() {
+		return mInstance;
+
+	}
 }

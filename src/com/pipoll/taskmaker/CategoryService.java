@@ -30,16 +30,16 @@ import com.pipoll.utils.ObjectMapper;
  * @Category/ @FBCategory
  * 
  */
-public class CategoryTaskMaker implements ICategory {
+public class CategoryService implements ICategory {
 
 	@SuppressWarnings("unused")
 	private Activity activity;
 
-	public CategoryTaskMaker() {
+	public CategoryService() {
 
 	}
 
-	public CategoryTaskMaker(Activity activity) {
+	public CategoryService(Activity activity) {
 		this.activity = activity;
 	}
 
@@ -72,7 +72,7 @@ public class CategoryTaskMaker implements ICategory {
 			reqParam.putString("q", q);
 			reqParam.putString("type", "page");
 			reqParam.putInt("limit", 1000);
-			Request.Callback callback2 = new Request.Callback() {
+			Request.Callback callback = new Request.Callback() {
 
 				@Override
 				public void onCompleted(Response response) {
@@ -95,7 +95,7 @@ public class CategoryTaskMaker implements ICategory {
 				}
 			};
 			Request request = new Request(session, "search", reqParam, HttpMethod.GET,
-					callback2);
+					callback);
 			task = new RequestAsyncTask(request);
 
 		}

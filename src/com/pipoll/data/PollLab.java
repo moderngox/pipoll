@@ -20,7 +20,6 @@ public class PollLab {
 		for (int i = 0; i < 5; i++) {
 			Poll p = new Poll();
 
-			ArrayList<Trend> trends = new ArrayList<Trend>();
 			Trend t = new Trend();
 			t.setId("a trend");
 			t.setTrendname("a trend name");
@@ -30,9 +29,8 @@ public class PollLab {
 			news.add("http://www.jeuxvideo.com/preview/415318/the-witcher-3-wild-hunt.htm");
 
 			t.setTrendNews(news);
-			trends.add(t);
 
-			p.setTrendNews(trends);
+			p.setTrend(t);
 			p.setId("poll #" + i);
 
 			mPolls.add(p);

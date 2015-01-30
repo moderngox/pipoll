@@ -31,6 +31,7 @@ import com.pipoll.taskmaker.TrendService;
 /**
  * @author Bulbi
  * 
+ *         Bulbi zdzd qclfj sqqsxqsx adsfjgh
  */
 public class PollListFragment extends Fragment {
 

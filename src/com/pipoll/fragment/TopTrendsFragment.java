@@ -13,15 +13,6 @@ public class TopTrendsFragment extends Fragment {
 
 	TextView mTextView;
 
-	// public static ProfileFragment newInstance(UUID crimeId) {
-	// Bundle args = new Bundle();
-	// args.putSerializable(EXTRA_CRIME_ID, crimeId);
-	//
-	// ProfileFragment fragment = new ProfileFragment();
-	// fragment.setArguments(args);
-	//
-	// return fragment;
-	// }
 	public static TopTrendsFragment newInstance() {
 		Bundle args = new Bundle();
 
@@ -46,6 +37,7 @@ public class TopTrendsFragment extends Fragment {
 
 		return v;
 	}
+
 	//
 	// @Override
 	// public void onActivityResult(int requestCode, int resultCode, Intent data) {

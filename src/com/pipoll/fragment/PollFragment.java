@@ -25,7 +25,7 @@ import com.pipoll.data.Trend;
  */
 public class PollFragment extends Fragment {
 
-	private static final String KEY_POLL_ID = "keyPollId";
+	public static final String KEY_POLL_ID = "keyPollId";
 
 	TextView mTvTitle;
 	TextView mTvDescription;

@@ -31,9 +31,11 @@ import com.pipoll.taskmaker.TrendService;
 /**
  * @author Bulbi
  * 
- *         Bulbi zdzd qclfj sqqsxqsx adsfjgh
+ *         Fragment managing a list of Polls. Uses a Custom ViewPager.
  */
 public class PollListFragment extends Fragment {
+
+	public static final String KEY_FRAGMENT_TITLE = "keyFragmentTitle";
 
 	TextView mTextView;
 	// ViewPager mPollViewPager;
@@ -44,16 +46,6 @@ public class PollListFragment extends Fragment {
 
 	private ArrayList<Poll> mPolls;
 	private List<Trend> mTrends;
-
-	// public static ProfileFragment newInstance(UUID crimeId) {
-	// Bundle args = new Bundle();
-	// args.putSerializable(EXTRA_CRIME_ID, crimeId);
-	//
-	// ProfileFragment fragment = new ProfileFragment();
-	// fragment.setArguments(args);
-	//
-	// return fragment;
-	// }
 
 	public static PollListFragment newInstance() {
 		Bundle args = new Bundle();
@@ -118,6 +110,9 @@ public class PollListFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_poll_list, parent, false);
 
+		// getActivity().getActionBar().setTitle(R.string.tab_poll_list_name);
+		String title = getArguments().getString(KEY_FRAGMENT_TITLE, "");
+
 		return v;
 	}
 
@@ -127,6 +122,7 @@ public class PollListFragment extends Fragment {
 		mPollViewPager = (CustomViewPager) view.findViewById(R.id.poll_view_pager);
 		mPollViewPager.setPagingEnabled(false);
 		mPollViewPager.setIsVertical(true);
+
 		mPollViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
 
 			@Override
@@ -137,8 +133,8 @@ public class PollListFragment extends Fragment {
 			@Override
 			public Fragment getItem(int position) {
 				// Bundle args = new Bundle();
-				// args.putInt(NotificationFragment.POSITION_KEY, position);
-				// return NotificationFragment.newInstance(args);
+				// args.putInt(PollFragment.KEY_POLL_ID, position);
+				// return PollFragment.newInstance(args);
 				String pollId = mPolls.get(position).getId();
 				return PollFragment.newInstance(pollId);
 			}

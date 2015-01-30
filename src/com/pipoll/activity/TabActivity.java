@@ -49,19 +49,14 @@ public class TabActivity extends FragmentActivity {
 				// return ProfileFragment.newInstance(crimeId);
 				switch (pos) {
 				case 0:
-					getActionBar().setTitle(R.string.tab_poll_list_name);
 					return PollListFragment.newInstance();
 				case 1:
-					getActionBar().setTitle(R.string.tab_notification_name);
 					return NotificationFragment.newInstance();
 				case 2:
-					getActionBar().setTitle(R.string.tab_top_trends_name);
 					return TopTrendsFragment.newInstance();
 				case 3:
-					getActionBar().setTitle(R.string.tab_profile_name);
 					return ProfileFragment.newInstance();
 				default:
-					getActionBar().setTitle(R.string.tab_poll_list_name);
 					return PollListFragment.newInstance();
 				}
 			}
@@ -79,6 +74,9 @@ public class TabActivity extends FragmentActivity {
 				// When swiping between pages, select the
 				// corresponding tab.
 				getActionBar().setSelectedNavigationItem(position);
+
+				getActionBar().setTitle(getPageTitleResource(position));
+
 			}
 		});
 
@@ -147,5 +145,20 @@ public class TabActivity extends FragmentActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private int getPageTitleResource(int position) {
+		switch (position) {
+		case 0:
+			return R.string.tab_poll_list_name;
+		case 1:
+			return R.string.tab_notification_name;
+		case 2:
+			return R.string.tab_top_trends_name;
+		case 3:
+			return R.string.tab_profile_name;
+		default:
+			return R.string.tab_poll_list_name;
+		}
 	}
 }

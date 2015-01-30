@@ -110,9 +110,6 @@ public class PollListFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_poll_list, parent, false);
 
-		// getActivity().getActionBar().setTitle(R.string.tab_poll_list_name);
-		String title = getArguments().getString(KEY_FRAGMENT_TITLE, "");
-
 		return v;
 	}
 
@@ -127,16 +124,20 @@ public class PollListFragment extends Fragment {
 
 			@Override
 			public int getCount() {
-				return mPolls.size();
+				return mPolls.size() + 1;
 			}
 
 			@Override
 			public Fragment getItem(int position) {
-				// Bundle args = new Bundle();
-				// args.putInt(PollFragment.KEY_POLL_ID, position);
-				// return PollFragment.newInstance(args);
-				String pollId = mPolls.get(position).getId();
-				return PollFragment.newInstance(pollId);
+				if (position < getCount() - 1) {
+					// Bundle args = new Bundle();
+					// args.putInt(PollFragment.KEY_POLL_ID, position);
+					// return PollFragment.newInstance(args);
+					String pollId = mPolls.get(position).getId();
+					return PollFragment.newInstance(pollId);
+				} else {
+					return PollEndFragment.newInstance();
+				}
 			}
 
 			@Override

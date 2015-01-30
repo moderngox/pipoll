@@ -8,6 +8,7 @@ import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import com.pipoll.activity.MainActivity;
+import com.pipoll.interfaces.TaskCallback;
 import com.pipoll.taskmaker.TrendService;
 
 /**
@@ -41,7 +42,14 @@ public class GetTrendsTest extends ActivityUnitTestCase<MainActivity> {
 
 			@Override
 			public void run() {
-				new TrendService().getTrends();
+				new TrendService().getTrends(new TaskCallback() {
+
+					@Override
+					public void onSuccess() {
+						// TODO Auto-generated method stub
+
+					}
+				});
 			}
 		});
 

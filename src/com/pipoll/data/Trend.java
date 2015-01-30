@@ -3,6 +3,7 @@
  */
 package com.pipoll.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,7 +15,8 @@ import java.util.List;
 public class Trend {
 
 	private String id, trendname, image;
-	private List<String> trendNews; // relevant and recent articles about the trend
+	private List<String> trendNews = new ArrayList<String>(); // relevant and recent articles
+																// about the trend
 	private Category category;
 
 	public String getId() {

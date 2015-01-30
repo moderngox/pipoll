@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import com.facebook.HttpMethod;
@@ -32,12 +33,6 @@ import com.pipoll.utils.ObjectMapper;
  */
 public class UserService implements IUser {
 
-	private TaskCallback mCallback;
-
-	public void setCallBack(TaskCallback taskCallback) {
-		mCallback = taskCallback;
-	}
-
 	private Activity activity;
 
 	public UserService(Activity activity) {
@@ -51,9 +46,10 @@ public class UserService implements IUser {
 	}
 
 	@Override
-	public List<Like> getUserLikes(final Session fbSession, TaskCallback taskCallback) {
-		mCallback = taskCallback;
+	public List<Like> getUserLikes(final Session fbSession, final TaskCallback taskCallback) {
 		final List<Like> userLikes = new ArrayList<Like>();
+		Bundle param = new Bundle();
+		param.putInt("limit", 1000);
 		Request.Callback callback = new Request.Callback() {
 
 			@Override
@@ -72,13 +68,13 @@ public class UserService implements IUser {
 					Toast.makeText(activity, "Parsing error. Please retry", Toast.LENGTH_SHORT)
 							.show();
 				}
-				if (mCallback != null && !userLikes.isEmpty()) {
-					mCallback.onSuccess();
+				if (taskCallback != null && !userLikes.isEmpty()) {
+					taskCallback.onSuccess();
 				}
 			}
 
 		};
-		Request request = new Request(fbSession, "me/likes", null, HttpMethod.GET, callback);
+		Request request = new Request(fbSession, "me/likes", param, HttpMethod.GET, callback);
 		final RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();
 

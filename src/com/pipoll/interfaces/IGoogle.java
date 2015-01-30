@@ -5,6 +5,7 @@ package com.pipoll.interfaces;
 
 import java.util.List;
 
+import com.google.api.services.customsearch.model.Result;
 import com.pipoll.data.google.GoogleResult;
 
 /**
@@ -14,4 +15,6 @@ import com.pipoll.data.google.GoogleResult;
 public interface IGoogle {
 
 	List<GoogleResult> googleSearch(String query, TaskCallback taskCallback);
+
+	List<Result> getSearchResult(String keyword);
 }

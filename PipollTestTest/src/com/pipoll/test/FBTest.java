@@ -21,6 +21,7 @@ import com.facebook.SessionState;
 import com.facebook.TestSession;
 import com.pipoll.activity.MainActivity;
 import com.pipoll.data.FBCategory;
+import com.pipoll.interfaces.TaskCallback;
 import com.pipoll.taskmaker.CategoryService;
 import com.pipoll.taskmaker.TrendService;
 
@@ -103,7 +104,14 @@ public class FBTest extends ActivityUnitTestCase<MainActivity> {
 
 			@Override
 			public void run() {
-				new TrendService().getTrends();
+				new TrendService().getTrends(new TaskCallback() {
+
+					@Override
+					public void onSuccess() {
+						// TODO Auto-generated method stub
+
+					}
+				});
 				List<FBCategory> fbCategories = catService
 						.getFBCategories(testSession);
 				assertTrue(!fbCategories.isEmpty());

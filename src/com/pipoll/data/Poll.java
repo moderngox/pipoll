@@ -10,7 +10,7 @@ package com.pipoll.data;
  */
 public class Poll {
 
-	private String id, theme;
+	private String id, theme, image;
 	private int upvotes, downvotes;
 	private Trend trend; // recent and relevant trend about the theme
 	private Category category;
@@ -78,5 +78,20 @@ public class Poll {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	/**
+	 * @return the image
+	 */
+	public String getImage() {
+		return image;
+	}
+
+	/**
+	 * @param image
+	 *            the image to set
+	 */
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

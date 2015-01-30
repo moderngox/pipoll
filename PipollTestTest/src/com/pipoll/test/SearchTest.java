@@ -50,7 +50,14 @@ public class SearchTest extends AndroidTestCase {
 	@Test
 	public void getTrendsTest() {
 
-		new TrendService().getTrends();
+		new TrendService().getTrends(new TaskCallback() {
+
+			@Override
+			public void onSuccess() {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	@Override

@@ -16,7 +16,14 @@ import java.util.List;
 import android.app.Activity;
 import android.os.AsyncTask;
 
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.customsearch.Customsearch;
+import com.google.api.services.customsearch.model.Result;
 import com.google.gson.Gson;
+import com.pipoll.app.AppController;
 import com.pipoll.data.google.GoogleResult;
 import com.pipoll.interfaces.IGoogle;
 import com.pipoll.interfaces.TaskCallback;
@@ -29,11 +36,6 @@ public class GoogleService implements IGoogle {
 
 	@SuppressWarnings("unused")
 	private Activity activity;
-	private TaskCallback mCallback;
-
-	public void setCallBack(TaskCallback taskCallback) {
-		mCallback = taskCallback;
-	}
 
 	public GoogleService(Activity activity) {
 		this.activity = activity;
@@ -55,26 +57,19 @@ public class GoogleService implements IGoogle {
 		new AsyncTask<Void, Void, List<GoogleResult>>() {
 
 			@Override
-			protected void onPreExecute() {
-				super.onPreExecute();
-				mCallback = taskCallback;
-			}
-
-			@Override
 			protected void onPostExecute(List<GoogleResult> result) {
 				super.onPostExecute(result);
 				if (!result.isEmpty()) {
-					mCallback.onSuccess();
+					taskCallback.onSuccess();
 				}
 			}
 
 			@Override
 			protected List<GoogleResult> doInBackground(Void... params) {
 				for (int i = 0; i < 20; i = i + 4) {
-					String address = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start="
-							+ i + "&q=";
+					String address = AppController.GOOGLE_ENDPOINT + i + "&q=";
 
-					String charset = "UTF-8";
+					String charset = AppController.UTF_8;
 
 					URL url;
 					try {
@@ -82,24 +77,12 @@ public class GoogleService implements IGoogle {
 						Reader reader = new InputStreamReader(url.openStream(), charset);
 						GoogleResult results = new Gson().fromJson(reader, GoogleResult.class);
 						googleResults.add(results);
-						// Show title and URL of each results
-						for (int m = 0; m <= 3; m++) {
-							System.out
-									.println("Title: "
-											+ results.getResponseData().getResults().get(m)
-													.getTitle());
-							System.out.println("URL: "
-									+ results.getResponseData().getResults().get(m).getUrl()
-									+ "\n");
-						}
+
 					} catch (MalformedURLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -108,6 +91,35 @@ public class GoogleService implements IGoogle {
 		}.execute();
 
 		return googleResults;
+	}
+
+	@Override
+	public List<Result> getSearchResult(String keyword) {
+		// Set up the HTTP transport and JSON factory
+		HttpTransport httpTransport = new NetHttpTransport();
+		JsonFactory jsonFactory = new JacksonFactory();
+		// HttpRequestInitializer initializer = (HttpRequestInitializer)new
+		// CommonGoogleClientRequestInitializer(API_KEY);
+		Customsearch customsearch = new Customsearch(httpTransport, jsonFactory, null);
+
+		List<Result> resultList = null;
+		try {
+			Customsearch.Cse.List list = customsearch.cse().list(keyword);
+			list.setKey(AppController.GCS_API_KEY);
+			list.setCx("");
+			// num results per page
+			// list.setNum(2L);
+
+			// for pagination
+			list.setStart(10L);
+			// Search results = list.execute();
+			// resultList = results.getItems();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return resultList;
 	}
 
 }

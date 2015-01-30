@@ -15,7 +15,9 @@ import com.pipoll.data.Trend;
  */
 public interface ITrend {
 
-	List<Trend> getTrends();
+	List<Trend> getTrends(TaskCallback taskcallback);
 
 	List<Trend> getTrends4Like(Like userLike);
+
+	void setNews(List<Trend> trends, TaskCallback taskcallback);
 }

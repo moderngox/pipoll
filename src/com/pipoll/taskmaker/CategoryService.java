@@ -71,7 +71,7 @@ public class CategoryService implements ICategory {
 			Bundle reqParam = new Bundle();
 			reqParam.putString("q", q);
 			reqParam.putString("type", "page");
-			reqParam.putInt("limit", 1000);
+			reqParam.putInt("limit", 100);
 			Request.Callback callback = new Request.Callback() {
 
 				@Override

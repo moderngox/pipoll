@@ -27,8 +27,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/image_border"
-        android:contentDescription="@string/image_card"
         android:scaleType="centerCrop"
+        tools:ignore="ContentDescription"
         tools:src="@drawable/picture1" />
 
     <LinearLayout

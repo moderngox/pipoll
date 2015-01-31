@@ -2,6 +2,7 @@ package com.pipoll.activity;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -63,8 +64,20 @@ public class TabActivity extends FragmentActivity {
 
 			@Override
 			public CharSequence getPageTitle(int position) {
-				String res = "Tab " + position;
-				return res;
+				Resources r = getResources();
+
+				switch (position) {
+				case 0:
+					return r.getString(R.string.tab_poll_list_short_name);
+				case 1:
+					return r.getString(R.string.tab_notification_short_name);
+				case 2:
+					return r.getString(R.string.tab_top_trends_short_name);
+				case 3:
+					return r.getString(R.string.tab_profile_short_name);
+				default:
+					return r.getString(R.string.tab_poll_list_short_name);
+				}
 			}
 		});
 
@@ -75,7 +88,7 @@ public class TabActivity extends FragmentActivity {
 				// corresponding tab.
 				getActionBar().setSelectedNavigationItem(position);
 
-				getActionBar().setTitle(getPageTitleResource(position));
+				getActionBar().setTitle(getActionBarTitleResource(position));
 
 			}
 		});
@@ -119,8 +132,8 @@ public class TabActivity extends FragmentActivity {
 			}
 		};
 
-		// Add 3 tabs, specifying the tab's text and TabListener
-		for (int i = 0; i < 4; i++) {
+		// Add the tabs, specifying the tab's text and TabListener
+		for (int i = 0; i < mViewPager.getAdapter().getCount(); i++) {
 			actionBar.addTab(actionBar.newTab()
 					.setText(mViewPager.getAdapter().getPageTitle(i))
 					.setTabListener(tabListener));
@@ -147,7 +160,7 @@ public class TabActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private int getPageTitleResource(int position) {
+	private int getActionBarTitleResource(int position) {
 		switch (position) {
 		case 0:
 			return R.string.tab_poll_list_name;
@@ -161,4 +174,5 @@ public class TabActivity extends FragmentActivity {
 			return R.string.tab_poll_list_name;
 		}
 	}
+
 }

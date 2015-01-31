@@ -17,6 +17,10 @@
     <string name="tab_notification_name">My notifications</string>
     <string name="tab_profile_name">My profile</string>
     <string name="tab_top_trends_name">Top trends</string>
-	<string name="poll_end_thanks">Thanks for answering the polls of the day.</string>
-    
+    <string name="tab_poll_list_short_name">Polls</string>
+    <string name="tab_notification_short_name">Notifs</string>
+    <string name="tab_profile_short_name">Profile</string>
+    <string name="tab_top_trends_short_name">Trends</string>
+    <string name="poll_end_thanks">Thanks for answering the polls of the day.</string>
+
 </resources>

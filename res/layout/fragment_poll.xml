@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/global_container"
     android:layout_width="match_parent"
@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/text_view_title"
-        style="@android:style/TextAppearance.Large.Inverse"
+        style="@style/TextViewDefault"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/card_bg"
@@ -22,7 +22,9 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
+        android:layout_below="@id/text_view_title"
+        android:layout_centerVertical="true"
         android:layout_gravity="center"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
@@ -33,15 +35,20 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp" >
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/image_button_no"
-            style="@style/DefaultButton"
-            android:layout_width="0dp"
+            style="@style/ButtonNo"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0"
             android:contentDescription="@string/no"
             android:padding="10dp"
             android:src="@drawable/ic_no" />
@@ -49,54 +56,56 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:padding="10dp" >
 
             <TextView
-                android:id="@+id/text_view_description"
-                style="@android:style/TextAppearance.Inverse"
+                style="@style/TextViewDefault"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:lines="1"
-                android:textColor="@android:color/secondary_text_light" />
+                android:text="@string/more_infos"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_view_description"
+                style="@style/TextViewDefault"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:lines="1" />
 
             <TextView
                 android:id="@+id/text_view_description_2"
-                style="@android:style/TextAppearance.Inverse"
+                style="@style/TextViewDefault"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center"
-                android:lines="1"
-                android:textColor="@android:color/secondary_text_light" />
+                android:gravity="center_horizontal"
+                android:lines="1" />
 
             <TextView
                 android:id="@+id/text_view_description_3"
-                style="@android:style/TextAppearance.Inverse"
+                style="@style/TextViewDefault"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center"
-                android:lines="1"
-                android:textColor="@android:color/secondary_text_light" />
+                android:gravity="center_horizontal"
+                android:lines="1" />
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/image_button_yes"
-            style="@style/DefaultButton"
-            android:layout_width="0dp"
+            style="@style/ButtonYes"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="2"
-            android:contentDescription="@string/yes"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0"
+            android:contentDescription="@string/no"
             android:padding="10dp"
             android:src="@drawable/ic_yes" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

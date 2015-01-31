@@ -74,15 +74,20 @@ public class PollFragment extends Fragment {
 
 		String link1 = trend.getTrendNews().get(0);
 		String link2 = trend.getTrendNews().get(1);
+		String link3 = "dummy text";
 
 		Resources r = getActivity().getResources();
 		String moreInfos = r.getString(R.string.more_infos);
 
-		mTvDescription2.setText(Html.fromHtml("<a href=\"" + link1 + "\">" + moreInfos
+		mTvDescription.setText(Html
+				.fromHtml("<a href=\"" + link1 + "\">" + moreInfos + "</a>"));
+		mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+
+		mTvDescription2.setText(Html.fromHtml("<a href=\"" + link2 + "\">" + moreInfos
 				+ "</a>"));
 		mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 
-		mTvDescription3.setText(Html.fromHtml("<a href=\"" + link2 + "\">" + moreInfos
+		mTvDescription3.setText(Html.fromHtml("<a href=\"" + link3 + "\">" + moreInfos
 				+ "</a>"));
 		mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
 

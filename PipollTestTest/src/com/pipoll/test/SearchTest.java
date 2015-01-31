@@ -11,8 +11,8 @@ import android.test.AndroidTestCase;
 
 import com.pipoll.data.google.GoogleResult;
 import com.pipoll.interfaces.TaskCallback;
-import com.pipoll.taskmaker.GoogleService;
-import com.pipoll.taskmaker.TrendService;
+import com.pipoll.service.GoogleService;
+import com.pipoll.service.TrendService;
 
 /**
  * @author moderngox

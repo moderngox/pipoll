@@ -58,8 +58,6 @@ public class ObjectMapper {
 
 		Like like = new Like();
 		like.setId(jsonLike.getString(AppController.ID_TAG));
-		// like.setImage(jsonLike.getString(AppController.IMAGE_TAG));
-
 		String category = jsonLike.getString(AppController.CATEGORY_TAG);
 		like.setCategory(category);
 		like.setName(jsonLike.getString(AppController.NAME_TAG));

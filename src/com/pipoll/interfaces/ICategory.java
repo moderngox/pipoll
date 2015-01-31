@@ -16,11 +16,13 @@ import com.pipoll.data.FBCategory;
  */
 public interface ICategory {
 
-	List<Category> getAppCategories();
+	List<Category> getAppCategories(final TaskCallback taskCallBack);
 
-	List<FBCategory> getFBCategories(Session session);
+	List<FBCategory> getFBCategories(final Session session);
 
-	String createCategory(Category category); // return logical ID
+	String createCategory(final Category category, final TaskCallback taskCallBack); // return
+																						// logical
+																						// ID
 
-	Category getCategory(String categoryID);
+	Category getCategory(final String categoryID, final TaskCallback taskCallBack);
 }

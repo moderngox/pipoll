@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pipoll.taskmaker;
+package com.pipoll.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,7 @@ public class UserService implements IUser {
 	}
 
 	@Override
-	public List<Poll> getUserPolls(String userID) {
+	public List<Poll> getUserPolls(final String userID) {
 		// TODO Auto-generated method stub
 		return null;
 	}

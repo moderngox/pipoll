@@ -2,7 +2,6 @@ package com.pipoll.fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,18 +14,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.customview.CustomViewPager;
 import com.pipoll.customview.FixedSpeedScroller;
 import com.pipoll.data.Poll;
 import com.pipoll.data.PollLab;
-import com.pipoll.data.Trend;
-import com.pipoll.data.google.GoogleResult;
-import com.pipoll.interfaces.TaskCallback;
-import com.pipoll.taskmaker.GoogleService;
-import com.pipoll.taskmaker.TrendService;
 
 /**
  * @author Bulbi
@@ -45,7 +38,6 @@ public class PollListFragment extends Fragment {
 	// private ArrayList<Poll> mPolls = PollLab.get(getActivity()).getPolls();
 
 	private ArrayList<Poll> mPolls;
-	private List<Trend> mTrends;
 
 	public static PollListFragment newInstance() {
 		Bundle args = new Bundle();
@@ -61,45 +53,6 @@ public class PollListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		mPolls = PollLab.get(getActivity()).getPolls();
-		final TrendService trendService = new TrendService(getActivity());
-		mTrends = trendService.getTrends(new TaskCallback() {
-			final GoogleService googleTaskMaker = new GoogleService(getActivity());
-			private List<GoogleResult> googleSearch;
-
-			@Override
-			public void onSuccess() {
-				Toast.makeText(getActivity(), String.valueOf(mTrends.size()),
-						Toast.LENGTH_SHORT).show();
-				// for (final Trend trend : mTrends) {
-				// googleSearch = googleTaskMaker.googleSearch(trend.getTrendname(),
-				// new TaskCallback() {
-				//
-				// @Override
-				// public void onSuccess() {
-				// for (final GoogleResult gr : googleSearch) {
-				// trend.getTrendNews().add(gr.toString());
-				// Toast.makeText(getActivity(), gr.toString(),
-				// Toast.LENGTH_SHORT).show();
-				//
-				// }
-				// }
-				// });
-				//
-				// }
-				trendService.setNews(mTrends, new TaskCallback() {
-
-					@Override
-					public void onSuccess() {
-
-						for (int i = 0; i < 5; i++) {
-							Toast.makeText(getActivity(),
-									mTrends.get(i).getTrendNews().get(0), Toast.LENGTH_SHORT)
-									.show();
-						}
-					}
-				});
-			}
-		});
 
 		// UUID crimeId = (UUID) getArguments().getSerializable(EXTRA_CRIME_ID);
 		// mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);

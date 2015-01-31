@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pipoll.taskmaker;
+package com.pipoll.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import com.facebook.Session;
 import com.pipoll.data.Category;
 import com.pipoll.data.FBCategory;
 import com.pipoll.interfaces.ICategory;
+import com.pipoll.interfaces.TaskCallback;
 import com.pipoll.utils.ObjectMapper;
 
 /**
@@ -46,10 +47,11 @@ public class CategoryService implements ICategory {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.pipoll.interfaces.ICategory#getAppCategories()
+	 * @see
+	 * com.pipoll.interfaces.ICategory#getAppCategories(com.pipoll.interfaces.TaskCallback)
 	 */
 	@Override
-	public List<Category> getAppCategories() {
+	public List<Category> getAppCategories(final TaskCallback taskCallBack) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -60,7 +62,7 @@ public class CategoryService implements ICategory {
 	 * @see com.pipoll.interfaces.ICategory#getFBCategories(com.facebook.Session)
 	 */
 	@Override
-	public List<FBCategory> getFBCategories(Session session) {
+	public List<FBCategory> getFBCategories(final Session session) {
 		final List<FBCategory> categories = new ArrayList<FBCategory>();
 		RequestAsyncTask task = null;
 		String q;
@@ -104,19 +106,14 @@ public class CategoryService implements ICategory {
 		return categories;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.pipoll.interfaces.ICategory#createCategory(com.pipoll.data.Category)
-	 */
 	@Override
-	public String createCategory(Category category) {
+	public String createCategory(Category category, TaskCallback taskCallBack) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Category getCategory(String categoryID) {
+	public Category getCategory(String categoryID, TaskCallback taskCallBack) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pipoll.taskmaker;
+package com.pipoll.service;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,6 +57,19 @@ public class TrendService implements ITrend {
 		// TODO Auto-generated constructor stub
 	}
 
+	public boolean trendAlreadyPresent(String trendname, List<Trend> trends) {
+		boolean result = false;
+
+		for (Trend t : trends) {
+			if (t.getTrendname().equals(trendname)) {
+				result = true;
+				break;
+			}
+		}
+
+		return result;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -87,8 +100,11 @@ public class TrendService implements ITrend {
 							JSONArray jsonArray = jsonResponse.getJSONArray(key);
 							for (int i = 0; i < jsonArray.length(); i++) {
 								Trend trend = new Trend();
-								trend.setTrendname(jsonArray.getString(i));
-								trends.add(trend);
+								String trendname = jsonArray.getString(i);
+								if (!trendAlreadyPresent(trendname, trends)) {
+									trend.setTrendname(trendname);
+									trends.add(trend);
+								}
 							}
 						}
 
@@ -124,13 +140,13 @@ public class TrendService implements ITrend {
 	 * @see com.pipoll.interfaces.ITrend#getTrends4Like(com.pipoll.data.Like)
 	 */
 	@Override
-	public List<Trend> getTrends4Like(Like userLike) {
+	public List<Trend> getTrends4Like(final Like userLike) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setNews(List<Trend> trends, final TaskCallback taskcallback) {
+	public void setNews(final List<Trend> trends, final TaskCallback taskcallback) {
 		new AsyncTask<Trend[], Void, Void>() {
 
 			@Override

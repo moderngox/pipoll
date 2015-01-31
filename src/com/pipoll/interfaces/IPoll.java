@@ -18,9 +18,10 @@ import com.pipoll.data.Trend;
  */
 public interface IPoll {
 
-	Poll createPoll(Like userLike, List<Trend> trends4like);
+	Poll createPoll(final Like userLike, final List<Trend> trends4like);
 
-	String getLikeAvatar(Session fbSession, String likeID, GetImgCallback getImgCallback);
+	String getLikeAvatar(final Session fbSession, final String likeID,
+			final GetImgCallback getImgCallback);
 
-	Like getLike(Session fbSession, String query, TaskCallback taskCallback);
+	Like getLike(final Session fbSession, final String query, final TaskCallback taskCallback);
 }

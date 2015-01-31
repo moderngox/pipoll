@@ -14,7 +14,11 @@ import com.pipoll.data.google.GoogleResult;
  */
 public interface IGoogle {
 
-	List<GoogleResult> googleSearch(String query, TaskCallback taskCallback);
+	@Deprecated
+	List<GoogleResult> googleSearch(final String query, final TaskCallback taskCallback);
 
-	List<Result> getSearchResult(String keyword);
+	@Deprecated
+	List<Result> getSearchResult(final String keyword, final TaskCallback taskCallback);
+
+	List<String> getDataFromGoogle(final String query, final TaskCallback taskCallback);
 }

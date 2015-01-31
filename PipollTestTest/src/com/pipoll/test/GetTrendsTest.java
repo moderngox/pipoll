@@ -9,7 +9,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import com.pipoll.activity.MainActivity;
 import com.pipoll.interfaces.TaskCallback;
-import com.pipoll.taskmaker.TrendService;
+import com.pipoll.service.TrendService;
 
 /**
  * @author moderngox

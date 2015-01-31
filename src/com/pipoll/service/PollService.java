@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pipoll.taskmaker;
+package com.pipoll.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +46,19 @@ public class PollService implements IPoll {
 	 * @see com.pipoll.interfaces.IPoll#createPoll(com.pipoll.data.Like, java.util.List)
 	 */
 	@Override
-	public Poll createPoll(Like userLike, List<Trend> trends4like) {
+	public Poll createPoll(final Like userLike, final List<Trend> trends4like) {
 		// TODO create a poll if a match exists between the userLike and the list of trends
 		// (trends4like)
-
-		return null;
+		Poll poll = new Poll();
+		// String userLikename = userLike.getName();
+		// for (Trend trend : trends4like) {
+		//
+		// }
+		return poll;
 	}
 
 	@Override
-	public String getLikeAvatar(Session fbSession, String likeID,
+	public String getLikeAvatar(final Session fbSession, final String likeID,
 			final GetImgCallback getImgCallback) {
 		final List<String> pagePicture = new ArrayList<String>();
 		String pageRequest = "/" + likeID + "/picture";

@@ -3,7 +3,10 @@
  */
 package com.pipoll.app;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * @author moderngox
@@ -34,6 +37,7 @@ public class AppController extends Application {
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";
 	// Keys
 	public static final String GCS_API_KEY = "AIzaSyB0H_CHXE6ZrpMstY4jGSVcLytDr9TfGN0";
+	public static final String SEARCH_ENGINE_ID = "008262435911699479698:kytdbffa034";
 	// CONSTANT
 	public static final String UTF_8 = "UTF-8";
 
@@ -47,6 +51,15 @@ public class AppController extends Application {
 
 	public static synchronized AppController getInstance() {
 		return mInstance;
+
+	}
+
+	public void goToActivity(Activity srcActivity, Class<?> destActivity, Bundle bundle) {
+		Intent intent = new Intent(srcActivity, destActivity);
+		if (bundle != null) {
+			intent.putExtras(bundle);
+		}
+		srcActivity.startActivity(intent);
 
 	}
 }

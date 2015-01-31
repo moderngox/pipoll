@@ -1,9 +1,11 @@
 package com.pipoll.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -24,8 +26,9 @@ import com.pipoll.data.Trend;
  * 
  */
 public class PollFragment extends Fragment {
-
 	public static final String KEY_POLL_ID = "keyPollId";
+	private static final String DIALOG_COMMENT = "comment";
+	private static final int REQUEST_COMMENT = 0;
 
 	TextView mTvTitle;
 	TextView mTvDescription;
@@ -120,17 +123,29 @@ public class PollFragment extends Fragment {
 			if (vp.getCurrentItem() < vp.getAdapter().getCount() - 1) {
 				vp.setCurrentItem(vp.getCurrentItem() + 1);
 			}
+			// start CommentDialog
+			FragmentManager fm = getActivity().getSupportFragmentManager();
+			CommentDialogFragment dialog = CommentDialogFragment.newInstance(true);
+			dialog.setTargetFragment(PollFragment.this, REQUEST_COMMENT);
+			dialog.show(fm, DIALOG_COMMENT);
 		}
 	}
-	//
-	// @Override
-	// public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	// if (resultCode != Activity.RESULT_OK)
-	// return;
-	// if (requestCode == REQUEST_DATE) {
-	// Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
-	// mCrime.setDate(date);
-	// updateDate();
-	// }
-	// }
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != Activity.RESULT_OK)
+			return;
+		if (requestCode == REQUEST_COMMENT) {
+			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
+			String commentTitle = data
+					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
+			String commentDescription = data
+					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
+
+			// TODO : save comment here
+			Toast.makeText(getActivity(), "" + liked, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), commentTitle, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), commentDescription, Toast.LENGTH_SHORT).show();
+		}
+	}
 }

@@ -9,7 +9,8 @@
     <string name="title_activity_card">CardActivity</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="image_card">image card</string>
+    <string name="send">Send</string>
+    <string name="poll_image">poll photo</string>
     <string name="more_infos">More informations...</string>
     <string name="like">You like</string>
     <string name="dislike">You dislike</string>
@@ -22,5 +23,10 @@
     <string name="tab_profile_short_name">Profile</string>
     <string name="tab_top_trends_short_name">Trends</string>
     <string name="poll_end_thanks">Thanks for answering the polls of the day.</string>
+    <string name="comment_dialog_title">Give your comment</string>
+    <string name="comment_like">I like.</string>
+    <string name="comment_dislike">I dislike.</string>
+    <string name="comment_title">Title</string>
+    <string name="comment_description">Decription</string>
 
 </resources>

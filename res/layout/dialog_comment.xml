@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="20dp" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp" >
+
+        <ImageButton
+            android:id="@+id/imageButtonNo"
+            style="@style/ButtonNo"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="40dp"
+            android:contentDescription="@string/no"
+            android:padding="15dp"
+            android:src="@drawable/ic_no" />
+
+        <ImageButton
+            android:id="@+id/imageButtonYes"
+            style="@style/ButtonYes"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:contentDescription="@string/yes"
+            android:padding="15dp"
+            android:src="@drawable/ic_yes" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textViewLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/editTextCommentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/comment_title" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editTextCommentDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/comment_description"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:maxLines="3" />
+
+</LinearLayout>

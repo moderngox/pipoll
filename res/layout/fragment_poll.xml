@@ -22,14 +22,14 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_below="@id/text_view_title"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="false"
         android:layout_gravity="center"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:adjustViewBounds="false"
-        android:contentDescription="@string/image_card"
+        android:contentDescription="@string/poll_image"
         android:scaleType="centerCrop"
         android:src="@drawable/picture3" />
 
@@ -43,14 +43,11 @@
         <ImageButton
             android:id="@+id/image_button_no"
             style="@style/ButtonNo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp"
             android:layout_weight="0"
             android:contentDescription="@string/no"
-            android:padding="10dp"
+            android:padding="15dp"
             android:src="@drawable/ic_no" />
 
         <LinearLayout
@@ -97,14 +94,11 @@
         <ImageButton
             android:id="@+id/image_button_yes"
             style="@style/ButtonYes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="15dp"
             android:layout_weight="0"
             android:contentDescription="@string/no"
-            android:padding="10dp"
+            android:padding="15dp"
             android:src="@drawable/ic_yes" />
     </LinearLayout>
 

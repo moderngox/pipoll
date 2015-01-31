@@ -21,4 +21,6 @@ public interface IGoogle {
 	List<Result> getSearchResult(final String keyword, final TaskCallback taskCallback);
 
 	List<String> getDataFromGoogle(final String query, final TaskCallback taskCallback);
+
+	List<String> getDataFromGoogleNews(final String query, final TaskCallback taskCallback);
 }

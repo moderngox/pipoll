@@ -211,4 +211,11 @@ public class GoogleService implements IGoogle {
 		}.execute();
 		return result;
 	}
+
+	@Override
+	public List<String> getDataFromGoogleNews(final String query,
+			final TaskCallback taskCallback) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

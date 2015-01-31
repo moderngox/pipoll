@@ -19,6 +19,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.LoginButton;
 import com.pipoll.R;
 import com.pipoll.activity.StartupActivity;
+import com.pipoll.app.AppController;
 
 /**
  * @author moderngox
@@ -29,14 +30,13 @@ public class LoginFragment extends Fragment {
 
 	private static final String TAG = "LoginFragment";
 	private UiLifecycleHelper uiHelper;
-
+	private AppController application = AppController.getInstance();
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
-	protected String responseText = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,11 +50,14 @@ public class LoginFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = null;
 
-		if (Session.getActiveSession() != null) {
+		Session session = Session.getActiveSession();
+		if (session != null
+				&& (!session.getState().equals(SessionState.OPENED) || !session.getState()
+						.equals(SessionState.CREATED))) {
 			// hide actionBar. To make it properly //TODO define (in themes) and use a
 			// NoBarTheme in Manifest
 			getActivity().getActionBar().hide();
-			goToAppInfoActivity();
+			application.goToActivity(getActivity(), StartupActivity.class, null);
 		} else {
 			view = inflater.inflate(R.layout.login, container, false);
 			LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
@@ -91,13 +94,7 @@ public class LoginFragment extends Fragment {
 		super.onActivityResult(requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);
 
-		goToAppInfoActivity();
-
-	}
-
-	private void goToAppInfoActivity() {
-		Intent intent = new Intent(getActivity(), StartupActivity.class);
-		getActivity().startActivity(intent);
+		application.goToActivity(getActivity(), StartupActivity.class, null);
 
 	}
 

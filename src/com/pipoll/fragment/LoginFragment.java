@@ -50,20 +50,21 @@ public class LoginFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = null;
 
-		Session session = Session.getActiveSession();
-		if (session != null
-				&& (!session.getState().equals(SessionState.OPENED) || !session.getState()
-						.equals(SessionState.CREATED))) {
-			// hide actionBar. To make it properly //TODO define (in themes) and use a
-			// NoBarTheme in Manifest
-			getActivity().getActionBar().hide();
-			application.goToActivity(getActivity(), StartupActivity.class, null);
-		} else {
-			view = inflater.inflate(R.layout.login, container, false);
-			LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
-			authButton.setFragment(this);
-			authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
-		}
+		// Session session = Session.getActiveSession();
+		// if (session != null) {
+		// if (!session.isOpened()) {
+		// Session.openActiveSession(getActivity(), true,
+		// Arrays.asList("user_likes", "user_status"), callback);
+		// }
+		// getActivity().getActionBar().hide();
+		// application.goToActivity(getActivity(), StartupActivity.class, null, true);
+		// } else {
+		view = inflater.inflate(R.layout.login, container, false);
+		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+		authButton.setFragment(this);
+		authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
+		// }
+		// }
 		return view;
 	}
 
@@ -94,7 +95,7 @@ public class LoginFragment extends Fragment {
 		super.onActivityResult(requestCode, resultCode, data);
 		uiHelper.onActivityResult(requestCode, resultCode, data);
 
-		application.goToActivity(getActivity(), StartupActivity.class, null);
+		application.goToActivity(getActivity(), StartupActivity.class, null, true);
 
 	}
 

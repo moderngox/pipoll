@@ -14,9 +14,10 @@ import java.util.List;
  */
 public class Trend {
 
-	private String id, trendname, image;
-	private List<String> trendNews = new ArrayList<String>(); // relevant and recent articles
-																// about the trend
+	private String id, name, image;
+	private List<TrendNews> trendNews = new ArrayList<TrendNews>(); // relevant and recent
+																	// articles
+	// about the trend
 	private Category category;
 
 	public String getId() {
@@ -27,12 +28,12 @@ public class Trend {
 		this.id = id;
 	}
 
-	public String getTrendname() {
-		return trendname;
+	public String getname() {
+		return name;
 	}
 
-	public void setTrendname(String trendname) {
-		this.trendname = trendname;
+	public void setname(String name) {
+		this.name = name;
 	}
 
 	public String getImage() {
@@ -51,11 +52,11 @@ public class Trend {
 		this.category = category;
 	}
 
-	public List<String> getTrendNews() {
+	public List<TrendNews> getTrendNews() {
 		return trendNews;
 	}
 
-	public void setTrendNews(List<String> trendNews) {
+	public void setTrendNews(List<TrendNews> trendNews) {
 		this.trendNews = trendNews;
 	}
 }

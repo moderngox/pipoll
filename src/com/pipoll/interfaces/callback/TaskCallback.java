@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.pipoll.interfaces;
+package com.pipoll.interfaces.callback;
 
 /**
  * @author moderngox

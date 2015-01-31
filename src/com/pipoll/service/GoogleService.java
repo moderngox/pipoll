@@ -33,9 +33,11 @@ import com.google.api.services.customsearch.model.Result;
 import com.google.api.services.customsearch.model.Search;
 import com.google.gson.Gson;
 import com.pipoll.app.AppController;
+import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
 import com.pipoll.interfaces.IGoogle;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
+import com.pipoll.interfaces.callback.TrendNewsCallback;
 
 /**
  * @author moderngox
@@ -122,6 +124,7 @@ public class GoogleService implements IGoogle {
 	}
 
 	@Override
+	@Deprecated
 	public List<Result> getSearchResult(final String keyword, final TaskCallback taskCallback) {
 		final List<Result> resultList = new ArrayList<Result>();
 		new AsyncTask<Void, Void, List<Result>>() {
@@ -163,18 +166,19 @@ public class GoogleService implements IGoogle {
 	}
 
 	@Override
-	public List<String> getDataFromGoogle(final String query, final TaskCallback taskCallback) {
-		final List<String> result = new ArrayList<String>();
-		new AsyncTask<Void, Void, List<String>>() {
+	public List<TrendNews> getDataFromGoogle(final String query,
+			final TrendNewsCallback trendNewsCallback) {
+		final List<TrendNews> result = new ArrayList<TrendNews>();
+		new AsyncTask<Void, Void, List<TrendNews>>() {
 
 			@Override
-			protected void onPostExecute(List<String> result) {
+			protected void onPostExecute(List<TrendNews> result) {
 				super.onPostExecute(result);
-				taskCallback.onSuccess();
+				trendNewsCallback.onNewsRetrieved(result);
 			}
 
 			@Override
-			protected List<String> doInBackground(Void... params) {
+			protected List<TrendNews> doInBackground(Void... params) {
 				try {
 
 					Elements links = Jsoup
@@ -185,7 +189,7 @@ public class GoogleService implements IGoogle {
 									"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
 							.get().select("li.g>h3>a");
 					for (Element link : links) {
-
+						TrendNews trendnews = new TrendNews();
 						String title = link.text();
 						String url = link.absUrl("href"); // Google returns URLs in format
 															// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
@@ -196,8 +200,9 @@ public class GoogleService implements IGoogle {
 						if (!url.startsWith("http")) {
 							continue; // Ads/news/etc.
 						}
-
-						result.add(title + ": " + url);
+						trendnews.setTitle(title);
+						trendnews.setUrl(url);
+						result.add(trendnews);
 
 					}
 

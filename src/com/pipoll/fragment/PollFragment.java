@@ -68,12 +68,12 @@ public class PollFragment extends Fragment {
 
 		// get one Trend for the Poll
 		Trend trend = mPoll.getTrend();
-		String trendName = mPoll.getTrend().getTrendname();
+		String trendName = mPoll.getTrend().getname();
 
-		mTvDescription.setText(trend.getTrendname());
+		mTvDescription.setText(trend.getname());
 
-		String link1 = trend.getTrendNews().get(0);
-		String link2 = trend.getTrendNews().get(1);
+		String link1 = trend.getTrendNews().get(0).getUrl();
+		String link2 = trend.getTrendNews().get(1).getUrl();
 
 		Resources r = getActivity().getResources();
 		String moreInfos = r.getString(R.string.more_infos);

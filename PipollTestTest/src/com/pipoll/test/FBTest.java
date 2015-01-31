@@ -21,7 +21,7 @@ import com.facebook.SessionState;
 import com.facebook.TestSession;
 import com.pipoll.activity.MainActivity;
 import com.pipoll.data.FBCategory;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.service.CategoryService;
 import com.pipoll.service.TrendService;
 

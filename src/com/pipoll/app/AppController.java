@@ -38,6 +38,7 @@ public class AppController extends Application {
 	// Keys
 	public static final String GCS_API_KEY = "AIzaSyB0H_CHXE6ZrpMstY4jGSVcLytDr9TfGN0";
 	public static final String SEARCH_ENGINE_ID = "008262435911699479698:kytdbffa034";
+	public static String FB_ACCESS_TOKEN = "CAAEyKSUKgk8BAMouzKIw3lo02NTsxZAzZAuRddtbiACvgK9otRcRBm9lfZAS5a5JrOkuZA4ZB4GCKZCys57RTtBkAmJ5ZA2BWvhem4f4eQn06VAHVnuuqZA3sekVZCjqwLf9A5mt1UCHfJYZCFpYmbPduZAoPmijcgTWPulfSq6M3CXcBETroTALm8LTDktkp8sLsJhYctZAsQYJzeZCOMwSxh8sqn6F2XVzbRekZD";
 	// CONSTANT
 	public static final String UTF_8 = "UTF-8";
 
@@ -54,12 +55,16 @@ public class AppController extends Application {
 
 	}
 
-	public void goToActivity(Activity srcActivity, Class<?> destActivity, Bundle bundle) {
+	public void goToActivity(Activity srcActivity, Class<?> destActivity, Bundle bundle,
+			boolean isToFinished) {
 		Intent intent = new Intent(srcActivity, destActivity);
 		if (bundle != null) {
 			intent.putExtras(bundle);
 		}
 		srcActivity.startActivity(intent);
+		if (isToFinished) {
+			srcActivity.finish();
+		}
 
 	}
 }

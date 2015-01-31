@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.pipoll.data.Like;
 import com.pipoll.data.Trend;
+import com.pipoll.interfaces.callback.TaskCallback;
 
 /**
  * @author moderngox

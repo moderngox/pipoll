@@ -8,7 +8,7 @@ import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import com.pipoll.activity.MainActivity;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.service.TrendService;
 
 /**

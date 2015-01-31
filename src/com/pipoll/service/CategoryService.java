@@ -21,7 +21,7 @@ import com.facebook.Session;
 import com.pipoll.data.Category;
 import com.pipoll.data.FBCategory;
 import com.pipoll.interfaces.ICategory;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.utils.ObjectMapper;
 
 /**

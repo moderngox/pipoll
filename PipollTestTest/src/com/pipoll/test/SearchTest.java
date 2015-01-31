@@ -10,7 +10,7 @@ import org.junit.Test;
 import android.test.AndroidTestCase;
 
 import com.pipoll.data.google.GoogleResult;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.service.GoogleService;
 import com.pipoll.service.TrendService;
 

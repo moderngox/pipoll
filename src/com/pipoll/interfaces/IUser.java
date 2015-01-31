@@ -9,6 +9,7 @@ import com.facebook.Session;
 import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
 import com.pipoll.data.User;
+import com.pipoll.interfaces.callback.TaskCallback;
 
 /**
  * @author moderngox

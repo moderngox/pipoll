@@ -32,11 +32,12 @@ import com.google.gson.Gson;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Like;
 import com.pipoll.data.Trend;
+import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
 import com.pipoll.data.google.ResponseData;
 import com.pipoll.data.google.Result;
 import com.pipoll.interfaces.ITrend;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
 
 /**
  * @author moderngox
@@ -61,7 +62,7 @@ public class TrendService implements ITrend {
 		boolean result = false;
 
 		for (Trend t : trends) {
-			if (t.getTrendname().equals(trendname)) {
+			if (t.getname().equals(trendname)) {
 				result = true;
 				break;
 			}
@@ -102,7 +103,7 @@ public class TrendService implements ITrend {
 								Trend trend = new Trend();
 								String trendname = jsonArray.getString(i);
 								if (!trendAlreadyPresent(trendname, trends)) {
-									trend.setTrendname(trendname);
+									trend.setname(trendname);
 									trends.add(trend);
 								}
 							}
@@ -167,7 +168,7 @@ public class TrendService implements ITrend {
 						URL url;
 						try {
 							url = new URL(address
-									+ URLEncoder.encode(trend.getTrendname(), charset));
+									+ URLEncoder.encode(trend.getname(), charset));
 							Reader reader = new InputStreamReader(url.openStream(), charset);
 							GoogleResult googleResult = new Gson().fromJson(reader,
 									GoogleResult.class);
@@ -176,7 +177,9 @@ public class TrendService implements ITrend {
 								if (responseData != null) {
 									List<Result> results = responseData.getResults();
 									for (Result result : results) {
-										trend.getTrendNews().add(result.getUrl());
+										TrendNews trendNews = new TrendNews();
+										trendNews.setUrl(result.getUrl());
+										trend.getTrendNews().add(trendNews);
 									}
 								}
 							}

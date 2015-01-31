@@ -23,7 +23,7 @@ import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
 import com.pipoll.data.User;
 import com.pipoll.interfaces.IUser;
-import com.pipoll.interfaces.TaskCallback;
+import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.utils.ObjectMapper;
 
 /**

@@ -22,12 +22,16 @@ public class PollLab {
 
 			Trend t = new Trend();
 			t.setId("a trend");
-			t.setTrendname("a trend name");
-
-			ArrayList<String> news = new ArrayList<String>();
-			news.add("http://www.jeuxvideo.com/news/415383/lumines-et-meteos-vont-revenir-sur-smartphones.htm");
-			news.add("http://www.jeuxvideo.com/preview/415318/the-witcher-3-wild-hunt.htm");
-
+			t.setname("a trend name");
+			ArrayList<TrendNews> news = new ArrayList<TrendNews>();
+			TrendNews trendNews = new TrendNews();
+			TrendNews trendNews2 = new TrendNews();
+			trendNews
+					.setUrl("http://www.jeuxvideo.com/news/415383/lumines-et-meteos-vont-revenir-sur-smartphones.htm");
+			news.add(trendNews);
+			trendNews2
+					.setUrl("http://www.jeuxvideo.com/preview/415318/the-witcher-3-wild-hunt.htm");
+			news.add(trendNews2);
 			t.setTrendNews(news);
 
 			p.setTrend(t);

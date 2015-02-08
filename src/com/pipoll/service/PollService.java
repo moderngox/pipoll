@@ -413,24 +413,29 @@ public class PollService implements IPoll {
 			protected List<Like> doInBackground(Trend... trends) {
 
 				try {
+					List<String> trendNames = new ArrayList<String>();
 					for (Trend trend : trends) {
-						String request = "https://graph.facebook.com/v1.0/search?q="
-								+ URLEncoder.encode(trend.getName(), AppController.UTF_8)
-								+ "&type=page&limit=1&access_token=" + accessToken;
-						HttpGet httpgetreq = new HttpGet(request);
-						httpgetreq.setHeader("Content-type", "application/json");
-						String responseText = null;
-						HttpResponse httpresponse = httpclient.execute(httpgetreq);
-						responseText = EntityUtils.toString(httpresponse.getEntity());
-						Log.d("Response: ", responseText);
-						if (responseText != null && !"{\"data\":[]}".equals(responseText)) {// if
-							// Like
 
-							JSONArray jsonArray = new JSONObject(responseText)
-									.getJSONArray("data");
-							JSONObject jsonLike = jsonArray.getJSONObject(0);
-							Like like = ObjectMapper.mapLike(jsonLike);
-							likes.add(like);
+						if (!trendNames.contains(trend.getName())) {
+							trendNames.add(trend.getName());
+							String request = "https://graph.facebook.com/v1.0/search?q="
+									+ URLEncoder.encode(trend.getName(), AppController.UTF_8)
+									+ "&type=page&limit=1&access_token=" + accessToken;
+							HttpGet httpgetreq = new HttpGet(request);
+							httpgetreq.setHeader("Content-type", "application/json");
+							String responseText = null;
+							HttpResponse httpresponse = httpclient.execute(httpgetreq);
+							responseText = EntityUtils.toString(httpresponse.getEntity());
+							Log.d("Response: ", responseText);
+							if (responseText != null && !"{\"data\":[]}".equals(responseText)) {// if
+								// Like
+
+								JSONArray jsonArray = new JSONObject(responseText)
+										.getJSONArray("data");
+								JSONObject jsonLike = jsonArray.getJSONObject(0);
+								Like like = ObjectMapper.mapLike(jsonLike);
+								likes.add(like);
+							}
 						}
 					}
 				} catch (UnsupportedEncodingException e) {

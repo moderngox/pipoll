@@ -16,6 +16,7 @@ import com.facebook.Session;
 import com.pipoll.R;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Trend;
+import com.pipoll.data.parcelable.ParcelableTrend;
 import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.service.PollService;
@@ -58,7 +59,7 @@ public class StartupActivity extends Activity {
 
 					final PollService pollService = new PollService(activity);
 
-					pollService.createPolls(mTrends, 0, 20, new ServiceCallback() {
+					pollService.createPolls(mTrends, 0, 5, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override
@@ -66,6 +67,9 @@ public class StartupActivity extends Activity {
 							Bundle extras = new Bundle();
 							ArrayList<? extends Parcelable> Parcelresp = (ArrayList<? extends Parcelable>) response;
 							extras.putParcelableArrayList(AppController.POLLS_TAG, Parcelresp);
+							extras.putParcelableArrayList(AppController.TRENDS_TAG,
+									(ArrayList<? extends Parcelable>) ParcelableTrend
+											.getParcelTrends(mTrends));
 							Toast.makeText(activity,
 									String.valueOf(Parcelresp.size()) + " polls loaded",
 									Toast.LENGTH_SHORT).show();

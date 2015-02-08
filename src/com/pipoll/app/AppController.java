@@ -40,6 +40,10 @@ public class AppController extends Application {
 	public static final String POLLS_TAG = "polls";
 	public static final String POLL_TAG = "poll";
 
+	// Trends
+	public static final String TRENDS_TAG = "trends";
+	public static final String TREND_TAG = "trend";
+
 	// Endpoints
 	public static final String TRENDS_ENDPOINT = "http://hawttrends.appspot.com/api/terms/";
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";

@@ -3,10 +3,13 @@
  */
 package com.pipoll.data.parcelable;
 
-import com.pipoll.data.Trend;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.pipoll.data.Trend;
 
 /**
  * @author moderngox
@@ -62,4 +65,21 @@ public class ParcelableTrend implements Parcelable {
 		return trend;
 	}
 
+	public static List<ParcelableTrend> getParcelTrends(List<Trend> trends) {
+		List<ParcelableTrend> pTrends = new ArrayList<ParcelableTrend>();
+		for (Trend trend : trends) {
+			pTrends.add(new ParcelableTrend(trend));
+		}
+
+		return pTrends;
+	}
+
+	public static List<Trend> getTrends(List<ParcelableTrend> pTrends) {
+		List<Trend> trends = new ArrayList<Trend>();
+		for (ParcelableTrend pTrend : pTrends) {
+			trends.add(pTrend.getTrend());
+		}
+
+		return trends;
+	}
 }

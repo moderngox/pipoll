@@ -1,7 +1,5 @@
 package com.pipoll.activity;
 
-import java.util.ArrayList;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.content.res.Resources;
@@ -16,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.pipoll.R;
-import com.pipoll.app.AppController;
-import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.fragment.NotificationFragment;
 import com.pipoll.fragment.PollListFragment;
 import com.pipoll.fragment.ProfileFragment;
@@ -53,11 +49,10 @@ public class TabActivity extends FragmentActivity {
 				// UUID crimeId = crimes.get(pos).getId();
 				// return ProfileFragment.newInstance(crimeId);
 				Bundle extras = getIntent().getExtras();
-				ArrayList<ParcelablePoll> parcelablePolls = extras
-						.getParcelableArrayList(AppController.POLLS_TAG);
+
 				switch (pos) {
 				case 0:
-					return PollListFragment.newInstance(parcelablePolls);
+					return PollListFragment.newInstance(extras);
 				case 1:
 					return NotificationFragment.newInstance();
 				case 2:
@@ -65,7 +60,7 @@ public class TabActivity extends FragmentActivity {
 				case 3:
 					return ProfileFragment.newInstance();
 				default:
-					return PollListFragment.newInstance(parcelablePolls);
+					return PollListFragment.newInstance(extras);
 				}
 			}
 

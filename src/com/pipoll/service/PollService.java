@@ -402,7 +402,9 @@ public class PollService implements IPoll {
 			@Override
 			protected void onPostExecute(List<ParcelablePoll> result) {
 				super.onPostExecute(result);
-				serviceCallback.onServiceDone(result);
+				if (!result.isEmpty()) {
+					serviceCallback.onServiceDone(result);
+				}
 			}
 
 		};

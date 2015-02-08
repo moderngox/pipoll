@@ -44,7 +44,7 @@ public class PollFragment extends Fragment {
 	ImageButton mImgBtnYes;
 	ImageButton mImgBtnNo;
 
-	static Poll mPoll;
+	private Poll mPoll;
 	private ImageView mImage;
 
 	public static PollFragment newInstance(String pollId) {
@@ -91,42 +91,6 @@ public class PollFragment extends Fragment {
 		mImgBtnNo = (ImageButton) v.findViewById(R.id.image_button_no);
 		mImage = (ImageView) v.findViewById(R.id.image);
 		buildPoll();
-		// mTvTitle.setText(mPoll.getId());
-		//
-		// // get one Trend for the Poll
-		// Trend trend = mPoll.getTrend();
-		// String trendName = mPoll.getTrend().getname();
-		//
-		// mTvDescription.setText(trend.getname());
-		//
-		// String link1 = trend.getTrendNews().get(0).getUrl();
-		// String link2 = trend.getTrendNews().get(1).getUrl();
-		//
-		// String link3 = "dummy text";
-		//
-		// Resources r = getActivity().getResources();
-		// String moreInfos = r.getString(R.string.more_infos);
-		//
-		// mTvDescription.setText(Html
-		// .fromHtml("<a href=\"" + link1 + "\">" + moreInfos + "</a>"));
-		// mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
-		//
-		// mTvDescription2.setText(Html.fromHtml("<a href=\"" + link2 + "\">" + moreInfos
-		// + "</a>"));
-		// mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
-		//
-		// mTvDescription3.setText(Html.fromHtml("<a href=\"" + link3 + "\">" + moreInfos
-		// + "</a>"));
-		// mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
-		//
-		// mImgBtnYes = (ImageButton) v.findViewById(R.id.image_button_yes);
-		//
-		// mImgBtnYes.setOnClickListener(new VoteClickListener(getActivity(), r
-		// .getString(R.string.like) + " " + trendName));
-		//
-		// mImgBtnNo.setOnClickListener(new VoteClickListener(getActivity(), r
-		// .getString(R.string.dislike) + " " + trendName));
-
 		return v;
 	}
 
@@ -183,14 +147,14 @@ public class PollFragment extends Fragment {
 
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(getActivity(), mMessage, Toast.LENGTH_SHORT).show();
-//			ViewPager vp = (ViewPager) mActivity.findViewById(R.id.poll_view_pager);
-//
-//			if (vp.getCurrentItem() < vp.getAdapter().getCount() - 1) {
-//				vp.setCurrentItem(vp.getCurrentItem() + 1);
-//			}
-			//changePage(mActivity);
-			
+			Toast.makeText(mActivity, mMessage, Toast.LENGTH_SHORT).show();
+			// ViewPager vp = (ViewPager) mActivity.findViewById(R.id.poll_view_pager);
+			//
+			// if (vp.getCurrentItem() < vp.getAdapter().getCount() - 1) {
+			// vp.setCurrentItem(vp.getCurrentItem() + 1);
+			// }
+			// changePage(mActivity);
+
 			// start CommentDialog
 			FragmentManager fm = getActivity().getSupportFragmentManager();
 			CommentDialogFragment dialog = CommentDialogFragment.newInstance(true);
@@ -206,14 +170,14 @@ public class PollFragment extends Fragment {
 			vp.setCurrentItem(vp.getCurrentItem() + 1);
 		}
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
 		if (requestCode == REQUEST_COMMENT) {
 			changePage(getActivity());
-			
+
 			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
 			String commentTitle = data
 					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);

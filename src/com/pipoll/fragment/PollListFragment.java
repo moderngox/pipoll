@@ -43,7 +43,6 @@ public class PollListFragment extends Fragment {
 	private static ArrayList<Trend> mTrends;
 
 	public static PollListFragment newInstance(Bundle extras) {
-
 		PollListFragment fragment = new PollListFragment();
 		fragment.setArguments(extras);
 

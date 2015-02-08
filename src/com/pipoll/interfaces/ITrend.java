@@ -20,5 +20,6 @@ public interface ITrend {
 
 	List<Trend> getTrends4Like(final Like userLike);
 
+	@Deprecated
 	void setNews(final List<Trend> trends, final TaskCallback taskcallback);
 }

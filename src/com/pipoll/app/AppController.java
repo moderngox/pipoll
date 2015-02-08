@@ -8,6 +8,10 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 /**
  * @author moderngox
  * 
@@ -32,6 +36,10 @@ public class AppController extends Application {
 	public static final String CATEGORY_ID_TAG = "categoryID";
 	public static final String CATEGORY_TAG = "category";
 
+	// Poll(s)
+	public static final String POLLS_TAG = "polls";
+	public static final String POLL_TAG = "poll";
+
 	// Endpoints
 	public static final String TRENDS_ENDPOINT = "http://hawttrends.appspot.com/api/terms/";
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";
@@ -43,6 +51,7 @@ public class AppController extends Application {
 	public static final String UTF_8 = "UTF-8";
 
 	private static AppController mInstance;
+	private ImageLoader mImageLoader;
 
 	@Override
 	public void onCreate() {
@@ -53,6 +62,21 @@ public class AppController extends Application {
 	public static synchronized AppController getInstance() {
 		return mInstance;
 
+	}
+
+	public ImageLoader getImageLoader() {
+
+		if (mImageLoader == null) {
+			DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+					.cacheInMemory(true).cacheOnDisk(true).build();
+			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+					getApplicationContext()).defaultDisplayImageOptions(defaultOptions)
+					.build();
+			mImageLoader = ImageLoader.getInstance();
+			mImageLoader.init(config);
+		}
+
+		return this.mImageLoader;
 	}
 
 	public void goToActivity(Activity srcActivity, Class<?> destActivity, Bundle bundle,

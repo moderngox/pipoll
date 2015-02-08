@@ -3,13 +3,19 @@
  */
 package com.pipoll.data;
 
+import java.io.Serializable;
+
 /**
  * @author moderngox
  * 
  *         A poll created by the system and potentially voted by an user
  */
-public class Poll {
+public class Poll implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id, theme, image;
 	private int upvotes, downvotes;
 	private Trend trend; // recent and relevant trend about the theme

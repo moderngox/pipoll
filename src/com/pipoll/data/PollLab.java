@@ -22,7 +22,7 @@ public class PollLab {
 
 			Trend t = new Trend();
 			t.setId("a trend");
-			t.setname("a trend name");
+			t.setName("a trend name");
 			ArrayList<TrendNews> news = new ArrayList<TrendNews>();
 			TrendNews trendNews = new TrendNews();
 			TrendNews trendNews2 = new TrendNews();

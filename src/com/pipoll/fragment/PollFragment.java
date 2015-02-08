@@ -119,11 +119,13 @@ public class PollFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			Toast.makeText(getActivity(), mMessage, Toast.LENGTH_SHORT).show();
-			ViewPager vp = (ViewPager) mActivity.findViewById(R.id.poll_view_pager);
-
-			if (vp.getCurrentItem() < vp.getAdapter().getCount() - 1) {
-				vp.setCurrentItem(vp.getCurrentItem() + 1);
-			}
+//			ViewPager vp = (ViewPager) mActivity.findViewById(R.id.poll_view_pager);
+//
+//			if (vp.getCurrentItem() < vp.getAdapter().getCount() - 1) {
+//				vp.setCurrentItem(vp.getCurrentItem() + 1);
+//			}
+			//changePage(mActivity);
+			
 			// start CommentDialog
 			FragmentManager fm = getActivity().getSupportFragmentManager();
 			CommentDialogFragment dialog = CommentDialogFragment.newInstance(true);
@@ -132,11 +134,21 @@ public class PollFragment extends Fragment {
 		}
 	}
 
+	private void changePage(Activity activity) {
+		ViewPager vp = (ViewPager) activity.findViewById(R.id.poll_view_pager);
+
+		if (vp.getCurrentItem() < vp.getAdapter().getCount() - 1) {
+			vp.setCurrentItem(vp.getCurrentItem() + 1);
+		}
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK)
 			return;
 		if (requestCode == REQUEST_COMMENT) {
+			changePage(getActivity());
+			
 			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
 			String commentTitle = data
 					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);

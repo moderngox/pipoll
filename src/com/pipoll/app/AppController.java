@@ -47,6 +47,8 @@ public class AppController extends Application {
 	// Endpoints
 	public static final String TRENDS_ENDPOINT = "http://hawttrends.appspot.com/api/terms/";
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";
+	public static final String GOOGLE_SEARCH_ENDPOINT = "https://www.google.com/search?q=";
+	public static final String GOOGLE_NEWS_ENDPOINT = "https://news.google.com/news?q=";
 	// Keys
 	public static final String GCS_API_KEY = "AIzaSyB0H_CHXE6ZrpMstY4jGSVcLytDr9TfGN0";
 	public static final String SEARCH_ENGINE_ID = "008262435911699479698:kytdbffa034";

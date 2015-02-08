@@ -17,7 +17,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.java.frej.fuzzy.Fuzzy;
+
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -183,29 +186,34 @@ public class GoogleService implements IGoogle {
 			protected List<TrendNews> doInBackground(Void... params) {
 				try {
 
-					Elements links = Jsoup
+					Document document = Jsoup
 							.connect(
-									"https://www.google.com/search?q="
+									AppController.GOOGLE_NEWS_ENDPOINT
 											+ URLEncoder.encode(query, AppController.UTF_8))
 							.userAgent(
 									"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-							.get().select("li.g>h3>a");
+							.get();
+					Elements links = document.select("a[href]");
 					for (Element link : links) {
 						TrendNews trendnews = new TrendNews();
 						String title = link.text();
 						String url = link.absUrl("href"); // Google returns URLs in format
 															// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
-						url = URLDecoder
-								.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')),
-										"UTF-8");
+															// String url = URLDecoder
+						// .decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')),
+						// "UTF-8");
 
-						if (!url.startsWith("http")) {
+						if (url.contains(".google.")
+								|| (Fuzzy.substrStart(title, query) == -1 && Fuzzy.substrEnd(
+										title, query) == -1)) {
 							continue; // Ads/news/etc.
 						}
 						trendnews.setTitle(title);
 						trendnews.setUrl(url);
 						result.add(trendnews);
-
+						if (result.size() == 3) {
+							break;
+						}
 					}
 
 				} catch (IOException e) {

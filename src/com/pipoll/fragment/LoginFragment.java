@@ -51,24 +51,21 @@ public class LoginFragment extends Fragment {
 		View view = null;
 
 		Session session = Session.getActiveSession();
-		if (session != null) {
-			if (!session.isOpened()) {
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Session.openActiveSession(getActivity(), true,
-						Arrays.asList("user_likes", "user_status"), callback);
-			}
-			getActivity().getActionBar().hide();
-			application.goToActivity(getActivity(), StartupActivity.class, null, true);
-		} else {
+		if (session == null || session.getState().equals(SessionState.CREATED)) {
 			view = inflater.inflate(R.layout.login, container, false);
 			LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 			authButton.setFragment(this);
 			authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
+		} else {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Session.openActiveSession(getActivity(), true,
+					Arrays.asList("user_likes", "user_status"), callback);
+			getActivity().getActionBar().hide();
+			application.goToActivity(getActivity(), StartupActivity.class, null, true);
 		}
 		return view;
 	}

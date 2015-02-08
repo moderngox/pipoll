@@ -58,7 +58,7 @@ public class StartupActivity extends Activity {
 
 					final PollService pollService = new PollService(activity);
 
-					pollService.createPolls(mTrends, 0, 100, new ServiceCallback() {
+					pollService.createPolls(mTrends, 0, 20, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override

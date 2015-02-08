@@ -349,7 +349,7 @@ public class PollService implements IPoll {
 	public void createPolls(final List<Trend> trends, final int start, final int end,
 			final ServiceCallback serviceCallback) {
 		final List<Like> likes = new ArrayList<Like>();
-		List<Trend> trendSubList = trends.subList(start, 100);
+		List<Trend> trendSubList = trends.subList(start, end);
 		final String accessToken = Session.getActiveSession().getAccessToken();
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 		final AsyncTask<Like, Void, List<ParcelablePoll>> getPollsTask = new AsyncTask<Like, Void, List<ParcelablePoll>>() {

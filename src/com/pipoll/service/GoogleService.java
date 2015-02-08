@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,6 +34,7 @@ import com.google.api.services.customsearch.model.Result;
 import com.google.api.services.customsearch.model.Search;
 import com.google.gson.Gson;
 import com.pipoll.app.AppController;
+import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
 import com.pipoll.interfaces.IGoogle;
@@ -168,7 +170,7 @@ public class GoogleService implements IGoogle {
 	@Override
 	public List<TrendNews> getDataFromGoogle(final String query,
 			final TrendNewsCallback trendNewsCallback) {
-		final List<TrendNews> result = new ArrayList<TrendNews>();
+		final List<TrendNews> result = new LinkedList<TrendNews>();
 		new AsyncTask<Void, Void, List<TrendNews>>() {
 
 			@Override
@@ -214,7 +216,58 @@ public class GoogleService implements IGoogle {
 			}
 
 		}.execute();
-		return result;
+		return new ArrayList<TrendNews>(result);
+	}
+
+	@Override
+	public void fillTrendWithNews(final List<Trend> trends, final TaskCallback taskCallback) {
+		new AsyncTask<Trend, Void, Void>() {
+
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+				taskCallback.onSuccess();
+			}
+
+			@Override
+			protected Void doInBackground(Trend... trends) {
+				try {
+					for (Trend trend : trends) {
+						List<TrendNews> trendNews = new ArrayList<TrendNews>();
+						Elements links = Jsoup
+								.connect(
+										"https://www.google.com/search?q="
+												+ URLEncoder.encode(trend.getName(),
+														AppController.UTF_8))
+								.userAgent(
+										"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+								.get().select("li.g>h3>a");
+						for (Element link : links) {
+							TrendNews news = new TrendNews();
+							String title = link.text();
+							String url = link.absUrl("href"); // Google returns URLs in format
+																// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
+							url = URLDecoder.decode(
+									url.substring(url.indexOf('=') + 1, url.indexOf('&')),
+									"UTF-8");
+
+							if (!url.startsWith("http")) {
+								continue; // Ads/news/etc.
+							}
+							news.setTitle(title);
+							news.setUrl(url);
+							trendNews.add(news);
+
+						}
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+		}.execute(trends.toArray(new Trend[trends.size()]));
 	}
 
 	@Override

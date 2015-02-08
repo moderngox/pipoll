@@ -19,7 +19,7 @@ import com.pipoll.R;
 import com.pipoll.customview.CustomViewPager;
 import com.pipoll.customview.FixedSpeedScroller;
 import com.pipoll.data.Poll;
-import com.pipoll.data.PollLab;
+import com.pipoll.data.parcelable.ParcelablePoll;
 
 /**
  * @author Bulbi
@@ -37,14 +37,17 @@ public class PollListFragment extends Fragment {
 	// getActivity() returns null at this state
 	// private ArrayList<Poll> mPolls = PollLab.get(getActivity()).getPolls();
 
-	private ArrayList<Poll> mPolls;
+	private static ArrayList<Poll> mPolls;
+	private static ArrayList<ParcelablePoll> mParcelPolls;
 
-	public static PollListFragment newInstance() {
+	public static PollListFragment newInstance(ArrayList<ParcelablePoll> parcelablePolls) {
 		Bundle args = new Bundle();
 
 		PollListFragment fragment = new PollListFragment();
 		fragment.setArguments(args);
 
+		// retrieve the parcelable polls
+		mParcelPolls = parcelablePolls;
 		return fragment;
 	}
 
@@ -52,7 +55,7 @@ public class PollListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mPolls = PollLab.get(getActivity()).getPolls();
+		// mPolls = PollLab.get(getActivity()).getPolls();
 
 		// UUID crimeId = (UUID) getArguments().getSerializable(EXTRA_CRIME_ID);
 		// mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
@@ -77,7 +80,8 @@ public class PollListFragment extends Fragment {
 
 			@Override
 			public int getCount() {
-				return mPolls.size() + 1;
+				// return mPolls.size() + 1;
+				return mParcelPolls.size() + 1;
 			}
 
 			@Override
@@ -86,8 +90,10 @@ public class PollListFragment extends Fragment {
 					// Bundle args = new Bundle();
 					// args.putInt(PollFragment.KEY_POLL_ID, position);
 					// return PollFragment.newInstance(args);
-					String pollId = mPolls.get(position).getId();
-					return PollFragment.newInstance(pollId);
+					// String pollId = mPolls.get(position).getId();
+					// return PollFragment.newInstance(pollId);
+					// return PollFragment.newInstance(mPolls.get(position));
+					return PollFragment.newInstance(mParcelPolls.get(position));
 				} else {
 					return PollEndFragment.newInstance();
 				}

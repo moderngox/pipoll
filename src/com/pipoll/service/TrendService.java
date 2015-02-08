@@ -12,6 +12,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections4.IteratorUtils;
@@ -62,7 +63,7 @@ public class TrendService implements ITrend {
 		boolean result = false;
 
 		for (Trend t : trends) {
-			if (t.getname().equals(trendname)) {
+			if (t.getName().equals(trendname)) {
 				result = true;
 				break;
 			}
@@ -78,7 +79,7 @@ public class TrendService implements ITrend {
 	 */
 	@Override
 	public List<Trend> getTrends(final TaskCallback taskcallback) {
-		final List<Trend> trends = new ArrayList<Trend>();
+		final List<Trend> trends = new LinkedList<Trend>();
 		new AsyncTask<Void, Void, List<Trend>>() {
 
 			@Override
@@ -103,7 +104,7 @@ public class TrendService implements ITrend {
 								Trend trend = new Trend();
 								String trendname = jsonArray.getString(i);
 								if (!trendAlreadyPresent(trendname, trends)) {
-									trend.setname(trendname);
+									trend.setName(trendname);
 									trends.add(trend);
 								}
 							}
@@ -120,7 +121,7 @@ public class TrendService implements ITrend {
 					e.printStackTrace();
 				}
 				httpclient.getConnectionManager().shutdown();
-				return trends;
+				return new ArrayList<Trend>(trends);
 			}
 
 			@Override
@@ -141,6 +142,7 @@ public class TrendService implements ITrend {
 	 * @see com.pipoll.interfaces.ITrend#getTrends4Like(com.pipoll.data.Like)
 	 */
 	@Override
+	@Deprecated
 	public List<Trend> getTrends4Like(final Like userLike) {
 		// TODO Auto-generated method stub
 		return null;
@@ -168,7 +170,7 @@ public class TrendService implements ITrend {
 						URL url;
 						try {
 							url = new URL(address
-									+ URLEncoder.encode(trend.getname(), charset));
+									+ URLEncoder.encode(trend.getName(), charset));
 							Reader reader = new InputStreamReader(url.openStream(), charset);
 							GoogleResult googleResult = new Gson().fromJson(reader,
 									GoogleResult.class);

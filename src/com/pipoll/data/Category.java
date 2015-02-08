@@ -3,14 +3,20 @@
  */
 package com.pipoll.data;
 
+import java.io.Serializable;
+
 /**
  * @author moderngox
  * 
  *         The app category. We'll use categories for categorize the different poll
  * 
  */
-public class Category {
+public class Category implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String id, name, icon;
 	private long createdAt, updatedAt;
 
@@ -46,7 +52,8 @@ public class Category {
 	}
 
 	/**
-	 * @param createdAt the createdAt to set
+	 * @param createdAt
+	 *            the createdAt to set
 	 */
 	public void setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
@@ -60,7 +67,8 @@ public class Category {
 	}
 
 	/**
-	 * @param updatedAt the updatedAt to set
+	 * @param updatedAt
+	 *            the updatedAt to set
 	 */
 	public void setUpdatedAt(long updatedAt) {
 		this.updatedAt = updatedAt;

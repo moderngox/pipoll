@@ -1,5 +1,7 @@
 package com.pipoll.fragment;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -13,13 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pipoll.R;
+import com.pipoll.app.AppController;
 import com.pipoll.data.Poll;
-import com.pipoll.data.PollLab;
-import com.pipoll.data.Trend;
+import com.pipoll.data.TrendNews;
+import com.pipoll.data.parcelable.ParcelablePoll;
+import com.pipoll.interfaces.callback.TrendNewsCallback;
+import com.pipoll.service.GoogleService;
 
 /**
  * @author Bulbi
@@ -37,7 +44,8 @@ public class PollFragment extends Fragment {
 	ImageButton mImgBtnYes;
 	ImageButton mImgBtnNo;
 
-	Poll mPoll;
+	static Poll mPoll;
+	private ImageView mImage;
 
 	public static PollFragment newInstance(String pollId) {
 		Bundle args = new Bundle();
@@ -49,12 +57,25 @@ public class PollFragment extends Fragment {
 		return fragment;
 	}
 
+	public static PollFragment newInstance(ParcelablePoll pPoll) {
+		Bundle args = new Bundle();
+		args.putParcelable(AppController.POLL_TAG, pPoll);
+
+		PollFragment fragment = new PollFragment();
+		fragment.setArguments(args);
+
+		return fragment;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		String pollId = (String) getArguments().getSerializable(KEY_POLL_ID);
-		mPoll = PollLab.get(getActivity()).getPoll(pollId);
+		// String pollId = (String) getArguments().getSerializable(KEY_POLL_ID);
+		// mPoll = PollLab.get(getActivity()).getPoll(pollId);
+
+		ParcelablePoll pPoll = getArguments().getParcelable(AppController.POLL_TAG);
+		mPoll = pPoll.getPoll();
 	}
 
 	@Override
@@ -66,45 +87,89 @@ public class PollFragment extends Fragment {
 		mTvDescription = (TextView) v.findViewById(R.id.text_view_description);
 		mTvDescription2 = (TextView) v.findViewById(R.id.text_view_description_2);
 		mTvDescription3 = (TextView) v.findViewById(R.id.text_view_description_3);
+		mImgBtnYes = (ImageButton) v.findViewById(R.id.image_button_yes);
+		mImgBtnNo = (ImageButton) v.findViewById(R.id.image_button_no);
+		mImage = (ImageView) v.findViewById(R.id.image);
+		buildPoll();
+		// mTvTitle.setText(mPoll.getId());
+		//
+		// // get one Trend for the Poll
+		// Trend trend = mPoll.getTrend();
+		// String trendName = mPoll.getTrend().getname();
+		//
+		// mTvDescription.setText(trend.getname());
+		//
+		// String link1 = trend.getTrendNews().get(0).getUrl();
+		// String link2 = trend.getTrendNews().get(1).getUrl();
+		//
+		// String link3 = "dummy text";
+		//
+		// Resources r = getActivity().getResources();
+		// String moreInfos = r.getString(R.string.more_infos);
+		//
+		// mTvDescription.setText(Html
+		// .fromHtml("<a href=\"" + link1 + "\">" + moreInfos + "</a>"));
+		// mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+		//
+		// mTvDescription2.setText(Html.fromHtml("<a href=\"" + link2 + "\">" + moreInfos
+		// + "</a>"));
+		// mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
+		//
+		// mTvDescription3.setText(Html.fromHtml("<a href=\"" + link3 + "\">" + moreInfos
+		// + "</a>"));
+		// mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
+		//
+		// mImgBtnYes = (ImageButton) v.findViewById(R.id.image_button_yes);
+		//
+		// mImgBtnYes.setOnClickListener(new VoteClickListener(getActivity(), r
+		// .getString(R.string.like) + " " + trendName));
+		//
+		// mImgBtnNo.setOnClickListener(new VoteClickListener(getActivity(), r
+		// .getString(R.string.dislike) + " " + trendName));
 
-		mTvTitle.setText(mPoll.getId());
+		return v;
+	}
 
-		// get one Trend for the Poll
-		Trend trend = mPoll.getTrend();
-		String trendName = mPoll.getTrend().getname();
+	public void buildPoll() {
+		mTvTitle.setText(mPoll.getTheme());
 
-		mTvDescription.setText(trend.getname());
+		String trendName = mPoll.getTheme();
 
-		String link1 = trend.getTrendNews().get(0).getUrl();
-		String link2 = trend.getTrendNews().get(1).getUrl();
-
-		String link3 = "dummy text";
+		mTvDescription.setText(mPoll.getTheme());
 
 		Resources r = getActivity().getResources();
-		String moreInfos = r.getString(R.string.more_infos);
+		final String moreInfos = r.getString(R.string.more_infos);
 
-		mTvDescription.setText(Html
-				.fromHtml("<a href=\"" + link1 + "\">" + moreInfos + "</a>"));
-		mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+		GoogleService googleService = new GoogleService(getActivity());
+		googleService.getDataFromGoogle(mPoll.getTheme(), new TrendNewsCallback() {
 
-		mTvDescription2.setText(Html.fromHtml("<a href=\"" + link2 + "\">" + moreInfos
-				+ "</a>"));
-		mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
+			@Override
+			public void onNewsRetrieved(List<TrendNews> trendsnews) {
+				if (!trendsnews.isEmpty()) {
+					mTvDescription.setText(Html.fromHtml("<a href=\"" + trendsnews.get(0)
+							+ "\">" + moreInfos + "</a>"));
+					mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
 
-		mTvDescription3.setText(Html.fromHtml("<a href=\"" + link3 + "\">" + moreInfos
-				+ "</a>"));
+					mTvDescription2.setText(Html.fromHtml("<a href=\"" + trendsnews.get(1)
+							+ "\">" + moreInfos + "</a>"));
+					mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
+
+					mTvDescription3.setText(Html.fromHtml("<a href=\"" + trendsnews.get(2)
+							+ "\">" + moreInfos + "</a>"));
+				}
+			}
+
+		});
+
 		mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
-
-		mImgBtnYes = (ImageButton) v.findViewById(R.id.image_button_yes);
 
 		mImgBtnYes.setOnClickListener(new VoteClickListener(getActivity(), r
 				.getString(R.string.like) + " " + trendName));
 
-		mImgBtnNo = (ImageButton) v.findViewById(R.id.image_button_no);
 		mImgBtnNo.setOnClickListener(new VoteClickListener(getActivity(), r
 				.getString(R.string.dislike) + " " + trendName));
-
-		return v;
+		ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+		imageLoader.displayImage(mPoll.getImage(), mImage);
 	}
 
 	private class VoteClickListener implements View.OnClickListener {
@@ -156,9 +221,9 @@ public class PollFragment extends Fragment {
 					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
 
 			// TODO : save comment here
-			Toast.makeText(getActivity(), "" + liked, Toast.LENGTH_SHORT).show();
-			Toast.makeText(getActivity(), commentTitle, Toast.LENGTH_SHORT).show();
-			Toast.makeText(getActivity(), commentDescription, Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getActivity(), "" + liked, Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getActivity(), commentTitle, Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getActivity(), commentDescription, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

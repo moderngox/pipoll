@@ -12,6 +12,10 @@ package com.pipoll.data;
  */
 public class FBCategory extends Category {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int fbID;
 
 	public int getFbID() {

@@ -6,6 +6,7 @@ package com.pipoll.interfaces;
 import java.util.List;
 
 import com.google.api.services.customsearch.model.Result;
+import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
 import com.pipoll.interfaces.callback.TaskCallback;
@@ -22,6 +23,8 @@ public interface IGoogle {
 
 	@Deprecated
 	List<Result> getSearchResult(final String keyword, final TaskCallback taskCallback);
+
+	void fillTrendWithNews(final List<Trend> trends, final TaskCallback taskCallback);
 
 	List<TrendNews> getDataFromGoogle(final String query,
 			final TrendNewsCallback trendNewsCallback);

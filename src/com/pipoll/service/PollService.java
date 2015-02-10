@@ -455,7 +455,11 @@ public class PollService implements IPoll {
 			@Override
 			protected void onPostExecute(List<Like> likes) {
 				super.onPostExecute(likes);
-				getPollsTask.execute(likes.toArray(new Like[likes.size()]));
+				if (likes.isEmpty()) {
+					serviceCallback.onServiceDone(null);
+				} else {
+					getPollsTask.execute(likes.toArray(new Like[likes.size()]));
+				}
 			}
 		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
 

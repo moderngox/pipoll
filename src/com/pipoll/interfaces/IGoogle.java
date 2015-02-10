@@ -29,5 +29,6 @@ public interface IGoogle {
 	List<TrendNews> getDataFromGoogle(final String query,
 			final TrendNewsCallback trendNewsCallback);
 
-	List<String> getDataFromGoogleNews(final String query, final TaskCallback taskCallback);
+	List<TrendNews> getDataFromGoogleNews(final String query,
+			final TrendNewsCallback trendNewsCallback);
 }

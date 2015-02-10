@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.app.AppController;
@@ -35,12 +34,13 @@ import com.pipoll.service.PollService;
 public class PollListFragment extends Fragment {
 
 	public static final String KEY_FRAGMENT_TITLE = "keyFragmentTitle";
-	public static final int POLLS_COUNT = 100;
+	public static final int POLLS_COUNT = 50;
 	TextView mTextView;
 	CustomViewPager mPollViewPager;
 
-	private static LinkedList<ParcelablePoll> mParcelPolls;
-	private static ArrayList<Trend> mTrends;
+	private LinkedList<ParcelablePoll> mParcelPolls;
+	private ArrayList<Trend> mTrends;
+	private PollService pollService;
 
 	public static PollListFragment newInstance(Bundle extras) {
 		PollListFragment fragment = new PollListFragment();
@@ -61,6 +61,7 @@ public class PollListFragment extends Fragment {
 		// retrieve the parcelable polls and trends
 		mParcelPolls = new LinkedList<ParcelablePoll>(parcelablePolls);
 		mTrends = new ArrayList<Trend>(ParcelableTrend.getTrends(parcelableTrends));
+		pollService = new PollService(getActivity());
 	}
 
 	@Override
@@ -88,27 +89,29 @@ public class PollListFragment extends Fragment {
 			@Override
 			public Fragment getItem(int position) {
 
-				if (position == mParcelPolls.size() - 1) {
-					PollService pollService = new PollService(getActivity());
-					int start = mParcelPolls.size() + mParcelPolls.size() * 2 + 5;
-					int end = mParcelPolls.size() + mParcelPolls.size() * 2 + 10;
+				if (position < mParcelPolls.size() && position < getCount() - 1) {
+					// if the end of the list or the getCount limit is not reached we search
+					// for then potentially create a new poll for the current polls list before
+					// returning the current poll to the view
+
+					int start = mParcelPolls.size() + position + 2;
+					int end = start + 1;
 					pollService.createPolls(mTrends, start, end, new ServiceCallback() {
 
 						@Override
 						public void onServiceDone(Object response) {
-							@SuppressWarnings("unchecked")
-							ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
-							for (ParcelablePoll pPoll : parcelPolls) {
-								mParcelPolls.addLast(pPoll);
-								Toast.makeText(getActivity(),
-										"new Poll added: " + pPoll.getPoll().getTheme(),
-										Toast.LENGTH_SHORT).show();
+							if (response != null) {
+								@SuppressWarnings("unchecked")
+								ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
+								for (ParcelablePoll pPoll : parcelPolls) {
+									mParcelPolls.add(pPoll);
+									// Toast.makeText(getActivity(),
+									// "new Poll added: " + pPoll.getPoll().getTheme(),
+									// Toast.LENGTH_SHORT).show();
+								}
 							}
-
 						}
 					});
-				}
-				if (position < mParcelPolls.size() && position < getCount() - 1) {
 					return PollFragment.newInstance(mParcelPolls.get(position));
 				} else {
 					return PollEndFragment.newInstance();

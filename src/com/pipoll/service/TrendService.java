@@ -12,7 +12,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.collections4.IteratorUtils;
@@ -79,7 +78,7 @@ public class TrendService implements ITrend {
 	 */
 	@Override
 	public List<Trend> getTrends(final TaskCallback taskcallback) {
-		final List<Trend> trends = new LinkedList<Trend>();
+		final List<Trend> trends = new ArrayList<Trend>();
 		new AsyncTask<Void, Void, List<Trend>>() {
 
 			@Override
@@ -121,7 +120,7 @@ public class TrendService implements ITrend {
 					e.printStackTrace();
 				}
 				httpclient.getConnectionManager().shutdown();
-				return new ArrayList<Trend>(trends);
+				return trends;
 			}
 
 			@Override

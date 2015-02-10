@@ -173,7 +173,7 @@ public class GoogleService implements IGoogle {
 	@Override
 	public List<TrendNews> getDataFromGoogle(final String query,
 			final TrendNewsCallback trendNewsCallback) {
-		final List<TrendNews> result = new LinkedList<TrendNews>();
+		final List<TrendNews> trendNews = new LinkedList<TrendNews>();
 		new AsyncTask<Void, Void, List<TrendNews>>() {
 
 			@Override
@@ -186,45 +186,40 @@ public class GoogleService implements IGoogle {
 			protected List<TrendNews> doInBackground(Void... params) {
 				try {
 
-					Document document = Jsoup
+					Elements links = Jsoup
 							.connect(
-									AppController.GOOGLE_NEWS_ENDPOINT
+									"https://www.google.com/search?q="
 											+ URLEncoder.encode(query, AppController.UTF_8))
 							.userAgent(
 									"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-							.get();
-					Elements links = document.select("a[href]");
+							.get().select("li.g>h3>a");
 					for (Element link : links) {
-						TrendNews trendnews = new TrendNews();
+						TrendNews news = new TrendNews();
 						String title = link.text();
 						String url = link.absUrl("href"); // Google returns URLs in format
 															// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
-															// String url = URLDecoder
-						// .decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')),
-						// "UTF-8");
+						url = URLDecoder
+								.decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')),
+										"UTF-8");
 
-						if (url.contains(".google.")
-								|| (Fuzzy.substrStart(title, query) == -1 && Fuzzy.substrEnd(
-										title, query) == -1)) {
+						if (!url.startsWith("http")) {
 							continue; // Ads/news/etc.
 						}
-						trendnews.setTitle(title);
-						trendnews.setUrl(url);
-						result.add(trendnews);
-						if (result.size() == 3) {
-							break;
-						}
+						news.setTitle(title);
+						news.setUrl(url);
+						trendNews.add(news);
+
 					}
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
-				return result;
+				return trendNews;
 			}
 
 		}.execute();
-		return new ArrayList<TrendNews>(result);
+		return new ArrayList<TrendNews>(trendNews);
 	}
 
 	@Override
@@ -279,9 +274,63 @@ public class GoogleService implements IGoogle {
 	}
 
 	@Override
-	public List<String> getDataFromGoogleNews(final String query,
-			final TaskCallback taskCallback) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TrendNews> getDataFromGoogleNews(final String query,
+			final TrendNewsCallback trendNewsCallback) {
+		final List<TrendNews> result = new LinkedList<TrendNews>();
+		new AsyncTask<Void, Void, List<TrendNews>>() {
+
+			@Override
+			protected void onPostExecute(List<TrendNews> result) {
+				super.onPostExecute(result);
+				if (result.isEmpty()) {
+					getDataFromGoogle(query, trendNewsCallback);
+				} else {
+					trendNewsCallback.onNewsRetrieved(result);
+				}
+			}
+
+			@Override
+			protected List<TrendNews> doInBackground(Void... params) {
+				try {
+
+					Document document = Jsoup
+							.connect(
+									AppController.GOOGLE_NEWS_ENDPOINT
+											+ URLEncoder.encode(query, AppController.UTF_8))
+							.userAgent(
+									"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+							.get();
+					Elements links = document.select("a[href]");
+					for (Element link : links) {
+						TrendNews trendnews = new TrendNews();
+						String title = link.text();
+						String url = link.absUrl("href"); // Google returns URLs in format
+															// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
+															// String url = URLDecoder
+						// .decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')),
+						// "UTF-8");
+
+						if (url.contains(".google.")
+								|| (Fuzzy.substrStart(title, query) == -1 && Fuzzy.substrEnd(
+										title, query) == -1)) {
+							continue; // Ads/news/etc.
+						}
+						trendnews.setTitle(title);
+						trendnews.setUrl(url);
+						result.add(trendnews);
+						if (result.size() == 3) {
+							break;
+						}
+					}
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				return result;
+			}
+
+		}.execute();
+		return new ArrayList<TrendNews>(result);
 	}
 }

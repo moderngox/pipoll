@@ -102,24 +102,33 @@ public class PollFragment extends Fragment {
 		mTvDescription.setText(mPoll.getTheme());
 
 		Resources r = getActivity().getResources();
-		final String moreInfos = r.getString(R.string.more_infos);
+		// final String moreInfos = r.getString(R.string.more_infos);
 
 		GoogleService googleService = new GoogleService(getActivity());
-		googleService.getDataFromGoogle(mPoll.getTheme(), new TrendNewsCallback() {
+		googleService.getDataFromGoogleNews(mPoll.getTheme(), new TrendNewsCallback() {
 
 			@Override
 			public void onNewsRetrieved(List<TrendNews> trendsnews) {
-				if (!trendsnews.isEmpty()) {
-					mTvDescription.setText(Html.fromHtml("<a href=\"" + trendsnews.get(0)
-							+ "\">" + moreInfos + "</a>"));
+				if (trendsnews != null && !trendsnews.isEmpty()) {
+					mTvDescription.setText(Html.fromHtml("<a href=\""
+							+ trendsnews.get(0).getUrl() + "\">"
+							+ trendsnews.get(0).getTitle() + "</a>"));
 					mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+					mTvDescription.setVisibility(View.VISIBLE);
+					if (trendsnews.size() > 1) {
+						mTvDescription2.setText(Html.fromHtml("<a href=\""
+								+ trendsnews.get(1).getUrl() + "\">"
+								+ trendsnews.get(1).getTitle() + "</a>"));
+						mTvDescription2.setVisibility(View.VISIBLE);
+					}
+					if (trendsnews.size() > 2) {
+						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 
-					mTvDescription2.setText(Html.fromHtml("<a href=\"" + trendsnews.get(1)
-							+ "\">" + moreInfos + "</a>"));
-					mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
-
-					mTvDescription3.setText(Html.fromHtml("<a href=\"" + trendsnews.get(2)
-							+ "\">" + moreInfos + "</a>"));
+						mTvDescription3.setText(Html.fromHtml("<a href=\""
+								+ trendsnews.get(2).getUrl() + "\">"
+								+ trendsnews.get(2).getTitle() + "</a>"));
+						mTvDescription3.setVisibility(View.VISIBLE);
+					}
 				}
 			}
 
@@ -178,11 +187,12 @@ public class PollFragment extends Fragment {
 		if (requestCode == REQUEST_COMMENT) {
 			changePage(getActivity());
 
-			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
-			String commentTitle = data
-					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
-			String commentDescription = data
-					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
+			// boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED,
+			// true);
+			// String commentTitle = data
+			// .getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
+			// String commentDescription = data
+			// .getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
 
 			// TODO : save comment here
 			// Toast.makeText(getActivity(), "" + liked, Toast.LENGTH_SHORT).show();

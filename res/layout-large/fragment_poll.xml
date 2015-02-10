@@ -30,7 +30,6 @@
         android:layout_marginRight="0dp"
         android:src="@drawable/picture3"
         android:adjustViewBounds="false"
-        android:contentDescription="@string/poll_image"
         android:scaleType="fitXY" />
 
 
@@ -64,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:lines="1"
-                android:text="@string/more_infos"
+                android:text="@string/news"
                 android:textStyle="bold" />
 
             <TextView
@@ -73,7 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:lines="1" />
+                android:lines="1"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/text_view_description_2"
@@ -81,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:lines="1" />
+                android:lines="1"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/text_view_description_3"
@@ -89,7 +90,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:lines="1" />
+                android:lines="1"
+                android:visibility="gone" />
         </LinearLayout>
 
         <ImageButton

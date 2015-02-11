@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,8 +18,8 @@ import com.pipoll.R;
 /**
  * @author Bulbi
  * 
- *         This custom DialogFragment manage the poll comment posted by user. Caller must
- *         overrides onActivityResult() althought this is not Activity.
+ *         This custom DialogFragment manage the poll comment posted by user. Caller must overrides
+ *         onActivityResult() althought this is a fragment, not an Activity.
  */
 public class CommentDialogFragment extends DialogFragment {
 	public static final String EXTRA_KEY_LIKED = "CommentFragment.keyLiked";
@@ -29,10 +30,17 @@ public class CommentDialogFragment extends DialogFragment {
 	private String mCommentTitle;
 	private String mCommentDescription;
 
-	public static CommentDialogFragment newInstance() {
-		CommentDialogFragment fragment = new CommentDialogFragment();
-		return fragment;
-	}
+	private ImageButton imageButtonNo;
+	private ImageButton imageButtonYes;
+
+	private TextView tvLike;
+	private EditText edtCommentTitle;
+	private EditText edtCommentDescription;
+
+	// public static CommentDialogFragment newInstance() {
+	// TextView textViewLike = (TextV CommentDialogFragment fragment = new CommentDialogFragment();
+	// EditText edtCommentTitle = (Ed return fragment;
+	// EditText edtCommentDescription}
 
 	public static CommentDialogFragment newInstance(boolean liked) {
 		Bundle args = new Bundle();
@@ -60,33 +68,78 @@ public class CommentDialogFragment extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_comment, null);
 
-		mLiked = (boolean) getArguments().getBoolean(EXTRA_KEY_LIKED);
 		// TODO : Set the appearance of the buttons according to user's choice ?
+		mLiked = (boolean) getArguments().getBoolean(EXTRA_KEY_LIKED);
 
-		ImageButton imageButtonNo = (ImageButton) v.findViewById(R.id.imageButtonNo);
-		ImageButton imageButtonYes = (ImageButton) v.findViewById(R.id.imageButtonYes);
+		imageButtonNo = (ImageButton) v.findViewById(R.id.imageButtonNo);
+		// imageButtonNo.setOnClickListener(new View.OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// mLiked = false;
+		// getArguments().putBoolean(EXTRA_KEY_LIKED, mLiked);
+		// updateLike();
+		// }
+		// });
+		//
+		// onClick() does not work to keep a button at state pressed.
+		imageButtonNo.setOnTouchListener(new View.OnTouchListener() {
 
-		TextView textViewLike = (TextView) v.findViewById(R.id.textViewLike);
-		EditText edtCommentTitle = (EditText) v.findViewById(R.id.editTextCommentTitle);
-		EditText edtCommentDescription = (EditText) v
-				.findViewById(R.id.editTextCommentDescription);
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				mLiked = false;
+				// getArguments().putBoolean(EXTRA_KEY_LIKED, mLiked);
+				updateLike();
+				v.performClick();
+				return true;
+			}
+		});
 
-		// TODO : returns temporary
-		mCommentTitle = edtCommentTitle.getText().toString();
-		mCommentDescription = edtCommentDescription.getText().toString();
+		imageButtonYes = (ImageButton) v.findViewById(R.id.imageButtonYes);
+		imageButtonYes.setOnTouchListener(new View.OnTouchListener() {
 
-		mLiked = false;
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				mLiked = true;
+				// getArguments().putBoolean(EXTRA_KEY_LIKED, mLiked);
+				updateLike();
+				v.performClick();
+				return true;
+			}
+		});
+
+		tvLike = (TextView) v.findViewById(R.id.textViewLike);
+		edtCommentTitle = (EditText) v.findViewById(R.id.editTextCommentTitle);
+		edtCommentDescription = (EditText) v.findViewById(R.id.editTextCommentDescription);
+
+		// TODO : temporary results !?
+		// mCommentTitle = edtCommentTitle.getText().toString();
+		// mCommentDescription = edtCommentDescription.getText().toString();
+
 		mCommentTitle = "super titre";
 		mCommentDescription = "super commentaire";
 
 		// TODO : do stuff to preserve data on rotation ? => Check DialogDate in CriminalIntent
 
-		return new AlertDialog.Builder(getActivity()).setView(v)
-				.setTitle(R.string.comment_dialog_title)
+		updateLike();
+
+		return new AlertDialog.Builder(getActivity()).setView(v).setTitle(R.string.comment_dialog_title)
 				.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						sendResult(Activity.RESULT_OK);
 					}
 				}).create();
+	}
+
+	private void updateLike() {
+		if (mLiked) {
+			tvLike.setText(R.string.like);
+			imageButtonYes.setPressed(true);
+			imageButtonNo.setPressed(false);
+		} else {
+			tvLike.setText(R.string.dislike);
+			imageButtonYes.setPressed(false);
+			imageButtonNo.setPressed(true);
+		}
 	}
 }

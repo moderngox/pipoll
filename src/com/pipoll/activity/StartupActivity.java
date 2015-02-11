@@ -58,7 +58,7 @@ public class StartupActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 
 					final PollService pollService = new PollService(activity);
-					pollService.createPolls(mTrends, 0, 30, new ServiceCallback() {
+					pollService.createPolls(mTrends, 0, 7, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override

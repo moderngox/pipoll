@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -18,10 +18,22 @@
     </style>
 
     <!-- Do not know what is the correct location for this ! -->
+    <style name="Tag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/tag_background</item>
+        <item name="android:textColor">@drawable/text_color_inversed</item>
+    </style>
+    
     <style name="ButtonDefault">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/button_default_selector</item>
+        <item name="android:textColor">@drawable/text_color_inversed</item>
+    </style>
+    
+    <style name="ButtonDefault.Bottom">
+        <item name="android:background">@drawable/button_bottom_selector</item>
     </style>
     
     <style name="ButtonYes">

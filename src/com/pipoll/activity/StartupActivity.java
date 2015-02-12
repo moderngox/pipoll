@@ -51,7 +51,6 @@ public class StartupActivity extends Activity {
 
 			mTrends = trendService.getDailyHotTrends("p16", "fr", "20150212",
 					new TaskCallback() {
-
 						@Override
 						public void onSuccess() {
 							Toast.makeText(getApplicationContext(),

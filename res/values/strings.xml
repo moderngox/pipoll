@@ -15,6 +15,7 @@
     <string name="news">NEWS</string>
     <string name="like">You like</string>
     <string name="dislike">You dislike</string>
+    <string name="dont_care">Don\'t care</string>
     <string name="tab_poll_list_name">Polls of the day</string>
     <string name="tab_notification_name">My notifications</string>
     <string name="tab_profile_name">My profile</string>

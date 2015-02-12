@@ -333,4 +333,5 @@ public class GoogleService implements IGoogle {
 		}.execute();
 		return new ArrayList<TrendNews>(result);
 	}
+
 }

@@ -38,6 +38,7 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.pipoll.app.AppController;
+import com.pipoll.data.Category;
 import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
 import com.pipoll.data.Trend;
@@ -346,9 +347,10 @@ public class PollService implements IPoll {
 	}
 
 	@Override
-	public void createPolls(final List<Trend> trends, final int start, final int end,
+	public void createPolls(final List<Trend> trends, final int start, int end,
 			final ServiceCallback serviceCallback) {
 		final List<Like> likes = new ArrayList<Like>();
+		end = end > trends.size() ? trends.size() : end;
 		List<Trend> trendSubList = trends.subList(start, end);
 		final String accessToken = Session.getActiveSession().getAccessToken();
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -461,6 +463,73 @@ public class PollService implements IPoll {
 					getPollsTask.execute(likes.toArray(new Like[likes.size()]));
 				}
 			}
+		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
+
+	}
+
+	@Override
+	public void createGPolls(final List<Trend> trends, int start, int end,
+			final ServiceCallback serviceCallback) {
+		List<Trend> trendSubList = trends.subList(start, end);
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
+
+		new AsyncTask<Trend, Void, List<ParcelablePoll>>() {
+
+			@Override
+			protected List<ParcelablePoll> doInBackground(Trend... arg0) {
+				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
+
+				for (Trend trend : trends) {
+					String request;
+					try {
+						request = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="
+								+ URLEncoder.encode(trend.getName(), AppController.UTF_8);
+						HttpGet httpgetreq = new HttpGet(request);
+						httpgetreq.setHeader("Content-type", "application/json");
+						String responseText = null;
+						HttpResponse httpresponse = httpclient.execute(httpgetreq);
+						responseText = EntityUtils.toString(httpresponse.getEntity());
+						Log.d("Response: ", responseText);
+						JSONObject jsonResponse = new JSONObject(responseText);
+						JSONObject responseData = jsonResponse.isNull("responseData") ? null
+								: jsonResponse.getJSONObject("responseData");
+						if (responseData != null) {
+							String imgURL = responseData.getJSONArray("results")
+									.getJSONObject(0).getString("url");
+							Poll poll = new Poll();
+							long date = new Date().getTime();
+							poll.setId(String.valueOf(date));
+							poll.setCreatedAt(date);
+							poll.setUpdatedAt(date);
+							poll.setTheme(trend.getName());
+							poll.setImage(imgURL);
+							poll.setCategory(new Category());
+							trend.setTrendNews(new ArrayList<TrendNews>());
+							poll.setTrend(trend);
+							polls.add(new ParcelablePoll(poll));
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					} catch (ClientProtocolException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+				return polls;
+			}
+
+			@Override
+			protected void onPostExecute(List<ParcelablePoll> result) {
+				super.onPostExecute(result);
+				if (!result.isEmpty()) {
+					serviceCallback.onServiceDone(result);
+				}
+			}
+
 		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
 
 	}

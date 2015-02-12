@@ -20,6 +20,9 @@ public interface ITrend {
 
 	List<Trend> getTrends4Like(final Like userLike);
 
+	List<Trend> getDailyHotTrends(final String location, final String language,
+			final String dateUsFormat, final TaskCallback taskcallback);
+
 	@Deprecated
 	void setNews(final List<Trend> trends, final TaskCallback taskcallback);
 }

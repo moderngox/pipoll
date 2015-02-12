@@ -88,30 +88,30 @@ public class PollListFragment extends Fragment {
 
 			@Override
 			public Fragment getItem(int position) {
-
 				if (position < mParcelPolls.size() && position < getCount() - 1) {
 					// if the end of the list or the getCount limit is not reached we search
 					// for then potentially create a new poll for the current polls list before
 					// returning the current poll to the view
+					if (mTrends.size() > getCount()) {
+						int start = mParcelPolls.size() + position + 2;
+						int end = start + 1;
+						pollService.createPolls(mTrends, start, end, new ServiceCallback() {
 
-					int start = mParcelPolls.size() + position + 2;
-					int end = start + 1;
-					pollService.createPolls(mTrends, start, end, new ServiceCallback() {
-
-						@Override
-						public void onServiceDone(Object response) {
-							if (response != null) {
-								@SuppressWarnings("unchecked")
-								ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
-								for (ParcelablePoll pPoll : parcelPolls) {
-									mParcelPolls.add(pPoll);
-									// Toast.makeText(getActivity(),
-									// "new Poll added: " + pPoll.getPoll().getTheme(),
-									// Toast.LENGTH_SHORT).show();
+							@Override
+							public void onServiceDone(Object response) {
+								if (response != null) {
+									@SuppressWarnings("unchecked")
+									ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
+									for (ParcelablePoll pPoll : parcelPolls) {
+										mParcelPolls.add(pPoll);
+										// Toast.makeText(getActivity(),
+										// "new Poll added: " + pPoll.getPoll().getTheme(),
+										// Toast.LENGTH_SHORT).show();
+									}
 								}
 							}
-						}
-					});
+						});
+					}
 					return PollFragment.newInstance(mParcelPolls.get(position));
 				} else {
 					return PollEndFragment.newInstance();

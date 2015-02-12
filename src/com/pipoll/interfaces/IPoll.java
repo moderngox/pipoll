@@ -36,4 +36,7 @@ public interface IPoll {
 
 	void createPolls(final List<Trend> trends, final int start, final int end,
 			final ServiceCallback serviceCallback);
+
+	void createGPolls(final List<Trend> trends, final int start, final int end,
+			final ServiceCallback serviceCallback);
 }

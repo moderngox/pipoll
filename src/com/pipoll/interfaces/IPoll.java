@@ -19,24 +19,61 @@ import com.pipoll.interfaces.callback.ServiceCallback;
  */
 public interface IPoll {
 
-	void createPoll(final Like userLike, final List<Trend> trends4like,
+	/**
+	 * Create a poll when a FB Like match with a trend from @Trend list
+	 * 
+	 * @param userLike
+	 * @param trends4like
+	 * @param serviceCallback
+	 */
+	void createMatchPoll(final Like userLike, final List<Trend> trends4like,
 			ServiceCallback serviceCallback);
 
+	/**
+	 * Create a poll from a trend
+	 * 
+	 * @param trend
+	 * @param serviceCallback
+	 */
+	@Deprecated
 	void createPollFromTrend(final Trend trend, final ServiceCallback serviceCallback);
 
+	/**
+	 * Facebook async function for getting likeAvatar
+	 * 
+	 * @param fbSession
+	 * @param likeID
+	 * @param getImgCallback
+	 * @return
+	 */
+	@Deprecated
 	String getLikeAvatar(final Session fbSession, final String likeID,
 			final GetImgCallback getImgCallback);
 
-	Like getLike(final Session fbSession, final String query,
-			final ServiceCallback serviceCallback);
-
+	/**
+	 * Facebook async function for getting Like page data
+	 * 
+	 * @param fbSession
+	 * @param query
+	 * @param serviceCallback
+	 * @return
+	 */
 	@Deprecated
-	void asyncCreatePolls(final List<Trend> trends, final int pollNb,
+	Like getLike(final Session fbSession, final String query,
 			final ServiceCallback serviceCallback);
 
 	void createPolls(final List<Trend> trends, final int start, final int end,
 			final ServiceCallback serviceCallback);
 
+	/**
+	 * Create Polls from via Google Image Search API
+	 * 
+	 * @param trends
+	 * @param start
+	 * @param end
+	 * @param serviceCallback
+	 */
+	@Deprecated
 	void createGPolls(final List<Trend> trends, final int start, final int end,
 			final ServiceCallback serviceCallback);
 }

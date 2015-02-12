@@ -57,6 +57,8 @@ public class AppController extends Application {
 	public static final String UTF_8 = "UTF-8";
 	public static final String GOOGLE_HOT_TRENDS = "http://www.google.com/trends/hottrends/hotItems";
 	public static final String GOOGLE_TOP_CHART_CAT = "http://www.google.com/trends/topcharts/category";
+	public static final String NO_IMAGE_URL = "http://www.clker.com/cliparts/B/u/S/l/W/l/no-photo-available-md.png";
+	public static final String NO_CATEGORY_TAG = "N/C";
 
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;

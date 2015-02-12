@@ -47,7 +47,6 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:adjustViewBounds="false"
-        android:contentDescription="@string/poll_image"
         android:scaleType="fitXY"
         android:src="@drawable/picture3" />
 
@@ -114,7 +113,7 @@
                 android:layout_below="@id/text_view_description_2"
                 android:gravity="center_horizontal"
                 android:lines="1"
-                android:text="dummy text" />
+                 />
 
             <Button
                 android:id="@+id/button_next_poll"

@@ -49,40 +49,36 @@ public class StartupActivity extends Activity {
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
 
-			mTrends = trendService.getDailyHotTrends("p16", "fr", "20150212",
-					new TaskCallback() {
+			mTrends = trendService.getMonthlyTopTrends("p16", "fr", new TaskCallback() {
+				@Override
+				public void onSuccess() {
+					Toast.makeText(getApplicationContext(),
+							String.valueOf(mTrends.size()) + " hot trends available",
+							Toast.LENGTH_SHORT).show();
+
+					final PollService pollService = new PollService(activity);
+					pollService.createPolls(mTrends, 0, 30, new ServiceCallback() {
+
+						@SuppressWarnings("unchecked")
 						@Override
-						public void onSuccess() {
-							Toast.makeText(getApplicationContext(),
-									String.valueOf(mTrends.size()) + " hot trends available",
+						public void onServiceDone(Object response) {
+							Bundle extras = new Bundle();
+							ArrayList<? extends Parcelable> Parcelresp = (ArrayList<? extends Parcelable>) response;
+							extras.putParcelableArrayList(AppController.POLLS_TAG, Parcelresp);
+							extras.putParcelableArrayList(AppController.TRENDS_TAG,
+									(ArrayList<? extends Parcelable>) ParcelableTrend
+											.getParcelTrends(mTrends));
+							Toast.makeText(activity,
+									String.valueOf(Parcelresp.size()) + " polls loaded",
 									Toast.LENGTH_SHORT).show();
-
-							final PollService pollService = new PollService(activity);
-							pollService.createPolls(mTrends, 0, 30, new ServiceCallback() {
-
-								@SuppressWarnings("unchecked")
-								@Override
-								public void onServiceDone(Object response) {
-									Bundle extras = new Bundle();
-									ArrayList<? extends Parcelable> Parcelresp = (ArrayList<? extends Parcelable>) response;
-									extras.putParcelableArrayList(AppController.POLLS_TAG,
-											Parcelresp);
-									extras.putParcelableArrayList(AppController.TRENDS_TAG,
-											(ArrayList<? extends Parcelable>) ParcelableTrend
-													.getParcelTrends(mTrends));
-									Toast.makeText(
-											activity,
-											String.valueOf(Parcelresp.size())
-													+ " polls loaded", Toast.LENGTH_SHORT)
-											.show();
-									progress.clearAnimation();
-									application.goToActivity(activity, TabActivity.class,
-											extras, true);
-								}
-							});
-
+							progress.clearAnimation();
+							application
+									.goToActivity(activity, TabActivity.class, extras, true);
 						}
 					});
+
+				}
+			});
 
 		} else {
 			application.goToActivity(activity, MainActivity.class, null, true);

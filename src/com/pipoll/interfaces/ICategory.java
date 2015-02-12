@@ -16,14 +16,37 @@ import com.pipoll.interfaces.callback.TaskCallback;
  *         Interface gathering methods related to the @Category and @FBCategory
  */
 public interface ICategory {
-
+	/**
+	 * Get the app server categories
+	 * 
+	 * @param taskCallBack
+	 * @return
+	 */
 	List<Category> getAppCategories(final TaskCallback taskCallBack);
 
+	/**
+	 * Get a consistent list of FB categories
+	 * 
+	 * @param session
+	 * @return
+	 */
 	List<FBCategory> getFBCategories(final Session session);
 
-	String createCategory(final Category category, final TaskCallback taskCallBack); // return
-																						// logical
-																						// ID
+	/**
+	 * Create a category into the app server
+	 * 
+	 * @param category
+	 * @param taskCallBack
+	 * @return a logical ID
+	 */
+	String createCategory(final Category category, final TaskCallback taskCallBack);
 
+	/**
+	 * Get a app category
+	 * 
+	 * @param categoryID
+	 * @param taskCallBack
+	 * @return
+	 */
 	Category getCategory(final String categoryID, final TaskCallback taskCallBack);
 }

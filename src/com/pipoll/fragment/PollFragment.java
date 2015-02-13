@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pipoll.R;
+import com.pipoll.activity.WebPagerActivity;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
@@ -106,6 +107,18 @@ public class PollFragment extends Fragment {
 		String trendName = mPoll.getTheme();
 
 		mTvDescription.setText(mPoll.getTheme());
+		
+		// TODO : just launching webView for test here
+		mTvTitle.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				//Intent i = new Intent(getActivity(), WebActivity.class);
+				Intent i = new Intent(getActivity(), WebPagerActivity.class);
+				startActivity(i);
+			}
+		});
+		
 		mTvCategory.setText(mPoll.getCategory().getName());
 
 		ImageLoader imageLoader = AppController.getInstance().getImageLoader();

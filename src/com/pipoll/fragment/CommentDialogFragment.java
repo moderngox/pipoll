@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -149,12 +150,15 @@ public class CommentDialogFragment extends DialogFragment {
 	}
 
 	private void updateLike() {
+		Resources r = getActivity().getResources();
 		if (mLiked) {
-			mTvLike.setText(R.string.like);
+			mTvLike.setText(R.string.comment_like);
+			mTvLike.setTextColor(r.getColor(android.R.color.holo_green_dark));
 			mImgBtnYes.setPressed(true);
 			mImgBtnNo.setPressed(false);
 		} else {
-			mTvLike.setText(R.string.dislike);
+			mTvLike.setText(R.string.comment_dislike);
+			mTvLike.setTextColor(r.getColor(android.R.color.holo_orange_dark));
 			mImgBtnYes.setPressed(false);
 			mImgBtnNo.setPressed(true);
 		}

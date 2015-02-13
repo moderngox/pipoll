@@ -5,46 +5,49 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="20dp" >
+    android:paddingBottom="@dimen/dim_8dp"
+    android:paddingLeft="@dimen/dim_8dp"
+    android:paddingRight="@dimen/dim_8dp"
+    android:paddingTop="@dimen/dim_16dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp" >
+        android:layout_marginBottom="@dimen/dim_16dp" >
 
         <ImageButton
             android:id="@+id/imageButtonNo"
             style="@style/ButtonNo"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="@dimen/dim_40dp"
             android:contentDescription="@string/no"
-            android:padding="15dp"
+            android:padding="@dimen/dim_16dp"
             android:src="@drawable/ic_no" />
 
         <ImageButton
             android:id="@+id/imageButtonYes"
             style="@style/ButtonYes"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="@dimen/dim_40dp"
             android:contentDescription="@string/yes"
-            android:padding="15dp"
+            android:padding="@dimen/dim_16dp"
             android:src="@drawable/ic_yes" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/textViewLike"
+        style="@style/TextViewDefault"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="@dimen/dim_16dp"
+        android:layout_marginTop="@dimen/dim_16dp"
         android:text="dummy"
+        android:textSize="@dimen/text_size_medium"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/editTextCommentTitle"
+        style="@style/TextViewDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -55,6 +58,7 @@
 
     <EditText
         android:id="@+id/editTextCommentDescription"
+        style="@style/TextViewDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

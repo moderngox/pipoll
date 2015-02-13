@@ -53,6 +53,7 @@ public class PollListFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// TODO : null exception hero when coming back from webView
 		ArrayList<ParcelablePoll> parcelablePolls = getArguments().getParcelableArrayList(
 				AppController.POLLS_TAG);
 

@@ -12,5 +12,4 @@ public class WebActivity extends SingleFragmentActivity {
 
 		return fragment;
 	}
-
 }

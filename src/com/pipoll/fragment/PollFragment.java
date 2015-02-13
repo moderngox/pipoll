@@ -152,7 +152,7 @@ public class PollFragment extends Fragment {
 		});
 
 		mImgBtnNo.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				showCommentDialog(false);
@@ -160,7 +160,7 @@ public class PollFragment extends Fragment {
 		});
 
 		mBtnNext.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				changePage(getActivity());
@@ -208,19 +208,17 @@ public class PollFragment extends Fragment {
 		if (resultCode != Activity.RESULT_OK)
 			return;
 		if (requestCode == REQUEST_COMMENT) {
+
+			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
+			String commentTitle = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
+			String commentDescription = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
+
+			// TODO : replace Toast by a save comment function
+			Toast.makeText(
+					getActivity(),
+					mPoll.getTheme() + " liked: " + liked + "\ncommentTitle: " + commentTitle + "\ncommentDescription: "
+							+ commentDescription, Toast.LENGTH_SHORT).show();
 			changePage(getActivity());
-
-			// boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED,
-			// true);
-			// String commentTitle = data
-			// .getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
-			// String commentDescription = data
-			// .getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
-
-			// TODO : save comment here
-			// Toast.makeText(getActivity(), "" + liked, Toast.LENGTH_SHORT).show();
-			// Toast.makeText(getActivity(), commentTitle, Toast.LENGTH_SHORT).show();
-			// Toast.makeText(getActivity(), commentDescription, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

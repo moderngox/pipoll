@@ -1,5 +1,6 @@
 package com.pipoll.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -19,7 +22,9 @@ import com.pipoll.R;
  * @author Bulbi
  * 
  *         This custom DialogFragment manage the poll comment posted by user. Caller must overrides
- *         onActivityResult() althought this is a fragment, not an Activity.
+ *         onActivityResult() althought this is a fragment, not an Activity. The data is send back to caller
+ *         in the Extras whose keys are EXTRA_KEY_LIKED, EXTRA_KEY_COMMENT_TITLE and
+ *         EXTRA_KEY_COMMENT_DESCRIPTION
  */
 public class CommentDialogFragment extends DialogFragment {
 	public static final String EXTRA_KEY_LIKED = "CommentFragment.keyLiked";
@@ -30,12 +35,12 @@ public class CommentDialogFragment extends DialogFragment {
 	private String mCommentTitle;
 	private String mCommentDescription;
 
-	private ImageButton imageButtonNo;
-	private ImageButton imageButtonYes;
+	private ImageButton mImgBtnNo;
+	private ImageButton mImgBtnYes;
 
-	private TextView tvLike;
-	private EditText edtCommentTitle;
-	private EditText edtCommentDescription;
+	private TextView mTvLike;
+	private EditText mEdtCommentTitle;
+	private EditText mEdtCommentDescription;
 
 	// public static CommentDialogFragment newInstance() {
 	// TextView textViewLike = (TextV CommentDialogFragment fragment = new CommentDialogFragment();
@@ -64,26 +69,17 @@ public class CommentDialogFragment extends DialogFragment {
 		getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_comment, null);
 
-		// TODO : Set the appearance of the buttons according to user's choice ?
+		// Set the appearance of the buttons according to user's choice ?
 		mLiked = (boolean) getArguments().getBoolean(EXTRA_KEY_LIKED);
 
-		imageButtonNo = (ImageButton) v.findViewById(R.id.imageButtonNo);
-		// imageButtonNo.setOnClickListener(new View.OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// mLiked = false;
-		// getArguments().putBoolean(EXTRA_KEY_LIKED, mLiked);
-		// updateLike();
-		// }
-		// });
-		//
+		mImgBtnNo = (ImageButton) v.findViewById(R.id.imageButtonNo);
 		// onClick() does not work to keep a button at state pressed.
-		imageButtonNo.setOnTouchListener(new View.OnTouchListener() {
+		mImgBtnNo.setOnTouchListener(new View.OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -95,29 +91,50 @@ public class CommentDialogFragment extends DialogFragment {
 			}
 		});
 
-		imageButtonYes = (ImageButton) v.findViewById(R.id.imageButtonYes);
-		imageButtonYes.setOnTouchListener(new View.OnTouchListener() {
+		mImgBtnYes = (ImageButton) v.findViewById(R.id.imageButtonYes);
+		mImgBtnYes.setOnTouchListener(new View.OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				mLiked = true;
-				// getArguments().putBoolean(EXTRA_KEY_LIKED, mLiked);
 				updateLike();
 				v.performClick();
 				return true;
 			}
 		});
 
-		tvLike = (TextView) v.findViewById(R.id.textViewLike);
-		edtCommentTitle = (EditText) v.findViewById(R.id.editTextCommentTitle);
-		edtCommentDescription = (EditText) v.findViewById(R.id.editTextCommentDescription);
+		mTvLike = (TextView) v.findViewById(R.id.textViewLike);
+		mEdtCommentTitle = (EditText) v.findViewById(R.id.editTextCommentTitle);
+		mEdtCommentTitle.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				mCommentTitle = s.toString();
+			}
 
-		// TODO : temporary results !?
-		// mCommentTitle = edtCommentTitle.getText().toString();
-		// mCommentDescription = edtCommentDescription.getText().toString();
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
 
-		mCommentTitle = "super titre";
-		mCommentDescription = "super commentaire";
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+
+		mEdtCommentDescription = (EditText) v.findViewById(R.id.editTextCommentDescription);
+		mEdtCommentDescription.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				mCommentDescription = s.toString();
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 
 		// TODO : do stuff to preserve data on rotation ? => Check DialogDate in CriminalIntent
 
@@ -133,13 +150,13 @@ public class CommentDialogFragment extends DialogFragment {
 
 	private void updateLike() {
 		if (mLiked) {
-			tvLike.setText(R.string.like);
-			imageButtonYes.setPressed(true);
-			imageButtonNo.setPressed(false);
+			mTvLike.setText(R.string.like);
+			mImgBtnYes.setPressed(true);
+			mImgBtnNo.setPressed(false);
 		} else {
-			tvLike.setText(R.string.dislike);
-			imageButtonYes.setPressed(false);
-			imageButtonNo.setPressed(true);
+			mTvLike.setText(R.string.dislike);
+			mImgBtnYes.setPressed(false);
+			mImgBtnNo.setPressed(true);
 		}
 	}
 }

@@ -20,9 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="alfred"
+            android:text="alfred titre de la mort"
             android:textColor="@android:color/primary_text_light"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_large"
             android:textStyle="bold" />
 
         <TextView
@@ -34,7 +34,8 @@
             android:layout_centerVertical="true"
             android:padding="@dimen/dim_8dp"
             android:text="category"
-            android:textColor="@drawable/text_color_inversed" />
+            android:textColor="@drawable/text_color_inversed"
+            android:textSize="@dimen/text_size_small" />
     </RelativeLayout>
 
     <ImageView
@@ -114,7 +115,8 @@
                 android:layout_below="@id/text_view_description_2"
                 android:gravity="center_horizontal"
                 android:lines="1"
-                android:text="dummy text" />
+                android:text="dummy text"
+                android:textSize="@dimen/text_size_small" />
 
             <Button
                 android:id="@+id/button_next_poll"
@@ -122,9 +124,10 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="0dp"
                 android:minHeight="40dp"
-                android:text="@string/dont_care" />
+                android:text="@string/dont_care"
+                android:textSize="@dimen/text_size_small" />
         </RelativeLayout>
 
         <ImageButton

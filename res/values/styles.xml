@@ -2,14 +2,16 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
+
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
+        <item name="android:textSize">@dimen/text_size_large</item>
     </style>
 
     <!-- Application theme. -->
@@ -19,40 +21,41 @@
 
     <!-- Do not know what is the correct location for this ! -->
     <style name="Tag">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/tag_background</item>
-        <item name="android:textColor">@drawable/text_color_inversed</item>
-    </style>
-    
-    <style name="ButtonDefault">
-        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@drawable/text_color_inversed</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+    </style>
+
+    <style name="ButtonDefault">
         <item name="android:background">@drawable/button_default_selector</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">@drawable/text_color_inversed</item>
     </style>
-    
+
     <style name="ButtonDefault.Bottom">
         <item name="android:background">@drawable/button_bottom_selector</item>
     </style>
-    
+
     <style name="ButtonYes">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/button_yes_selector</item>
-    </style>
-    
-    <style name="ButtonNo">
-        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/button_no_selector</item>
+        <item name="android:layout_width">wrap_content</item>
     </style>
-    
+
+    <style name="ButtonNo">
+        <item name="android:background">@drawable/button_no_selector</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
     <style name="TextViewDefault">
-        <item name="android:textAppearance">@android:style/TextAppearance.Inverse</item>
         <item name="android:ellipsize">end</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
         <item name="android:textColor">@android:color/secondary_text_light</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
     </style>
 
 </resources>

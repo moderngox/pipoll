@@ -1,80 +1,102 @@
 package com.pipoll.activity;
 
-import android.content.res.Resources;
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 
 import com.pipoll.R;
+import com.pipoll.data.TrendNews;
+import com.pipoll.data.parcelable.ParcelableTrendNews;
 import com.pipoll.fragment.WebFragment;
 
 /**
  * @author Bulbi
  * 
+ *         This activity displays the news associated to the current Poll in a set of WebView
+ *         inside a ViewPager.
  */
 
 public class WebPagerActivity extends FragmentActivity {
-	private static final int TAB_COUNT = 3;
+
+	public final static String EXTRA_TREND_NEWS = "WebPagerActivity.EXTRA_TREND_NEWS";
+	public final static String EXTRA_TREND_NEWS_INDEX = "WebPagerActivity.EXTRA_TREND_NEWS_INDEX";
+
 	private ViewPager mViewPager;
+	private ArrayList<TrendNews> mTrendNews;
+	private int mIndex;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.activity_web_pager);
+
+		ArrayList<ParcelableTrendNews> trendNewsParcelable = getIntent()
+				.getParcelableArrayListExtra(EXTRA_TREND_NEWS);
+		if (trendNewsParcelable != null) {
+			mTrendNews = ParcelableTrendNews.toTrendNewsList(trendNewsParcelable);
+		}
+
 		mViewPager = (ViewPager) findViewById(R.id.view_pager_tab);
+		mViewPager.setOffscreenPageLimit(mTrendNews.size() - 1);
 
 		FragmentManager fm = getSupportFragmentManager();
-
-		// mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
-		mViewPager.setAdapter(new FragmentPagerAdapter(fm) {
+		mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
 			@Override
 			public int getCount() {
-				return TAB_COUNT;
+				return mTrendNews.size();
 			}
 
 			@Override
 			public Fragment getItem(int pos) {
-				Bundle extras = getIntent().getExtras();
-
-				return WebFragment.newInstance();
+				return WebFragment.newInstance(mTrendNews.get(pos).getUrl());
 			}
 
 			@Override
 			public CharSequence getPageTitle(int position) {
-				Resources r = getResources();
-
-				switch (position) {
-				case 0:
-					return r.getString(R.string.tab_poll_list_short_name);
-				case 1:
-					return r.getString(R.string.tab_notification_short_name);
-				case 2:
-					return r.getString(R.string.tab_top_trends_short_name);
-				case 3:
-					return r.getString(R.string.tab_profile_short_name);
-				default:
-					return r.getString(R.string.tab_poll_list_short_name);
-				}
+				return mTrendNews.get(position).getTitle().toString();
 			}
 		});
 
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
-
-				getActionBar().setTitle(getActionBarTitleResource(position));
-
+				getActionBar().setTitle(mTrendNews.get(position).getTitle().toString());
 			}
 		});
 
-		//final ActionBar actionBar = getActionBar();
+		mIndex = getIntent().getIntExtra(EXTRA_TREND_NEWS_INDEX, 0);
+		mViewPager.setCurrentItem(mIndex);
 
+		ImageButton imgBtnPrevious = (ImageButton) findViewById(R.id.imgBtnPrevious);
+		imgBtnPrevious.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mViewPager.getCurrentItem() > 0) {
+					mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+				}
+			}
+		});
+
+		ImageButton imgBtnNext = (ImageButton) findViewById(R.id.imgBtnNext);
+		imgBtnNext.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mViewPager.getCurrentItem() < mViewPager.getAdapter().getCount() - 1) {
+					mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+				}
+			}
+		});
+		// final ActionBar actionBar = getActionBar();
 	}
 
 	@Override
@@ -94,21 +116,6 @@ public class WebPagerActivity extends FragmentActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private int getActionBarTitleResource(int position) {
-		switch (position) {
-		case 0:
-			return R.string.tab_poll_list_name;
-		case 1:
-			return R.string.tab_notification_name;
-		case 2:
-			return R.string.tab_top_trends_name;
-		case 3:
-			return R.string.tab_profile_name;
-		default:
-			return R.string.tab_poll_list_name;
-		}
 	}
 
 }

@@ -19,16 +19,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pipoll.R;
-import com.pipoll.activity.WebPagerActivity;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
+import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
+import com.pipoll.service.CategoryService;
 import com.pipoll.service.GoogleService;
 
 /**
@@ -84,7 +84,8 @@ public class PollFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_poll, parent, false);
 
 		mTvTitle = (TextView) v.findViewById(R.id.text_view_title);
@@ -102,24 +103,18 @@ public class PollFragment extends Fragment {
 	}
 
 	public void buildPoll() {
-		mTvTitle.setText(mPoll.getTheme());
-
 		String trendName = mPoll.getTheme();
+		mTvTitle.setText(trendName);
 
-		mTvDescription.setText(mPoll.getTheme());
-		
-		// TODO : just launching webView for test here
-		mTvTitle.setOnClickListener(new OnClickListener() {
-			
+		CategoryService catService = new CategoryService(getActivity());
+		catService.getFBStringCategory(trendName, new ServiceCallback() {
+
 			@Override
-			public void onClick(View v) {
-				//Intent i = new Intent(getActivity(), WebActivity.class);
-				Intent i = new Intent(getActivity(), WebPagerActivity.class);
-				startActivity(i);
+			public void onServiceDone(Object response) {
+
+				mTvCategory.setText((String) response);
 			}
 		});
-		
-		mTvCategory.setText(mPoll.getCategory().getName());
 
 		ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 		imageLoader.displayImage(mPoll.getImage(), mImage);
@@ -128,25 +123,28 @@ public class PollFragment extends Fragment {
 		// final String moreInfos = r.getString(R.string.more_infos);
 
 		GoogleService googleService = new GoogleService(getActivity());
-		googleService.getDataFromGoogleNews(mPoll.getTheme(), new TrendNewsCallback() {
+		googleService.getDataFromGoogleNews(trendName, new TrendNewsCallback() {
 
 			@Override
 			public void onNewsRetrieved(List<TrendNews> trendsnews) {
 
 				if (trendsnews != null && !trendsnews.isEmpty()) {
-					mTvDescription.setText(Html.fromHtml("<a href=\"" + trendsnews.get(0).getUrl() + "\">"
+					mTvDescription.setText(Html.fromHtml("<a href=\""
+							+ trendsnews.get(0).getUrl() + "\">"
 							+ trendsnews.get(0).getTitle() + "</a>"));
 					mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
 					mTvDescription.setVisibility(View.VISIBLE);
 					if (trendsnews.size() > 1) {
-						mTvDescription2.setText(Html.fromHtml("<a href=\"" + trendsnews.get(1).getUrl() + "\">"
+						mTvDescription2.setText(Html.fromHtml("<a href=\""
+								+ trendsnews.get(1).getUrl() + "\">"
 								+ trendsnews.get(1).getTitle() + "</a>"));
 						mTvDescription2.setVisibility(View.VISIBLE);
 					}
 					if (trendsnews.size() > 2) {
 						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 
-						mTvDescription3.setText(Html.fromHtml("<a href=\"" + trendsnews.get(2).getUrl() + "\">"
+						mTvDescription3.setText(Html.fromHtml("<a href=\""
+								+ trendsnews.get(2).getUrl() + "\">"
 								+ trendsnews.get(2).getTitle() + "</a>"));
 						mTvDescription3.setVisibility(View.VISIBLE);
 					}
@@ -221,17 +219,19 @@ public class PollFragment extends Fragment {
 		if (resultCode != Activity.RESULT_OK)
 			return;
 		if (requestCode == REQUEST_COMMENT) {
-
-			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
-			String commentTitle = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
-			String commentDescription = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
-
-			// TODO : replace Toast by a save comment function
-			Toast.makeText(
-					getActivity(),
-					mPoll.getTheme() + " liked: " + liked + "\ncommentTitle: " + commentTitle + "\ncommentDescription: "
-							+ commentDescription, Toast.LENGTH_SHORT).show();
 			changePage(getActivity());
+
+			// boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED,
+			// true);
+			// String commentTitle = data
+			// .getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
+			// String commentDescription = data
+			// .getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
+
+			// TODO : save comment here
+			// Toast.makeText(getActivity(), "" + liked, Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getActivity(), commentTitle, Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getActivity(), commentDescription, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

@@ -5,6 +5,7 @@ package com.pipoll.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
@@ -244,7 +245,6 @@ public class PollService implements IPoll {
 			protected List<ParcelablePoll> doInBackground(Like... likes) {
 				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
 				try {
-
 					String imgURL = null;
 					for (Like like : likes) { // that means this a fake like
 						if (like.getId() != null) {
@@ -288,6 +288,7 @@ public class PollService implements IPoll {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				httpclient.getConnectionManager().shutdown();
 				return polls;
 			}
 
@@ -349,6 +350,8 @@ public class PollService implements IPoll {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				if (likes.isEmpty())
+					httpclient.getConnectionManager().shutdown();
 				return likes;
 			}
 
@@ -381,7 +384,8 @@ public class PollService implements IPoll {
 					String request;
 					try {
 						request = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="
-								+ URLEncoder.encode(trend.getName(), AppController.UTF_8);
+								+ URLEncoder.encode(trend.getName(), AppController.UTF_8)
+								+ "&userip=" + InetAddress.getLocalHost().toString();
 						HttpGet httpgetreq = new HttpGet(request);
 						httpgetreq.setHeader("Content-type", "application/json");
 						String responseText = null;
@@ -415,8 +419,8 @@ public class PollService implements IPoll {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-
 				}
+				httpclient.getConnectionManager().shutdown();
 				return polls;
 			}
 
@@ -431,4 +435,28 @@ public class PollService implements IPoll {
 		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
 
 	}
+
+	@Override
+	public List<ParcelablePoll> createPollsFromTrends(List<Trend> trends, int start, int end) {
+
+		end = end > trends.size() ? trends.size() : end;
+		List<Trend> trendSubList = trends.subList(start, end);
+
+		final List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
+		for (final Trend trend : trendSubList) {
+
+			Poll poll = new Poll();
+			long date = new Date().getTime();
+			poll.setId(String.valueOf(date));
+			poll.setCreatedAt(date);
+			poll.setUpdatedAt(date);
+			poll.setTheme(trend.getName());
+			poll.setCategory(new Category());
+			trend.setTrendNews(new ArrayList<TrendNews>());
+			poll.setTrend(trend);
+			polls.add(new ParcelablePoll(poll));
+		}
+		return polls;
+	}
+
 }

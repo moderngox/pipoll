@@ -48,7 +48,15 @@ public class StartupActivity extends Activity {
 			progress = (ProgressBar) findViewById(R.id.progressBar1);
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
-
+			// GoogleService googleService = new GoogleService(activity);
+			// googleService.getGoogleImage("sia", new ServiceCallback() {
+			//
+			// @Override
+			// public void onServiceDone(Object response) {
+			// String imgURL = (String) response;
+			// Toast.makeText(activity, "Img URL: " + imgURL, Toast.LENGTH_SHORT).show();
+			// }
+			// });
 			mTrends = trendService.getMonthlyTopTrends("p16", "fr", new TaskCallback() {
 				@Override
 				public void onSuccess() {
@@ -57,7 +65,7 @@ public class StartupActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 
 					final PollService pollService = new PollService(activity);
-					pollService.createPolls(mTrends, 0, 30, new ServiceCallback() {
+					pollService.createGPolls(mTrends, 0, 30, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override

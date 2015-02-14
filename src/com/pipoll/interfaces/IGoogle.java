@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.api.services.customsearch.model.Result;
 import com.pipoll.data.TrendNews;
+import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
 
@@ -50,8 +51,8 @@ public interface IGoogle {
 	 * Crawl and get an image list from google images search with the help of Jsoup
 	 * 
 	 * @param query
-	 * @param taskCallback
+	 * @param serviceCallback
 	 * @return
 	 */
-	String getGoogleImage(final String query, final TaskCallback taskCallback);
+	String getGoogleImage(final String query, final ServiceCallback serviceCallback);
 }

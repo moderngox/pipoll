@@ -18,6 +18,8 @@ import org.apache.commons.collections4.IteratorUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -55,7 +57,6 @@ public class TrendService implements ITrend {
 	}
 
 	public TrendService() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public boolean trendAlreadyPresent(String trendname, List<Trend> trends) {
@@ -77,7 +78,7 @@ public class TrendService implements ITrend {
 	 * @see com.pipoll.interfaces.ITrend#getTrends(com.pipoll.interfaces.TaskCallback)
 	 */
 	@Override
-	public List<Trend> getTrends(final TaskCallback taskcallback) {
+	public List<Trend> getHawtTrends(final TaskCallback taskcallback) {
 		final List<Trend> trends = new ArrayList<Trend>();
 		new AsyncTask<Void, Void, List<Trend>>() {
 
@@ -199,4 +200,176 @@ public class TrendService implements ITrend {
 
 	}
 
+	@Override
+	public List<Trend> getDailyTopTrends(final String location, final String language,
+			final String dateUSFormat, final TaskCallback taskcallback) {
+		final List<Trend> trends = new ArrayList<Trend>();
+		new AsyncTask<Void, Void, List<Trend>>() {
+
+			@Override
+			protected List<Trend> doInBackground(Void... params) {
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+				HttpPost httppostreq = new HttpPost(AppController.GOOGLE_HOT_TRENDS
+						+ "?ajax=1&htd=" + dateUSFormat + "&pn=" + location + "&htv=l&hl="
+						+ language);
+				httppostreq.setHeader("Content-type", "application/json");
+				String responseText = null;
+
+				try {
+					StringEntity se = new StringEntity(AppController.UTF_8);
+					httppostreq.setEntity(se);
+					HttpResponse httpresponse = httpclient.execute(httppostreq);
+					responseText = EntityUtils.toString(httpresponse.getEntity());
+					Log.d("Response: ", responseText);
+					JSONObject jsonResponse = new JSONObject(responseText);
+					JSONArray jsonArray = jsonResponse.getJSONArray("trendsByDateList")
+							.getJSONObject(0).getJSONArray("trendsList");
+					for (int i = 0; i < jsonArray.length(); i++) {
+						Trend trend = new Trend();
+						trend.setName(jsonArray.getJSONObject(i).getString("title"));
+						trend.setImage(jsonArray.getJSONObject(i).getString("imgUrl"));
+						trends.add(trend);
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				return trends;
+			}
+
+			@Override
+			protected void onPostExecute(List<Trend> result) {
+				super.onPostExecute(result);
+				if (!trends.isEmpty()) {
+					taskcallback.onSuccess();
+				}
+			}
+		}.execute();
+		return trends;
+	}
+
+	@Override
+	public List<Trend> getHourlyTrends(final String location, final String language,
+			final TaskCallback taskcallback) {
+		final List<Trend> trends = new ArrayList<Trend>();
+		new AsyncTask<Void, Void, List<Trend>>() {
+
+			@Override
+			protected List<Trend> doInBackground(Void... params) {
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+				HttpPost httppostreq = new HttpPost(AppController.GOOGLE_HOT_TRENDS
+						+ "?ajax=1&pn=" + location + "&htv=l&hl=" + language);
+				httppostreq.setHeader("Content-type", "application/json");
+				String responseText = null;
+
+				try {
+					StringEntity se = new StringEntity(AppController.UTF_8);
+					httppostreq.setEntity(se);
+					HttpResponse httpresponse = httpclient.execute(httppostreq);
+					responseText = EntityUtils.toString(httpresponse.getEntity());
+					Log.d("Response: ", responseText);
+					JSONObject jsonResponse = new JSONObject(responseText);
+					JSONArray trendsByDateList = jsonResponse.getJSONArray("trendsByDateList");
+					for (int i = 0; i < trendsByDateList.length(); i++) {
+						JSONObject trendsObj = trendsByDateList.getJSONObject(i);
+						if (!trendsObj.isNull("trendsList")) {
+							JSONArray trendsList = trendsObj.getJSONArray("trendsList");
+							for (int j = 0; j < trendsList.length(); j++) {
+								Trend t = new Trend();
+								t.setName(trendsList.getJSONObject(j).getString("title"));
+								trends.add(t);
+							}
+						}
+
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				return trends;
+			}
+
+			@Override
+			protected void onPostExecute(List<Trend> result) {
+				super.onPostExecute(result);
+				if (!trends.isEmpty()) {
+					taskcallback.onSuccess();
+				}
+			}
+		}.execute();
+		return trends;
+	}
+
+	@Override
+	public List<Trend> getMonthlyTopTrends(final String location, final String language,
+			final TaskCallback taskcallback) {
+		final List<Trend> trends = new ArrayList<Trend>();
+		new AsyncTask<Void, Void, List<Trend>>() {
+
+			@Override
+			protected List<Trend> doInBackground(Void... params) {
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+				HttpPost httppostreq = new HttpPost(AppController.GOOGLE_HOT_TRENDS
+						+ "?ajax=1&pn=" + location + "&htv=m&hl=" + language);
+				httppostreq.setHeader("Content-type", "application/json");
+				String responseText = null;
+
+				try {
+					StringEntity se = new StringEntity(AppController.UTF_8);
+					httppostreq.setEntity(se);
+					HttpResponse httpresponse = httpclient.execute(httppostreq);
+					responseText = EntityUtils.toString(httpresponse.getEntity());
+					Log.d("Response: ", responseText);
+					JSONObject jsonResponse = new JSONObject(responseText);
+					JSONArray weeksList = jsonResponse.getJSONArray("weeksList");
+					for (int i = 0; i < weeksList.length(); i++) {
+						JSONArray daysList = weeksList.getJSONObject(i).getJSONArray(
+								"daysList");
+						for (int j = 0; j < daysList.length(); j++) {
+							if (!daysList.getJSONObject(j).isNull("data")) {
+								JSONObject trend = daysList.getJSONObject(j)
+										.getJSONObject("data").getJSONObject("trend");
+								Trend t = new Trend();
+								t.setName(trend.getString("title"));
+								trends.add(t);
+							}
+						}
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				return trends;
+			}
+
+			@Override
+			protected void onPostExecute(List<Trend> result) {
+				super.onPostExecute(result);
+				if (!trends.isEmpty()) {
+					taskcallback.onSuccess();
+				}
+			}
+		}.execute();
+		return trends;
+	}
 }

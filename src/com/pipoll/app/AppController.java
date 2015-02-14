@@ -55,6 +55,10 @@ public class AppController extends Application {
 	public static String FB_ACCESS_TOKEN = "CAAEyKSUKgk8BAMouzKIw3lo02NTsxZAzZAuRddtbiACvgK9otRcRBm9lfZAS5a5JrOkuZA4ZB4GCKZCys57RTtBkAmJ5ZA2BWvhem4f4eQn06VAHVnuuqZA3sekVZCjqwLf9A5mt1UCHfJYZCFpYmbPduZAoPmijcgTWPulfSq6M3CXcBETroTALm8LTDktkp8sLsJhYctZAsQYJzeZCOMwSxh8sqn6F2XVzbRekZD";
 	// CONSTANT
 	public static final String UTF_8 = "UTF-8";
+	public static final String GOOGLE_HOT_TRENDS = "http://www.google.com/trends/hottrends/hotItems";
+	public static final String GOOGLE_TOP_CHART_CAT = "http://www.google.com/trends/topcharts/category";
+	public static final String NO_IMAGE_URL = "http://www.clker.com/cliparts/B/u/S/l/W/l/no-photo-available-md.png";
+	public static final String NO_CATEGORY_TAG = "N/C";
 
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;

@@ -48,7 +48,6 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:adjustViewBounds="false"
-        android:contentDescription="@string/poll_image"
         android:scaleType="fitXY"
         android:src="@drawable/picture3" />
 

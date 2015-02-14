@@ -49,8 +49,7 @@ public class StartupActivity extends Activity {
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
 
-			mTrends = trendService.getTrends(new TaskCallback() {
-
+			mTrends = trendService.getMonthlyTopTrends("p16", "fr", new TaskCallback() {
 				@Override
 				public void onSuccess() {
 					Toast.makeText(getApplicationContext(),
@@ -58,7 +57,7 @@ public class StartupActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 
 					final PollService pollService = new PollService(activity);
-					pollService.createPolls(mTrends, 0, 7, new ServiceCallback() {
+					pollService.createPolls(mTrends, 0, 30, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override

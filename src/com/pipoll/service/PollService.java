@@ -5,11 +5,9 @@ package com.pipoll.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import net.java.frej.fuzzy.Fuzzy;
@@ -22,9 +20,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -38,6 +33,7 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.pipoll.app.AppController;
+import com.pipoll.data.Category;
 import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
 import com.pipoll.data.Trend;
@@ -68,7 +64,7 @@ public class PollService implements IPoll {
 	 * @see com.pipoll.interfaces.IPoll#createPoll(com.pipoll.data.Like, java.util.List)
 	 */
 	@Override
-	public void createPoll(final Like userLike, final List<Trend> trends4like,
+	public void createMatchPoll(final Like userLike, final List<Trend> trends4like,
 			final ServiceCallback serviceCallback) {
 		// TODO create a poll if a match exists between the userLike and the list of trends
 		// (trends4like)
@@ -235,120 +231,10 @@ public class PollService implements IPoll {
 	}
 
 	@Override
-	@Deprecated
-	public void asyncCreatePolls(List<Trend> trends, int pollNb,
-			final ServiceCallback serviceCallback) {
-		List<Trend> trendSubList = trends.subList(0, 20);
-		new AsyncTask<Trend, Void, List<ParcelablePoll>>() {
-
-			@Override
-			protected List<ParcelablePoll> doInBackground(Trend... trends) {
-				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
-				DefaultHttpClient httpclient = new DefaultHttpClient();
-				String accessToken = Session.getActiveSession().getAccessToken();
-				try {
-
-					for (Trend trend : trends) {
-						String request = "https://graph.facebook.com/v1.0/search?q="
-								+ URLEncoder.encode(trend.getName(), AppController.UTF_8)
-								+ "&type=page&limit=1&access_token=" + accessToken;
-						HttpGet httpgetreq = new HttpGet(request);
-						httpgetreq.setHeader("Content-type", "application/json");
-						String responseText = null;
-						HttpResponse httpresponse = httpclient.execute(httpgetreq);
-						responseText = EntityUtils.toString(httpresponse.getEntity());
-						Log.d("Response: ", responseText);
-						Like like = null;
-						if (responseText != null && !"{\"data\":[]}".equals(responseText)) {// if
-																							// Like
-							// present
-							Poll poll = new Poll();
-							String imgURL = null;
-							JSONArray jsonArray = new JSONObject(responseText)
-									.getJSONArray("data");
-							// if (jsonArray.length() != 0) {
-							JSONObject jsonLike = jsonArray.getJSONObject(0);
-							like = ObjectMapper.mapLike(jsonLike);
-							request = "https://graph.facebook.com/" + like.getId()
-									+ "/picture?type=large&redirect=false&access_token="
-									+ accessToken;
-							httpgetreq = new HttpGet(request);
-							httpgetreq.setHeader("Content-type", "application/json");
-							httpresponse = httpclient.execute(httpgetreq);
-							responseText = EntityUtils.toString(httpresponse.getEntity());
-							if (responseText != null) { // if image URL present
-								JSONObject jsonResp = new JSONObject(responseText);
-								imgURL = jsonResp.getJSONObject("data").getString("url");
-								like.setImage(imgURL);
-							}
-							// }
-							long date = new Date().getTime();
-							poll.setId(String.valueOf(date));
-							poll.setCreatedAt(date);
-							poll.setUpdatedAt(date);
-							poll.setTheme(trend.getName());
-							poll.setImage(imgURL);
-							poll.setCategory(like.getCategory());
-							List<TrendNews> trendNews = new LinkedList<TrendNews>();
-							Elements links = Jsoup
-									.connect(
-											"https://www.google.com/search?q="
-													+ URLEncoder.encode(trend.getName(),
-															AppController.UTF_8))
-									.userAgent(
-											"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
-									.get().select("li.g>h3>a");
-							for (Element link : links) {
-								TrendNews trendnews = new TrendNews();
-								String title = link.text();
-								String url = link.absUrl("href"); // Google returns URLs in
-																	// format
-																	// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
-								url = URLDecoder.decode(
-										url.substring(url.indexOf('=') + 1, url.indexOf('&')),
-										"UTF-8");
-
-								if (!url.startsWith("http")) {
-									continue; // Ads/news/etc.
-								}
-								trendnews.setTitle(title);
-								trendnews.setUrl(url);
-								trendNews.add(trendnews);
-
-							}
-							trend.setTrendNews(trendNews);
-							poll.setTrend(trend);
-							polls.add(new ParcelablePoll(poll));
-						}
-					}
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				httpclient.getConnectionManager().shutdown();
-				return polls;
-			}
-
-			@Override
-			protected void onPostExecute(List<ParcelablePoll> result) {
-				super.onPostExecute(result);
-				if (!result.isEmpty()) {
-					serviceCallback.onServiceDone(result);
-				}
-			}
-
-		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
-	}
-
-	@Override
-	public void createPolls(final List<Trend> trends, final int start, final int end,
+	public void createPolls(final List<Trend> trends, final int start, int end,
 			final ServiceCallback serviceCallback) {
 		final List<Like> likes = new ArrayList<Like>();
+		end = end > trends.size() ? trends.size() : end;
 		List<Trend> trendSubList = trends.subList(start, end);
 		final String accessToken = Session.getActiveSession().getAccessToken();
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -360,19 +246,25 @@ public class PollService implements IPoll {
 				try {
 
 					String imgURL = null;
-					for (Like like : likes) {
-						String request = "https://graph.facebook.com/" + like.getId()
-								+ "/picture?type=large&redirect=false&access_token="
-								+ accessToken;
-						HttpGet httpgetreq = new HttpGet(request);
-						httpgetreq.setHeader("Content-type", "application/json");
-						String responseText = null;
-						HttpResponse httpresponse = httpclient.execute(httpgetreq);
-						responseText = EntityUtils.toString(httpresponse.getEntity());
-						Log.d("Response: ", responseText);
-						if (responseText != null) { // if image URL present
-							JSONObject jsonResp = new JSONObject(responseText);
-							imgURL = jsonResp.getJSONObject("data").getString("url");
+					for (Like like : likes) { // that means this a fake like
+						if (like.getId() != null) {
+							String request = "https://graph.facebook.com/" + like.getId()
+									+ "/picture?type=large&redirect=false&access_token="
+									+ accessToken;
+							HttpGet httpgetreq = new HttpGet(request);
+							httpgetreq.setHeader("Content-type", "application/json");
+							String responseText = null;
+							HttpResponse httpresponse = httpclient.execute(httpgetreq);
+							responseText = EntityUtils.toString(httpresponse.getEntity());
+							Log.d("Response: ", responseText);
+							if (responseText != null) { // if image URL present (normally it's
+														// always present)
+								JSONObject jsonResp = new JSONObject(responseText);
+								imgURL = jsonResp.getJSONObject("data").getString("url");
+							}
+
+						} else {
+							imgURL = like.getImage();
 						}
 						Poll poll = new Poll();
 						long date = new Date().getTime();
@@ -437,6 +329,14 @@ public class PollService implements IPoll {
 								JSONObject jsonLike = jsonArray.getJSONObject(0);
 								Like like = ObjectMapper.mapLike(jsonLike);
 								likes.add(like);
+							} else { // fake like (dirty hack)
+								Like like = new Like();
+								like.setImage(AppController.NO_IMAGE_URL);
+								Category category = new Category();
+								category.setName(AppController.NO_CATEGORY_TAG);
+								like.setCategory(category);
+								like.setName(trend.getName());
+								likes.add(like);
 							}
 						}
 					}
@@ -461,6 +361,73 @@ public class PollService implements IPoll {
 					getPollsTask.execute(likes.toArray(new Like[likes.size()]));
 				}
 			}
+		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
+
+	}
+
+	@Override
+	public void createGPolls(final List<Trend> trends, int start, int end,
+			final ServiceCallback serviceCallback) {
+		List<Trend> trendSubList = trends.subList(start, end);
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
+
+		new AsyncTask<Trend, Void, List<ParcelablePoll>>() {
+
+			@Override
+			protected List<ParcelablePoll> doInBackground(Trend... arg0) {
+				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
+
+				for (Trend trend : trends) {
+					String request;
+					try {
+						request = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="
+								+ URLEncoder.encode(trend.getName(), AppController.UTF_8);
+						HttpGet httpgetreq = new HttpGet(request);
+						httpgetreq.setHeader("Content-type", "application/json");
+						String responseText = null;
+						HttpResponse httpresponse = httpclient.execute(httpgetreq);
+						responseText = EntityUtils.toString(httpresponse.getEntity());
+						Log.d("Response: ", responseText);
+						JSONObject jsonResponse = new JSONObject(responseText);
+						JSONObject responseData = jsonResponse.isNull("responseData") ? null
+								: jsonResponse.getJSONObject("responseData");
+						if (responseData != null) {
+							String imgURL = responseData.getJSONArray("results")
+									.getJSONObject(0).getString("url");
+							Poll poll = new Poll();
+							long date = new Date().getTime();
+							poll.setId(String.valueOf(date));
+							poll.setCreatedAt(date);
+							poll.setUpdatedAt(date);
+							poll.setTheme(trend.getName());
+							poll.setImage(imgURL);
+							poll.setCategory(new Category());
+							trend.setTrendNews(new ArrayList<TrendNews>());
+							poll.setTrend(trend);
+							polls.add(new ParcelablePoll(poll));
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					} catch (ClientProtocolException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+
+				}
+				return polls;
+			}
+
+			@Override
+			protected void onPostExecute(List<ParcelablePoll> result) {
+				super.onPostExecute(result);
+				if (!result.isEmpty()) {
+					serviceCallback.onServiceDone(result);
+				}
+			}
+
 		}.execute(trendSubList.toArray(new Trend[trendSubList.size()]));
 
 	}

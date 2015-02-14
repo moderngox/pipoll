@@ -3,10 +3,13 @@
  */
 package com.pipoll.data.parcelable;
 
-import com.pipoll.data.TrendNews;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.pipoll.data.TrendNews;
 
 /**
  * @author moderngox
@@ -14,7 +17,7 @@ import android.os.Parcelable;
  */
 public class ParcelableTrendNews implements Parcelable {
 
-	private TrendNews trendnews;
+	private TrendNews trendNews;
 
 	/*
 	 * (non-Javadoc)
@@ -36,7 +39,7 @@ public class ParcelableTrendNews implements Parcelable {
 	@Override
 	// write your object's data to the passed-in Parcel
 	public void writeToParcel(Parcel arg0, int arg1) {
-		arg0.writeSerializable(trendnews);
+		arg0.writeSerializable(trendNews);
 	}
 
 	// this is used to regenerate your object. All Parcelables must have a
@@ -51,15 +54,34 @@ public class ParcelableTrendNews implements Parcelable {
 		}
 	};
 
+	public static ArrayList<TrendNews> toTrendNewsList(
+			ArrayList<ParcelableTrendNews> parcelTrendNewsList) {
+		ArrayList<TrendNews> trendNewsList = new ArrayList<TrendNews>();
+		for (ParcelableTrendNews pTrendNews : parcelTrendNewsList) {
+			trendNewsList.add(pTrendNews.getTrendNews());
+		}
+		return trendNewsList;
+	}
+
+	public static List<ParcelableTrendNews> getParcelTrendNewsList(
+			List<TrendNews> trendNewsList) {
+		List<ParcelableTrendNews> pTrendNewsList = new ArrayList<ParcelableTrendNews>();
+		for (TrendNews trendNews : trendNewsList) {
+			pTrendNewsList.add(new ParcelableTrendNews(trendNews));
+		}
+
+		return pTrendNewsList;
+	}
+
 	// example constructor that takes a Parcel and gives you an object populated
 	// with it's values
 	public ParcelableTrendNews(TrendNews in) {
-		trendnews = (TrendNews) in;
+		trendNews = (TrendNews) in;
 	}
 
-	public TrendNews getTrendnews() {
+	public TrendNews getTrendNews() {
 
-		return trendnews;
+		return trendNews;
 	}
 
 }

@@ -371,6 +371,7 @@ public class PollService implements IPoll {
 	@Override
 	public void createGPolls(final List<Trend> trends, int start, int end,
 			final ServiceCallback serviceCallback) {
+		end = end > trends.size() ? trends.size() : end;
 		List<Trend> trendSubList = trends.subList(start, end);
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
 

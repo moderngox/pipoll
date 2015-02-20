@@ -4,6 +4,7 @@
 package com.pipoll.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -25,6 +26,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -33,6 +37,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Like;
+import com.pipoll.data.RSSElement;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
@@ -371,5 +376,79 @@ public class TrendService implements ITrend {
 			}
 		}.execute();
 		return trends;
+	}
+
+	@Override
+	public List<RSSElement> getRSSNode(List<String> rssUrls) {
+		final List<RSSElement> rssElements = new ArrayList<RSSElement>();
+		new AsyncTask<String, Void, List<RSSElement>>() {
+
+			protected List<RSSElement> doInBackground(String... urls) {
+
+				for (String feedUrl : urls) {
+					try {
+						URL url = new URL(feedUrl);
+						InputStream in;
+						in = url.openStream(); // <=> in =
+												// url.openConnection().getInputStream();
+						XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+						factory.setNamespaceAware(false);
+						XmlPullParser xpp = factory.newPullParser();
+						xpp.setInput(in, "UTF_8");
+						/*
+						 * RSS Parsing from :
+						 * http://androidresearch.wordpress.com/2012/01/21/creating
+						 * -a-simple-rss-application-in-android/
+						 */
+						boolean insideItem = false;
+						List<String> titles = new ArrayList<String>();
+						List<String> links = new ArrayList<String>();
+						List<String> descriptions = new ArrayList<String>();
+						// Returns the type of current event: START_TAG, END_TAG, etc..
+						int eventType = xpp.getEventType();
+						while (eventType != XmlPullParser.END_DOCUMENT) {
+							if (eventType == XmlPullParser.START_TAG) {
+
+								if (xpp.getName().equalsIgnoreCase("item")) {
+									insideItem = true;
+								} else if (xpp.getName().equalsIgnoreCase("title")) {
+									if (insideItem)
+										titles.add(xpp.nextText()); // extract the title
+								} else if (xpp.getName().equalsIgnoreCase("link")) {
+									if (insideItem)
+										links.add(xpp.nextText()); // extract the link of
+																	// article
+								} else if (xpp.getName().equalsIgnoreCase("description")) {
+									if (insideItem)
+										descriptions.add(xpp.nextText()); // extract the
+																			// description
+								}
+							} else if (eventType == XmlPullParser.END_TAG
+									&& xpp.getName().equalsIgnoreCase("item")) {
+								insideItem = false;
+							}
+							eventType = xpp.next(); // move to next element
+						}
+						for (int i = 0; i < titles.size(); i++) {
+							rssElements.add(new RSSElement(titles.get(i), descriptions.get(i),
+									links.get(i)));
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (XmlPullParserException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				return rssElements;
+			}
+
+			// after downloading
+			protected void onPostExecute(List<RSSElement> result) {
+
+			}
+		}.execute(rssUrls.toArray(new String[rssUrls.size()]));
+		return rssElements;
 	}
 }

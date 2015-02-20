@@ -37,6 +37,7 @@ import com.pipoll.app.AppController;
 import com.pipoll.data.Category;
 import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
+import com.pipoll.data.RSSElement;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
@@ -458,6 +459,78 @@ public class PollService implements IPoll {
 			polls.add(new ParcelablePoll(poll));
 		}
 		return polls;
+	}
+
+	@Override
+	public void createPollsFromRssNodes(final List<RSSElement> rssNodes,
+			final ServiceCallback serviceCallback) {
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
+		new AsyncTask<RSSElement, Void, List<ParcelablePoll>>() {
+
+			@Override
+			protected List<ParcelablePoll> doInBackground(RSSElement... rssNodes) {
+				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
+
+				for (RSSElement rssNode : rssNodes) {
+					String request;
+					try {
+						request = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="
+								+ URLEncoder.encode(rssNode.getTitle(), AppController.UTF_8)
+								+ "&userip=" + InetAddress.getLocalHost().toString();
+						HttpGet httpgetreq = new HttpGet(request);
+						httpgetreq.setHeader("Content-type", "application/json");
+						String responseText = null;
+						HttpResponse httpresponse = httpclient.execute(httpgetreq);
+						responseText = EntityUtils.toString(httpresponse.getEntity());
+						Log.d("Response: ", responseText);
+						JSONObject jsonResponse = new JSONObject(responseText);
+						JSONObject responseData = jsonResponse.isNull("responseData") ? null
+								: jsonResponse.getJSONObject("responseData");
+						if (responseData != null) {
+							String imgURL = responseData.getJSONArray("results")
+									.getJSONObject(0).getString("url");
+							Poll poll = new Poll();
+							long date = new Date().getTime();
+							poll.setId(String.valueOf(date));
+							poll.setCreatedAt(date);
+							poll.setUpdatedAt(date);
+							poll.setTheme(rssNode.getTitle());
+							poll.setImage(imgURL);
+							poll.setCategory(new Category());
+							Trend trend = new Trend();
+							// 1st Trend news from the rss node
+							TrendNews trendNews = new TrendNews();
+							trendNews.setTitle(rssNode.getTitle());
+							trendNews.setUrl(rssNode.getLink());
+							trend.setTrendNews(new ArrayList<TrendNews>());
+							trend.getTrendNews().add(trendNews);
+							poll.setTrend(trend);
+							polls.add(new ParcelablePoll(poll));
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					} catch (ClientProtocolException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+				httpclient.getConnectionManager().shutdown();
+				return polls;
+			}
+
+			@Override
+			protected void onPostExecute(List<ParcelablePoll> result) {
+				super.onPostExecute(result);
+				if (!result.isEmpty()) {
+					serviceCallback.onServiceDone(result);
+				}
+			}
+
+		}.execute(rssNodes.toArray(new RSSElement[rssNodes.size()]));
+
 	}
 
 }

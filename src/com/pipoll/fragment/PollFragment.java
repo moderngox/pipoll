@@ -137,6 +137,7 @@ public class PollFragment extends Fragment {
 			public void onNewsRetrieved(final List<TrendNews> trendNewsList) {
 
 				if (trendNewsList != null && !trendNewsList.isEmpty()) {
+					// TODO insert 1st link from RSS FEED
 					mTvDescription.setText(Html.fromHtml("<a href=\""
 							+ trendNewsList.get(0).getUrl() + "\">"
 							+ trendNewsList.get(0).getTitle() + "</a>"));

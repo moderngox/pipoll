@@ -60,6 +60,14 @@ public class AppController extends Application {
 	public static final String NO_IMAGE_URL = "http://www.clker.com/cliparts/B/u/S/l/W/l/no-photo-available-md.png";
 	public static final String NO_CATEGORY_TAG = "N/C";
 
+	// RSS
+	public static final String REUTERS_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Reuters&um=1&ie=UTF-8&output=rss&num=100";
+	public static final String AFP_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:AFP&um=1&ie=UTF-8&output=rss&num=100";
+	public static final String UPI_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Bloomberg&um=1&ie=UTF-8&output=rss&num=100";
+
+	public static final String FASHION_WEEKLY_FEED = "http://fashionweekdaily.com/feed/";
+	public static final String SELECTISM_FEED = "http://feeds.feedburner.com/selectism/rss?format=xml";
+
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;
 

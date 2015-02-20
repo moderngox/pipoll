@@ -168,26 +168,21 @@ public class PollFragment extends Fragment {
 							}
 
 							// start pager
-							Intent i = new Intent(getActivity(), WebPagerActivity.class);
-							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
+//							Intent i = new Intent(getActivity(), WebPagerActivity.class);
+//							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
 							
 							// start tab
 							// Intent i = new Intent(getActivity(), WebTabActivity.class);
 							// i.putParcelableArrayListExtra(WebTabActivity.EXTRA_TREND_NEWS, data);
 
 							// start single WebView
-//							Intent i = new Intent(getActivity(), WebActivity.class);
-//							String url = data.get(0).getTrendNews().getUrl();
-//							i.putExtra(WebFragment.EXTRA_URL, url);
+							Intent i = new Intent(getActivity(), WebActivity.class);
+							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
+							//String url = data.get(0).getTrendNews().getUrl();
+							//i.putExtra(WebFragment.EXTRA_URL, url);
 							
 							startActivity(i);
 
-							// Intent i = new Intent(getActivity(), WebActivity.class);
-							//
-							// String url =
-							// "http://stackoverflow.com/questions/10258772/android-webview-savestate";
-							// i.putExtra(WebFragment.EXTRA_URL, url);
-							// startActivity(i);
 
 						}
 					});

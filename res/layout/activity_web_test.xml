@@ -4,11 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:id="@+id/linearLayoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/imgBtnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:contentDescription="@string/btn_previous"
+            android:src="@drawable/ic_arrow_left" />
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/web_slide" />
+
+        <ImageButton
+            android:id="@+id/imgBtnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:contentDescription="@string/btn_next"
+            android:src="@drawable/ic_arrow_right" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/fragmentContainer1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="3" />
 
     <FrameLayout
         android:id="@+id/fragmentContainer2"

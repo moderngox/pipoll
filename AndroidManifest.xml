@@ -22,16 +22,19 @@
              <activity
             android:name="com.pipoll.activity.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" >
         -->
         <activity
             android:name="com.pipoll.activity.MainActivity"
             android:label="@string/app_name" >
+
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
         <activity
             android:name="com.pipoll.activity.StartupActivity"
@@ -49,12 +52,35 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+        <!--
+             <activity
             android:name="com.pipoll.activity.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="change title"
             android:parentActivityName="com.pipoll.activity.TabActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait" >
+        -->
+        <activity
+            android:name="com.pipoll.activity.WebActivity"
+            android:label="change title"
+            android:parentActivityName="com.pipoll.activity.TabActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.pipoll.activity.TabActivity" />
+        </activity>
+        <activity
+            android:name="com.pipoll.activity.WebActivity2"
+            android:label="Test multiple Webview" >
+<!-- 			<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter> -->
+        </activity>
+        <activity
+            android:name="com.pipoll.activity.WebTabActivity"
+            android:label="change title"
+            android:parentActivityName="com.pipoll.activity.TabActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.pipoll.activity.TabActivity" />

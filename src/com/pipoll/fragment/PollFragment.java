@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pipoll.R;
+import com.pipoll.activity.WebActivity;
 import com.pipoll.activity.WebPagerActivity;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Poll;
@@ -160,15 +161,34 @@ public class PollFragment extends Fragment {
 
 						@Override
 						public void onClick(View v) {
-							Intent i = new Intent(getActivity(), WebPagerActivity.class);
-
 							ArrayList<ParcelableTrendNews> data = (ArrayList<ParcelableTrendNews>) ParcelableTrendNews
 									.getParcelTrendNewsList(trendNewsList);
 							if (data.size() >= TRENDNEWS_COUNT) {
 								data = new ArrayList<ParcelableTrendNews>(data.subList(0, TRENDNEWS_COUNT));
 							}
+
+							// start pager
+							Intent i = new Intent(getActivity(), WebPagerActivity.class);
 							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
+							
+							// start tab
+							// Intent i = new Intent(getActivity(), WebTabActivity.class);
+							// i.putParcelableArrayListExtra(WebTabActivity.EXTRA_TREND_NEWS, data);
+
+							// start single WebView
+//							Intent i = new Intent(getActivity(), WebActivity.class);
+//							String url = data.get(0).getTrendNews().getUrl();
+//							i.putExtra(WebFragment.EXTRA_URL, url);
+							
 							startActivity(i);
+
+							// Intent i = new Intent(getActivity(), WebActivity.class);
+							//
+							// String url =
+							// "http://stackoverflow.com/questions/10258772/android-webview-savestate";
+							// i.putExtra(WebFragment.EXTRA_URL, url);
+							// startActivity(i);
+
 						}
 					});
 				}
@@ -227,7 +247,7 @@ public class PollFragment extends Fragment {
 			String commentDescription = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
 
 			// TODO : replace Toast by a save comment function
-			//Toast.makeText(getActivity(), "Thanks for your critic", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getActivity(), "Thanks for your critic", Toast.LENGTH_SHORT).show();
 			Toast.makeText(
 					getActivity(),
 					mPoll.getTheme() + " liked: " + liked + "\ncommentTitle: " + commentTitle

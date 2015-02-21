@@ -3,6 +3,8 @@
  */
 package com.pipoll.data;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author moderngox
@@ -10,7 +12,11 @@ package com.pipoll.data;
  *         An element related to a RSS feed node
  * 
  */
-public class RSSElement {
+public class RSSElement implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String title;
 	private String description;
 	private String link;

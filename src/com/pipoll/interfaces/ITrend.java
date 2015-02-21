@@ -68,7 +68,8 @@ public interface ITrend {
 	 * Read rss Urls and returns rss nodes
 	 * 
 	 * @param rssUrls
+	 * @param taskcallback
 	 * @return
 	 */
-	List<RSSElement> getRSSNode(List<String> rssUrls);
+	List<RSSElement> getRSSNode(List<String> rssUrls, final TaskCallback taskcallback);
 }

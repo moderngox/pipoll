@@ -462,9 +462,11 @@ public class PollService implements IPoll {
 	}
 
 	@Override
-	public void createPollsFromRssNodes(final List<RSSElement> rssNodes,
+	public void createPollsFromRssNodes(final List<RSSElement> rssNodes, int start, int end,
 			final ServiceCallback serviceCallback) {
 		final DefaultHttpClient httpclient = new DefaultHttpClient();
+		end = end > rssNodes.size() ? rssNodes.size() : end;
+		final List<RSSElement> rssSublist = rssNodes.subList(start, end);
 		new AsyncTask<RSSElement, Void, List<ParcelablePoll>>() {
 
 			@Override
@@ -529,7 +531,7 @@ public class PollService implements IPoll {
 				}
 			}
 
-		}.execute(rssNodes.toArray(new RSSElement[rssNodes.size()]));
+		}.execute(rssSublist.toArray(new RSSElement[rssSublist.size()]));
 
 	}
 

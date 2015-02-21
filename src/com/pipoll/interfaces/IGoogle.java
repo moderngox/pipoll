@@ -6,8 +6,8 @@ package com.pipoll.interfaces;
 import java.util.List;
 
 import com.google.api.services.customsearch.model.Result;
+import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
-import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
 
@@ -48,11 +48,13 @@ public interface IGoogle {
 			final TrendNewsCallback trendNewsCallback);
 
 	/**
-	 * Crawl and get an image list from google images search with the help of Jsoup
+	 * Crawl an image list from google images and insert the first image into the poll
+	 * corresponding to the poll theme
 	 * 
 	 * @param query
+	 * @param poll
 	 * @param serviceCallback
 	 * @return
 	 */
-	String getGoogleImage(final String query, final ServiceCallback serviceCallback);
+	String setGoogleImage(final Poll poll);
 }

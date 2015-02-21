@@ -379,7 +379,7 @@ public class TrendService implements ITrend {
 	}
 
 	@Override
-	public List<RSSElement> getRSSNode(List<String> rssUrls) {
+	public List<RSSElement> getRSSNode(List<String> rssUrls, final TaskCallback taskcallback) {
 		final List<RSSElement> rssElements = new ArrayList<RSSElement>();
 		new AsyncTask<String, Void, List<RSSElement>>() {
 
@@ -446,7 +446,9 @@ public class TrendService implements ITrend {
 
 			// after downloading
 			protected void onPostExecute(List<RSSElement> result) {
-
+				if (!result.isEmpty()) {
+					taskcallback.onSuccess();
+				}
 			}
 		}.execute(rssUrls.toArray(new String[rssUrls.size()]));
 		return rssElements;

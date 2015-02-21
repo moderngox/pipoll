@@ -43,7 +43,8 @@ public class AppController extends Application {
 	// Trends
 	public static final String TRENDS_TAG = "trends";
 	public static final String TREND_TAG = "trend";
-
+	// RSS elems
+	public static final String RSS_ELEMS_TAG = "rssElems";
 	// Endpoints
 	public static final String TRENDS_ENDPOINT = "http://hawttrends.appspot.com/api/terms/";
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";

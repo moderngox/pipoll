@@ -92,8 +92,10 @@ public interface IPoll {
 	 * Create polls from a list of @RSSElement Node
 	 * 
 	 * @param rssNodes
+	 * @param start
+	 * @param end
 	 * @param serviceCallback
 	 */
-	void createPollsFromRssNodes(List<RSSElement> rssNodes,
+	void createPollsFromRssNodes(List<RSSElement> rssNodes, int start, int end,
 			final ServiceCallback serviceCallback);
 }

@@ -130,6 +130,12 @@ public class PollFragment extends Fragment {
 		Resources r = getActivity().getResources();
 		// final String moreInfos = r.getString(R.string.more_infos);
 
+		// Trendnews from the RSS FEED filled in the poll creation
+		TrendNews firstTrendnews = mPoll.getTrend().getTrendNews().get(0);
+		mTvDescription.setText(Html.fromHtml("<a href=\"" + firstTrendnews.getUrl() + "\">"
+				+ firstTrendnews.getTitle() + "</a>"));
+		mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+		mTvDescription.setVisibility(View.VISIBLE);
 		GoogleService googleService = new GoogleService(getActivity());
 		googleService.getDataFromGoogleNews(trendName, new TrendNewsCallback() {
 
@@ -137,25 +143,20 @@ public class PollFragment extends Fragment {
 			public void onNewsRetrieved(final List<TrendNews> trendNewsList) {
 
 				if (trendNewsList != null && !trendNewsList.isEmpty()) {
-					// TODO insert 1st link from RSS FEED
-					mTvDescription.setText(Html.fromHtml("<a href=\""
-							+ trendNewsList.get(0).getUrl() + "\">"
-							+ trendNewsList.get(0).getTitle() + "</a>"));
-					mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
-					mTvDescription.setVisibility(View.VISIBLE);
+					// populate the list with other source
 					if (trendNewsList.size() > 1) {
 						mTvDescription2.setText(Html.fromHtml("<a href=\""
-								+ trendNewsList.get(1).getUrl() + "\">"
-								+ trendNewsList.get(1).getTitle() + "</a>"));
+								+ trendNewsList.get(0).getUrl() + "\">"
+								+ trendNewsList.get(0).getTitle() + "</a>"));
+						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 						mTvDescription2.setVisibility(View.VISIBLE);
 					}
 					if (trendNewsList.size() > 2) {
-						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 
 						mTvDescription3.setText(Html.fromHtml("<a href=\""
-								+ trendNewsList.get(2).getUrl() + "\">"
-								+ trendNewsList.get(2).getTitle() + "</a>"));
-
+								+ trendNewsList.get(1).getUrl() + "\">"
+								+ trendNewsList.get(1).getTitle() + "</a>"));
+						mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
 						mTvDescription3.setVisibility(View.VISIBLE);
 					}
 
@@ -180,8 +181,6 @@ public class PollFragment extends Fragment {
 				}
 			}
 		});
-
-		mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
 
 		mImgBtnYes.setOnClickListener(new OnClickListener() {
 

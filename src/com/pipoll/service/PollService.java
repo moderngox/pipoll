@@ -496,7 +496,7 @@ public class PollService implements IPoll {
 							poll.setId(String.valueOf(date));
 							poll.setCreatedAt(date);
 							poll.setUpdatedAt(date);
-							poll.setTheme(rssNode.getTitle());
+							poll.setTheme(AppController.extractTopic(rssNode.getTitle()));
 							poll.setImage(imgURL);
 							poll.setCategory(new Category());
 							Trend trend = new Trend();

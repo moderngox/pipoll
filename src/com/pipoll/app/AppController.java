@@ -3,6 +3,8 @@
  */
 package com.pipoll.app;
 
+import java.util.StringTokenizer;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
@@ -22,6 +24,8 @@ public class AppController extends Application {
 
 	// TAGS
 
+	private static final char CHAR_SPACE = ' ';
+	private static final String STRING_SPACE = " ";
 	// Generic
 	public static final String ID_TAG = "id";
 	public static final String IMAGE_TAG = "image";
@@ -69,6 +73,9 @@ public class AppController extends Application {
 	public static final String FASHION_WEEKLY_FEED = "http://fashionweekdaily.com/feed/";
 	public static final String SELECTISM_FEED = "http://feeds.feedburner.com/selectism/rss?format=xml";
 
+	private static final String AFP = "AFP";
+	private static final String REUTERS = "Reuters";
+
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;
 
@@ -108,6 +115,23 @@ public class AppController extends Application {
 		if (isToFinished) {
 			srcActivity.finish();
 		}
+
+	}
+
+	public static String extractTopic(String title) {
+		StringBuilder sb = new StringBuilder("");
+		String word = "";
+		StringTokenizer st = new StringTokenizer(title, STRING_SPACE);
+		while (st.hasMoreElements()) {
+			word = st.nextToken();
+			if (java.lang.Character.isUpperCase(word.charAt(0))) {
+				if (!word.contains(REUTERS) && !word.contains(AFP) && word.length() > 2) {
+					sb.append(word).append(STRING_SPACE);
+				}
+			}
+		}
+
+		return sb.toString();
 
 	}
 }

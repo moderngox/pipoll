@@ -52,15 +52,7 @@ public class StartupActivity extends Activity {
 			progress = (ProgressBar) findViewById(R.id.progressBar1);
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
-			// GoogleService googleService = new GoogleService(activity);
-			// googleService.getGoogleImage("sia", new ServiceCallback() {
-			//
-			// @Override
-			// public void onServiceDone(Object response) {
-			// String imgURL = (String) response;
-			// Toast.makeText(activity, "Img URL: " + imgURL, Toast.LENGTH_SHORT).show();
-			// }
-			// });
+
 			mRssFeeds.add(AppController.FASHION_WEEKLY_FEED);
 			mRssFeeds.add(AppController.REUTERS_FEED);
 			mRssFeeds.add(AppController.AFP_FEED);
@@ -74,7 +66,7 @@ public class StartupActivity extends Activity {
 				@Override
 				public void onSuccess() {
 					final PollService pollService = new PollService(activity);
-					pollService.createPollsFromRssNodes(mRssEls, 0, 20, new ServiceCallback() {
+					pollService.createPollsFromRssNodes(mRssEls, 0, 3, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override

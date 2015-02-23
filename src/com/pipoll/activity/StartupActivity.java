@@ -4,9 +4,7 @@
 package com.pipoll.activity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,7 +15,8 @@ import android.widget.Toast;
 import com.facebook.Session;
 import com.pipoll.R;
 import com.pipoll.app.AppController;
-import com.pipoll.data.RSSElement;
+import com.pipoll.data.RSSFeed;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.parcelable.ParcelableRSSElement;
 import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
@@ -32,8 +31,8 @@ import com.pipoll.service.TrendService;
  */
 public class StartupActivity extends Activity {
 	// private List<Trend> mTrends;
-	private List<RSSElement> mRssEls;
-	private List<String> mRssFeeds = new ArrayList<String>();
+	private List<RSSNode> mRssEls;
+	private List<RSSFeed> mRssFeeds = new ArrayList<RSSFeed>();
 	private Session session;
 	private AppController application = AppController.getInstance();
 	private StartupActivity activity;
@@ -48,19 +47,21 @@ public class StartupActivity extends Activity {
 			// hide actionBar. To make it properly //TODO define (in themes) and use a
 			// NoBarTheme in Manifest
 			getActionBar().hide();
+
+			// TODO clear polls at every startup. Got to be managed differently
+			application.clearLocalPolls(this);
 			setContentView(R.layout.progress);
 			progress = (ProgressBar) findViewById(R.id.progressBar1);
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
 
-			mRssFeeds.add(AppController.FASHION_WEEKLY_FEED);
-			mRssFeeds.add(AppController.REUTERS_FEED);
-			mRssFeeds.add(AppController.AFP_FEED);
-			// mRssFeeds.add(AppController.UPI_FEED);
-			// Randomize the RSS feeds :
-			// http://stackoverflow.com/questions/4228975/how-to-randomize-arraylist?answertab=votes#tab-top
-			long seed = System.nanoTime();
-			Collections.shuffle(mRssFeeds, new Random(seed));
+			mRssFeeds.add(new RSSFeed(AppController.FASHION_CAT,
+					AppController.FASHION_WEEKLY_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT, AppController.REUTERS_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT, AppController.AFP_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT,
+					AppController.F365_PLEAGUE_FEED));
+
 			mRssEls = trendService.getRSSNode(mRssFeeds, new TaskCallback() {
 
 				@Override

@@ -8,7 +8,9 @@ import java.util.StringTokenizer;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,7 +26,6 @@ public class AppController extends Application {
 
 	// TAGS
 
-	private static final char CHAR_SPACE = ' ';
 	private static final String STRING_SPACE = " ";
 	// Generic
 	public static final String ID_TAG = "id";
@@ -68,14 +69,22 @@ public class AppController extends Application {
 	// RSS
 	public static final String REUTERS_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Reuters&um=1&ie=UTF-8&output=rss&num=100";
 	public static final String AFP_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:AFP&um=1&ie=UTF-8&output=rss&num=100";
-	public static final String UPI_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Bloomberg&um=1&ie=UTF-8&output=rss&num=100";
+
+	public static final String UPI_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Bloomberg&um=1&ie=UTF-8&output=rss&num=100"; // broke?
 
 	public static final String FASHION_WEEKLY_FEED = "http://fashionweekdaily.com/feed/";
 	public static final String SELECTISM_FEED = "http://feeds.feedburner.com/selectism/rss?format=xml";
-
+	public static final String F365_PLEAGUE_FEED = "http://www.football365.com/premier-league/rss";
 	private static final String AFP = "AFP";
 	private static final String REUTERS = "Reuters";
 
+	public static final String FASHION_CAT = "Fashion";
+	public static final String GLOBAL_CAT = "Global news";
+	public static final String SPORT_CAT = "Sport";
+	public static final String FOOTBALL_CAT = "Football";
+	// SharedPreferences
+	public static final String LOCAL_PREFERENCES = "localPreferences";
+	private SharedPreferences sharedPreferences;
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;
 
@@ -88,6 +97,34 @@ public class AppController extends Application {
 	public static synchronized AppController getInstance() {
 		return mInstance;
 
+	}
+
+	public SharedPreferences getSharedPreferences() {
+		if (sharedPreferences == null) {
+			sharedPreferences = getSharedPreferences(AppController.LOCAL_PREFERENCES,
+					Activity.MODE_PRIVATE);
+		}
+		return sharedPreferences;
+	}
+
+	public void clearLocalPolls(Activity activity) {
+		getSharedPreferences();
+
+		if (!sharedPreferences.getAll().isEmpty()) {
+			sharedPreferences.edit().clear().commit();
+			Toast.makeText(activity, "Local Polls cleared", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public boolean isTopicAlreadyPresentToday(String topic, String rawDate) {
+		getSharedPreferences();
+		boolean result = false;
+		if (sharedPreferences.getAll().containsKey(topic)) {
+			if (sharedPreferences.getString(topic, null).equals(topic + " - " + rawDate)) {
+				result = true;
+			}
+		}
+		return result;
 	}
 
 	public ImageLoader getImageLoader() {

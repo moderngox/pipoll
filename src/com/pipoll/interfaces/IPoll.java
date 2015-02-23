@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.facebook.Session;
 import com.pipoll.data.Like;
-import com.pipoll.data.RSSElement;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.Trend;
 import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.interfaces.callback.GetImgCallback;
@@ -96,6 +96,6 @@ public interface IPoll {
 	 * @param end
 	 * @param serviceCallback
 	 */
-	void createPollsFromRssNodes(List<RSSElement> rssNodes, int start, int end,
+	void createPollsFromRssNodes(List<RSSNode> rssNodes, int start, int end,
 			final ServiceCallback serviceCallback);
 }

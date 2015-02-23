@@ -6,7 +6,8 @@ package com.pipoll.interfaces;
 import java.util.List;
 
 import com.pipoll.data.Like;
-import com.pipoll.data.RSSElement;
+import com.pipoll.data.RSSFeed;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.Trend;
 import com.pipoll.interfaces.callback.TaskCallback;
 
@@ -65,11 +66,11 @@ public interface ITrend {
 	void setNews(final List<Trend> trends, final TaskCallback taskcallback);
 
 	/***
-	 * Read rss Urls and returns rss nodes
+	 * Read @RSSFeed and returns @RSSNode
 	 * 
-	 * @param rssUrls
+	 * @param rssFeeds
 	 * @param taskcallback
 	 * @return
 	 */
-	List<RSSElement> getRSSNode(List<String> rssUrls, final TaskCallback taskcallback);
+	List<RSSNode> getRSSNode(List<RSSFeed> rssFeeds, final TaskCallback taskcallback);
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.pipoll.data.RSSElement;
+import com.pipoll.data.RSSNode;
 
 /**
  * @author moderngox
@@ -17,7 +17,7 @@ import com.pipoll.data.RSSElement;
  */
 public class ParcelableRSSElement implements Parcelable {
 
-	private RSSElement rssElement;
+	private RSSNode rssElement;
 
 	/*
 	 * (non-Javadoc)
@@ -46,7 +46,7 @@ public class ParcelableRSSElement implements Parcelable {
 	// CREATOR that implements these two methods
 	public static final Parcelable.Creator<ParcelableRSSElement> CREATOR = new ParcelablePoll.Creator<ParcelableRSSElement>() {
 		public ParcelableRSSElement createFromParcel(Parcel in) {
-			return new ParcelableRSSElement((RSSElement) in.readSerializable());
+			return new ParcelableRSSElement((RSSNode) in.readSerializable());
 		}
 
 		public ParcelableRSSElement[] newArray(int size) {
@@ -56,21 +56,21 @@ public class ParcelableRSSElement implements Parcelable {
 
 	// example constructor that takes a Parcel and gives you an object populated
 	// with it's values
-	public ParcelableRSSElement(RSSElement in) {
-		rssElement = (RSSElement) in;
+	public ParcelableRSSElement(RSSNode in) {
+		rssElement = (RSSNode) in;
 	}
 
-	public static List<ParcelableRSSElement> getParcelRSSElements(List<RSSElement> rssElements) {
+	public static List<ParcelableRSSElement> getParcelRSSElements(List<RSSNode> rssElements) {
 		List<ParcelableRSSElement> pRSSElems = new ArrayList<ParcelableRSSElement>();
-		for (RSSElement rssElem : rssElements) {
+		for (RSSNode rssElem : rssElements) {
 			pRSSElems.add(new ParcelableRSSElement(rssElem));
 		}
 
 		return pRSSElems;
 	}
 
-	public static ArrayList<RSSElement> getRSSElements(List<ParcelableRSSElement> pRSSElement) {
-		ArrayList<RSSElement> rssElems = new ArrayList<RSSElement>();
+	public static ArrayList<RSSNode> getRSSElements(List<ParcelableRSSElement> pRSSElement) {
+		ArrayList<RSSNode> rssElems = new ArrayList<RSSNode>();
 		for (ParcelableRSSElement pRSSElem : pRSSElement) {
 			rssElems.add(pRSSElem.getRSSElement());
 		}
@@ -78,7 +78,7 @@ public class ParcelableRSSElement implements Parcelable {
 		return rssElems;
 	}
 
-	public RSSElement getRSSElement() {
+	public RSSNode getRSSElement() {
 
 		return rssElement;
 	}

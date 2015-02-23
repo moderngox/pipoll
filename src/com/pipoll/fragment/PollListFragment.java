@@ -2,7 +2,9 @@ package com.pipoll.fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,12 +17,13 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.app.AppController;
 import com.pipoll.customview.CustomViewPager;
 import com.pipoll.customview.FixedSpeedScroller;
-import com.pipoll.data.RSSElement;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.data.parcelable.ParcelableRSSElement;
 import com.pipoll.interfaces.callback.ServiceCallback;
@@ -40,7 +43,7 @@ public class PollListFragment extends Fragment {
 
 	private LinkedList<ParcelablePoll> mParcelPolls;
 	// private ArrayList<Trend> mTrends;
-	private ArrayList<RSSElement> mRssNodes;
+	private ArrayList<RSSNode> mRssNodes;
 	private PollService pollService;
 
 	public static PollListFragment newInstance(Bundle extras) {
@@ -61,6 +64,10 @@ public class PollListFragment extends Fragment {
 		ArrayList<ParcelableRSSElement> pRSSNodes = extras
 				.getParcelableArrayList(AppController.RSS_ELEMS_TAG);
 		mRssNodes = ParcelableRSSElement.getRSSElements(pRSSNodes);
+		// Randomize the RSS feeds :
+		// http://stackoverflow.com/questions/4228975/how-to-randomize-arraylist?answertab=votes#tab-top
+		long seed = System.nanoTime();
+		Collections.shuffle(mRssNodes, new Random(seed));
 		// ArrayList<ParcelableTrend> parcelableTrends = extras.getParcelableArrayList(
 		// AppController.TRENDS_TAG);
 		// retrieve the parcelable polls and trends
@@ -120,7 +127,7 @@ public class PollListFragment extends Fragment {
 					// }
 					if (mRssNodes.size() > getCount()) {
 						int start = mParcelPolls.size() + position + 2;
-						int end = start + 1;
+						int end = start + 5;
 						pollService.createPollsFromRssNodes(mRssNodes, start, end,
 								new ServiceCallback() {
 
@@ -130,9 +137,13 @@ public class PollListFragment extends Fragment {
 										ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
 										for (ParcelablePoll pPoll : parcelPolls) {
 											mParcelPolls.add(pPoll);
-											// Toast.makeText(getActivity(),
-											// "new Poll added: " + pPoll.getPoll().getTheme(),
-											// Toast.LENGTH_SHORT).show();
+											Toast.makeText(
+													getActivity(),
+													"new Poll added: "
+															+ pPoll.getPoll().getTheme()
+															+ "size of list:"
+															+ mParcelPolls.size(),
+													Toast.LENGTH_SHORT).show();
 										}
 									}
 								});

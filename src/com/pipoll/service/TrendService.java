@@ -37,7 +37,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Like;
-import com.pipoll.data.RSSElement;
+import com.pipoll.data.RSSNode;
+import com.pipoll.data.RSSFeed;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
@@ -242,7 +243,6 @@ public class TrendService implements ITrend {
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -379,15 +379,15 @@ public class TrendService implements ITrend {
 	}
 
 	@Override
-	public List<RSSElement> getRSSNode(List<String> rssUrls, final TaskCallback taskcallback) {
-		final List<RSSElement> rssElements = new ArrayList<RSSElement>();
-		new AsyncTask<String, Void, List<RSSElement>>() {
+	public List<RSSNode> getRSSNode(List<RSSFeed> rssFeeds, final TaskCallback taskcallback) {
+		final List<RSSNode> rssNodes = new ArrayList<RSSNode>();
+		new AsyncTask<RSSFeed, Void, List<RSSNode>>() {
 
-			protected List<RSSElement> doInBackground(String... urls) {
+			protected List<RSSNode> doInBackground(RSSFeed... rssFeeds) {
 
-				for (String feedUrl : urls) {
+				for (RSSFeed rssFeed : rssFeeds) {
 					try {
-						URL url = new URL(feedUrl);
+						URL url = new URL(rssFeed.getFeedEntry());
 						InputStream in;
 						in = url.openStream(); // <=> in =
 												// url.openConnection().getInputStream();
@@ -430,8 +430,8 @@ public class TrendService implements ITrend {
 							eventType = xpp.next(); // move to next element
 						}
 						for (int i = 0; i < titles.size(); i++) {
-							rssElements.add(new RSSElement(titles.get(i), descriptions.get(i),
-									links.get(i)));
+							rssNodes.add(new RSSNode(titles.get(i), descriptions.get(i),
+									links.get(i), rssFeed.getCategory()));
 						}
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
@@ -441,16 +441,16 @@ public class TrendService implements ITrend {
 						e.printStackTrace();
 					}
 				}
-				return rssElements;
+				return rssNodes;
 			}
 
 			// after downloading
-			protected void onPostExecute(List<RSSElement> result) {
+			protected void onPostExecute(List<RSSNode> result) {
 				if (!result.isEmpty()) {
 					taskcallback.onSuccess();
 				}
 			}
-		}.execute(rssUrls.toArray(new String[rssUrls.size()]));
-		return rssElements;
+		}.execute(rssFeeds.toArray(new RSSFeed[rssFeeds.size()]));
+		return rssNodes;
 	}
 }

@@ -29,9 +29,7 @@ import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.data.parcelable.ParcelableTrendNews;
-import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
-import com.pipoll.service.CategoryService;
 import com.pipoll.service.GoogleService;
 
 /**
@@ -110,15 +108,15 @@ public class PollFragment extends Fragment {
 		String trendName = mPoll.getTheme();
 		mTvTitle.setText(trendName);
 
-		CategoryService catService = new CategoryService(getActivity());
-		catService.getFBStringCategory(trendName, new ServiceCallback() {
-
-			@Override
-			public void onServiceDone(Object response) {
-
-				mTvCategory.setText((String) response);
-			}
-		});
+		// CategoryService catService = new CategoryService(getActivity());
+		// catService.getFBStringCategory(trendName, new ServiceCallback() {
+		//
+		// @Override
+		// public void onServiceDone(Object response) {
+		//
+		// mTvCategory.setText((String) response);
+		// }
+		// });
 
 		mTvDescription.setText(mPoll.getTheme());
 

@@ -33,6 +33,7 @@ import com.google.api.services.customsearch.model.Search;
 import com.pipoll.app.AppController;
 import com.pipoll.data.TrendNews;
 import com.pipoll.interfaces.IGoogle;
+import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
 
@@ -197,11 +198,7 @@ public class GoogleService implements IGoogle {
 					for (Element link : links) {
 						TrendNews trendnews = new TrendNews();
 						String title = link.text();
-						String url = link.absUrl("href"); // Google returns URLs in format
-															// "http://www.google.com/url?q=<url>&sa=U&ei=<someKey>".
-															// String url = URLDecoder
-						// .decode(url.substring(url.indexOf('=') + 1, url.indexOf('&')),
-						// "UTF-8");
+						String url = link.absUrl("href");
 
 						if (url.contains(".google.")
 								|| (Fuzzy.substrStart(title, query) == -1 && Fuzzy.substrEnd(
@@ -228,9 +225,8 @@ public class GoogleService implements IGoogle {
 	}
 
 	@Override
-	public String getGoogleImage(String query, TaskCallback taskCallback) {
-		// TODO Auto-generated method stub
+	public String getGoogleImage(String query, final ServiceCallback serviceCallback) {
+
 		return null;
 	}
-
 }

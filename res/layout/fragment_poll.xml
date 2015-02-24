@@ -114,7 +114,6 @@
                 android:layout_below="@id/text_view_description_2"
                 android:gravity="center_horizontal"
                 android:lines="1"
-                android:text="dummy text"
                 android:textSize="@dimen/text_size_small" />
 
             <Button

@@ -8,6 +8,7 @@ import java.util.List;
 import com.facebook.Session;
 import com.pipoll.data.Category;
 import com.pipoll.data.FBCategory;
+import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 
 /**
@@ -31,6 +32,15 @@ public interface ICategory {
 	 * @return
 	 */
 	List<FBCategory> getFBCategories(final Session session);
+
+	/**
+	 * Get a FB category from a query
+	 * 
+	 * @param session
+	 * @param query
+	 * @return
+	 */
+	void getFBStringCategory(final String query, final ServiceCallback serviceCallback);
 
 	/**
 	 * Create a category into the app server

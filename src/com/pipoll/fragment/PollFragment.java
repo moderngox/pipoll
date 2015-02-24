@@ -24,13 +24,16 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pipoll.R;
+import com.pipoll.activity.WebActivity;
 import com.pipoll.activity.WebPagerActivity;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.data.parcelable.ParcelableTrendNews;
+import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
+import com.pipoll.service.CategoryService;
 import com.pipoll.service.GoogleService;
 
 /**
@@ -87,8 +90,7 @@ public class PollFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_poll, parent, false);
 
 		mTvTitle = (TextView) v.findViewById(R.id.text_view_title);
@@ -106,9 +108,18 @@ public class PollFragment extends Fragment {
 	}
 
 	public void buildPoll() {
-		mTvTitle.setText(mPoll.getTheme());
-
 		String trendName = mPoll.getTheme();
+		mTvTitle.setText(trendName);
+
+		CategoryService catService = new CategoryService(getActivity());
+		catService.getFBStringCategory(trendName, new ServiceCallback() {
+
+			@Override
+			public void onServiceDone(Object response) {
+
+				mTvCategory.setText((String) response);
+			}
+		});
 
 		mTvDescription.setText(mPoll.getTheme());
 
@@ -121,29 +132,27 @@ public class PollFragment extends Fragment {
 		// final String moreInfos = r.getString(R.string.more_infos);
 
 		GoogleService googleService = new GoogleService(getActivity());
-		googleService.getDataFromGoogleNews(mPoll.getTheme(), new TrendNewsCallback() {
+		googleService.getDataFromGoogleNews(trendName, new TrendNewsCallback() {
 
 			@Override
 			public void onNewsRetrieved(final List<TrendNews> trendNewsList) {
 
 				if (trendNewsList != null && !trendNewsList.isEmpty()) {
-					mTvDescription.setText(Html.fromHtml("<a href=\""
-							+ trendNewsList.get(0).getUrl() + "\">"
+					mTvDescription.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(0).getUrl() + "\">"
 							+ trendNewsList.get(0).getTitle() + "</a>"));
 					mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
 					mTvDescription.setVisibility(View.VISIBLE);
 					if (trendNewsList.size() > 1) {
-						mTvDescription2.setText(Html.fromHtml("<a href=\""
-								+ trendNewsList.get(1).getUrl() + "\">"
+						mTvDescription2.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(1).getUrl() + "\">"
 								+ trendNewsList.get(1).getTitle() + "</a>"));
 						mTvDescription2.setVisibility(View.VISIBLE);
 					}
 					if (trendNewsList.size() > 2) {
 						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 
-						mTvDescription3.setText(Html.fromHtml("<a href=\""
-								+ trendNewsList.get(2).getUrl() + "\">"
+						mTvDescription3.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(2).getUrl() + "\">"
 								+ trendNewsList.get(2).getTitle() + "</a>"));
+
 						mTvDescription3.setVisibility(View.VISIBLE);
 					}
 
@@ -152,17 +161,29 @@ public class PollFragment extends Fragment {
 
 						@Override
 						public void onClick(View v) {
-							Intent i = new Intent(getActivity(), WebPagerActivity.class);
-
 							ArrayList<ParcelableTrendNews> data = (ArrayList<ParcelableTrendNews>) ParcelableTrendNews
 									.getParcelTrendNewsList(trendNewsList);
 							if (data.size() >= TRENDNEWS_COUNT) {
-								data = new ArrayList<ParcelableTrendNews>(data.subList(0,
-										TRENDNEWS_COUNT));
+								data = new ArrayList<ParcelableTrendNews>(data.subList(0, TRENDNEWS_COUNT));
 							}
-							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS,
-									data);
+
+							// start pager
+//							Intent i = new Intent(getActivity(), WebPagerActivity.class);
+//							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
+							
+							// start tab
+							// Intent i = new Intent(getActivity(), WebTabActivity.class);
+							// i.putParcelableArrayListExtra(WebTabActivity.EXTRA_TREND_NEWS, data);
+
+							// start single WebView
+							Intent i = new Intent(getActivity(), WebActivity.class);
+							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
+							//String url = data.get(0).getTrendNews().getUrl();
+							//i.putExtra(WebFragment.EXTRA_URL, url);
+							
 							startActivity(i);
+
+
 						}
 					});
 				}
@@ -216,20 +237,18 @@ public class PollFragment extends Fragment {
 		if (resultCode != Activity.RESULT_OK)
 			return;
 		if (requestCode == REQUEST_COMMENT) {
-
 			boolean liked = data.getBooleanExtra(CommentDialogFragment.EXTRA_KEY_LIKED, true);
-			String commentTitle = data
-					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
-			String commentDescription = data
-					.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
+			String commentTitle = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_TITLE);
+			String commentDescription = data.getStringExtra(CommentDialogFragment.EXTRA_KEY_COMMENT_DESCRIPTION);
 
 			// TODO : replace Toast by a save comment function
+			// Toast.makeText(getActivity(), "Thanks for your critic", Toast.LENGTH_SHORT).show();
 			Toast.makeText(
 					getActivity(),
 					mPoll.getTheme() + " liked: " + liked + "\ncommentTitle: " + commentTitle
-							+ "\ncommentDescription: " + commentDescription,
-					Toast.LENGTH_SHORT).show();
+							+ "\ncommentDescription: " + commentDescription, Toast.LENGTH_SHORT).show();
 			changePage(getActivity());
+
 		}
 	}
 }

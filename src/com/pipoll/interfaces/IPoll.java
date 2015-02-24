@@ -8,6 +8,7 @@ import java.util.List;
 import com.facebook.Session;
 import com.pipoll.data.Like;
 import com.pipoll.data.Trend;
+import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.interfaces.callback.GetImgCallback;
 import com.pipoll.interfaces.callback.ServiceCallback;
 
@@ -73,7 +74,16 @@ public interface IPoll {
 	 * @param end
 	 * @param serviceCallback
 	 */
-	@Deprecated
 	void createGPolls(final List<Trend> trends, final int start, final int end,
 			final ServiceCallback serviceCallback);
+
+	/**
+	 * Create and return Polls (without loaded an image for it) from a list of Trend
+	 * 
+	 * @param trends
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	List<ParcelablePoll> createPollsFromTrends(List<Trend> trends, int start, int end);
 }

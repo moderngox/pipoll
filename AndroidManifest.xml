@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="com.pipoll.app.AppController"
@@ -17,24 +18,16 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-        <!--
-             <activity
+        
+        <activity
             android:name="com.pipoll.activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-        -->
-        <activity
-            android:name="com.pipoll.activity.MainActivity"
-            android:label="@string/app_name" >
-
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
         <activity
             android:name="com.pipoll.activity.StartupActivity"
@@ -52,14 +45,12 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-        <!--
-             <activity
+        <!--<activity
             android:name="com.pipoll.activity.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="change title"
             android:parentActivityName="com.pipoll.activity.TabActivity"
-            android:screenOrientation="portrait" >
-        -->
+            android:screenOrientation="portrait" >-->
         <activity
             android:name="com.pipoll.activity.WebActivity"
             android:label="change title"
@@ -71,11 +62,6 @@
         <activity
             android:name="com.pipoll.activity.WebActivity2"
             android:label="Test multiple Webview" >
-<!-- 			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
         </activity>
         <activity
             android:name="com.pipoll.activity.WebTabActivity"
@@ -106,6 +92,12 @@
             android:name="com.facebook.LoginActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <receiver android:name="com.pipoll.background.StartupReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

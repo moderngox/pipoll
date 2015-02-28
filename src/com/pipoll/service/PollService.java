@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +40,7 @@ import com.pipoll.app.AppController;
 import com.pipoll.data.Category;
 import com.pipoll.data.Like;
 import com.pipoll.data.Poll;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
@@ -458,6 +462,97 @@ public class PollService implements IPoll {
 			polls.add(new ParcelablePoll(poll));
 		}
 		return polls;
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	@Override
+	public void createPollsFromRssNodes(final List<RSSNode> rssNodes, int start, int end,
+			final ServiceCallback serviceCallback) {
+		final DefaultHttpClient httpclient = new DefaultHttpClient();
+		final AppController application = AppController.getInstance();
+		final SharedPreferences localPolls = application.getSharedPreferences();
+		final SharedPreferences.Editor sharedPrefEdit = localPolls.edit();
+		end = end > rssNodes.size() ? rssNodes.size() : end;
+		final List<RSSNode> rssSublist = rssNodes.subList(start, end);
+		new AsyncTask<RSSNode, Void, List<ParcelablePoll>>() {
+
+			@Override
+			protected List<ParcelablePoll> doInBackground(RSSNode... rssNodes) {
+				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
+				for (RSSNode rssNode : rssNodes) {
+					String request;
+					try {
+						String topic = rssNode.getTopic();
+						request = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="
+								+ URLEncoder.encode(topic, AppController.UTF_8)
+								+ "&userip="
+								+ InetAddress.getLocalHost().toString();
+						HttpGet httpgetreq = new HttpGet(request);
+						httpgetreq.setHeader("Content-type", "application/json");
+						String responseText = null;
+						HttpResponse httpresponse = httpclient.execute(httpgetreq);
+						responseText = EntityUtils.toString(httpresponse.getEntity());
+						Log.d("Response: ", responseText);
+						JSONObject jsonResponse = new JSONObject(responseText);
+						JSONObject responseData = jsonResponse.isNull("responseData") ? null
+								: jsonResponse.getJSONObject("responseData");
+						if (responseData != null) {
+							String imgURL = responseData.getJSONArray("results")
+									.getJSONObject(0).getString("url");
+							Poll poll = new Poll();
+							Date rawDate = new Date();
+							String formattedDate = new SimpleDateFormat("yyyy-MM-dd")
+									.format(rawDate);
+							if (!application.isTopicAlreadyPresentToday(topic, formattedDate)) {
+								// Control if the poll is already created for the day
+								long date = rawDate.getTime();
+								poll.setId(String.valueOf(date));
+								poll.setCreatedAt(date);
+								poll.setUpdatedAt(date);
+
+								poll.setTheme(topic);
+								poll.setImage(imgURL);
+								Category category = new Category();
+								category.setName(rssNode.getCategory());
+								poll.setCategory(category);
+								Trend trend = new Trend();
+								// 1st Trend news from the rss node
+								TrendNews trendNews = new TrendNews();
+								trendNews.setTitle(rssNode.getTitle());
+								trendNews.setUrl(rssNode.getLink());
+								trend.setTrendNews(new ArrayList<TrendNews>());
+								trend.getTrendNews().add(trendNews);
+								poll.setTrend(trend);
+								// save poll(topic) info on local sharedPref
+								sharedPrefEdit.putString(topic, topic + " - " + formattedDate);
+								sharedPrefEdit.commit();
+								polls.add(new ParcelablePoll(poll));
+							}
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					} catch (ClientProtocolException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+				httpclient.getConnectionManager().shutdown();
+				return polls;
+			}
+
+			@Override
+			protected void onPostExecute(List<ParcelablePoll> result) {
+				super.onPostExecute(result);
+				if (!result.isEmpty()) {
+					serviceCallback.onServiceDone(result);
+				}
+			}
+
+		}.execute(rssSublist.toArray(new RSSNode[rssSublist.size()]));
+
 	}
 
 }

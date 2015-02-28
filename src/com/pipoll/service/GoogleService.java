@@ -4,8 +4,11 @@
 package com.pipoll.service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +17,13 @@ import java.util.regex.Pattern;
 
 import net.java.frej.fuzzy.Fuzzy;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,6 +32,8 @@ import org.jsoup.select.Elements;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -31,9 +43,9 @@ import com.google.api.services.customsearch.Customsearch;
 import com.google.api.services.customsearch.model.Result;
 import com.google.api.services.customsearch.model.Search;
 import com.pipoll.app.AppController;
+import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
 import com.pipoll.interfaces.IGoogle;
-import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
 
@@ -43,7 +55,6 @@ import com.pipoll.interfaces.callback.TrendNewsCallback;
  */
 public class GoogleService implements IGoogle {
 
-	@SuppressWarnings("unused")
 	private Activity activity;
 	private static Pattern patternDomainName;
 	private Matcher matcher;
@@ -173,6 +184,8 @@ public class GoogleService implements IGoogle {
 		final List<TrendNews> result = new LinkedList<TrendNews>();
 		new AsyncTask<Void, Void, List<TrendNews>>() {
 
+			private String queryVsTitle;
+
 			@Override
 			protected void onPostExecute(List<TrendNews> result) {
 				super.onPostExecute(result);
@@ -185,6 +198,7 @@ public class GoogleService implements IGoogle {
 
 			@Override
 			protected List<TrendNews> doInBackground(Void... params) {
+
 				try {
 
 					Document document = Jsoup
@@ -199,11 +213,25 @@ public class GoogleService implements IGoogle {
 						TrendNews trendnews = new TrendNews();
 						String title = link.text();
 						String url = link.absUrl("href");
+						queryVsTitle = title + " VS " + query;
+						try {
 
-						if (url.contains(".google.")
-								|| (Fuzzy.substrStart(title, query) == -1 && Fuzzy.substrEnd(
-										title, query) == -1)) {
-							continue; // Ads/news/etc.
+							if (url.contains(".google.")
+									|| (Fuzzy.substrStart(title, query) == -1 && Fuzzy
+											.substrEnd(title, query) == -1)) {
+								continue; // Ads/news/etc.
+							}
+						} catch (Exception e) {
+							activity.runOnUiThread(new Runnable() {
+
+								@Override
+								public void run() {
+									// TODO Auto-generated method stub
+
+									Toast.makeText(activity, queryVsTitle, Toast.LENGTH_SHORT)
+											.show();
+								}
+							});
 						}
 						trendnews.setTitle(title);
 						trendnews.setUrl(url);
@@ -225,8 +253,55 @@ public class GoogleService implements IGoogle {
 	}
 
 	@Override
-	public String getGoogleImage(String query, final ServiceCallback serviceCallback) {
+	public String setGoogleImage(final Poll poll) {
+		final String imgURL = null;
+		new AsyncTask<String, Void, String>() {
 
-		return null;
+			@Override
+			protected String doInBackground(String... queries) {
+				final DefaultHttpClient httpclient = new DefaultHttpClient();
+				String request;
+				String imgURL = null;
+				try {
+					request = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="
+							+ URLEncoder.encode(queries[0], AppController.UTF_8)
+							+ "&userip="
+							+ InetAddress.getLocalHost().toString();
+					HttpGet httpgetreq = new HttpGet(request);
+					httpgetreq.setHeader("Content-type", "application/json");
+					String responseText = null;
+					HttpResponse httpresponse = httpclient.execute(httpgetreq);
+					responseText = EntityUtils.toString(httpresponse.getEntity());
+					Log.d("Response: ", responseText);
+					JSONObject jsonResponse = new JSONObject(responseText);
+					JSONObject responseData = jsonResponse.isNull("responseData") ? null
+							: jsonResponse.getJSONObject("responseData");
+					if (responseData != null) {
+						imgURL = responseData.getJSONArray("results").getJSONObject(0)
+								.getString("url");
+					}
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				} catch (ClientProtocolException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				return imgURL;
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				poll.setImage(imgURL);
+			}
+
+		}.execute(poll.getTheme());
+		return imgURL;
 	}
 }

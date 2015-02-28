@@ -39,13 +39,13 @@ public class WebActivity extends FragmentActivity {
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.fragmentContainer);
 
-        if (fragment == null) {
-            fragment = createFragment();
-            manager.beginTransaction()
-                .add(R.id.fragmentContainer, fragment)
-                .commit();
-            manager.beginTransaction().re
-        }
+//        if (fragment == null) {
+//            fragment = createFragment();
+//            manager.beginTransaction()
+//                .add(R.id.fragmentContainer, fragment)
+//                .commit();
+//            manager.beginTransaction().re
+//        }
         
         
         ImageButton imgBtnPrevious = (ImageButton) findViewById(R.id.imgBtnPrevious);

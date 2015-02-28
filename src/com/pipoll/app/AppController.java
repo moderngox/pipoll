@@ -3,10 +3,14 @@
  */
 package com.pipoll.app;
 
+import java.util.StringTokenizer;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,6 +26,7 @@ public class AppController extends Application {
 
 	// TAGS
 
+	private static final String STRING_SPACE = " ";
 	// Generic
 	public static final String ID_TAG = "id";
 	public static final String IMAGE_TAG = "image";
@@ -43,7 +48,8 @@ public class AppController extends Application {
 	// Trends
 	public static final String TRENDS_TAG = "trends";
 	public static final String TREND_TAG = "trend";
-
+	// RSS elems
+	public static final String RSS_ELEMS_TAG = "rssElems";
 	// Endpoints
 	public static final String TRENDS_ENDPOINT = "http://hawttrends.appspot.com/api/terms/";
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";
@@ -60,6 +66,25 @@ public class AppController extends Application {
 	public static final String NO_IMAGE_URL = "http://www.clker.com/cliparts/B/u/S/l/W/l/no-photo-available-md.png";
 	public static final String NO_CATEGORY_TAG = "N/C";
 
+	// RSS
+	public static final String REUTERS_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Reuters&um=1&ie=UTF-8&output=rss&num=100";
+	public static final String AFP_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:AFP&um=1&ie=UTF-8&output=rss&num=100";
+
+	public static final String UPI_FEED = "https://news.google.com/news?hl=fr&gl=fr&q=source:Bloomberg&um=1&ie=UTF-8&output=rss&num=100"; // broke?
+
+	public static final String FASHION_WEEKLY_FEED = "http://fashionweekdaily.com/feed/";
+	public static final String SELECTISM_FEED = "http://feeds.feedburner.com/selectism/rss?format=xml";
+	public static final String F365_PLEAGUE_FEED = "http://www.football365.com/premier-league/rss";
+	private static final String AFP = "AFP";
+	private static final String REUTERS = "Reuters";
+
+	public static final String FASHION_CAT = "Fashion";
+	public static final String GLOBAL_CAT = "Global news";
+	public static final String SPORT_CAT = "Sport";
+	public static final String FOOTBALL_CAT = "Football";
+	// SharedPreferences
+	public static final String LOCAL_PREFERENCES = "localPreferences";
+	private SharedPreferences sharedPreferences;
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;
 
@@ -72,6 +97,34 @@ public class AppController extends Application {
 	public static synchronized AppController getInstance() {
 		return mInstance;
 
+	}
+
+	public SharedPreferences getSharedPreferences() {
+		if (sharedPreferences == null) {
+			sharedPreferences = getSharedPreferences(AppController.LOCAL_PREFERENCES,
+					Activity.MODE_PRIVATE);
+		}
+		return sharedPreferences;
+	}
+
+	public void clearLocalPolls(Activity activity) {
+		getSharedPreferences();
+
+		if (!sharedPreferences.getAll().isEmpty()) {
+			sharedPreferences.edit().clear().commit();
+			Toast.makeText(activity, "Local Polls cleared", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public boolean isTopicAlreadyPresentToday(String topic, String rawDate) {
+		getSharedPreferences();
+		boolean result = false;
+		if (sharedPreferences.getAll().containsKey(topic)) {
+			if (sharedPreferences.getString(topic, null).equals(topic + " - " + rawDate)) {
+				result = true;
+			}
+		}
+		return result;
 	}
 
 	public ImageLoader getImageLoader() {
@@ -99,6 +152,23 @@ public class AppController extends Application {
 		if (isToFinished) {
 			srcActivity.finish();
 		}
+
+	}
+
+	public static String extractTopic(String title) {
+		StringBuilder sb = new StringBuilder("");
+		String word = "";
+		StringTokenizer st = new StringTokenizer(title, STRING_SPACE);
+		while (st.hasMoreElements()) {
+			word = st.nextToken();
+			if (java.lang.Character.isUpperCase(word.charAt(0))) {
+				if (!word.contains(REUTERS) && !word.contains(AFP) && word.length() > 2) {
+					sb.append(word).append(STRING_SPACE);
+				}
+			}
+		}
+
+		return sb.toString();
 
 	}
 }

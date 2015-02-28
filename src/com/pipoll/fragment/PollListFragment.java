@@ -2,7 +2,9 @@ package com.pipoll.fragment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,14 +17,15 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.app.AppController;
 import com.pipoll.customview.CustomViewPager;
 import com.pipoll.customview.FixedSpeedScroller;
-import com.pipoll.data.Trend;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.parcelable.ParcelablePoll;
-import com.pipoll.data.parcelable.ParcelableTrend;
+import com.pipoll.data.parcelable.ParcelableRSSElement;
 import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.service.PollService;
 
@@ -39,7 +42,8 @@ public class PollListFragment extends Fragment {
 	CustomViewPager mPollViewPager;
 
 	private LinkedList<ParcelablePoll> mParcelPolls;
-	private ArrayList<Trend> mTrends;
+	// private ArrayList<Trend> mTrends;
+	private ArrayList<RSSNode> mRssNodes;
 	private PollService pollService;
 
 	public static PollListFragment newInstance(Bundle extras) {
@@ -54,14 +58,21 @@ public class PollListFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		// TODO : null exception hero when coming back from webView
-		ArrayList<ParcelablePoll> parcelablePolls = getArguments().getParcelableArrayList(
-				AppController.POLLS_TAG);
-
-		ArrayList<ParcelableTrend> parcelableTrends = getArguments().getParcelableArrayList(
-				AppController.TRENDS_TAG);
+		Bundle extras = getArguments();
+		ArrayList<ParcelablePoll> parcelablePolls = extras
+				.getParcelableArrayList(AppController.POLLS_TAG);
+		ArrayList<ParcelableRSSElement> pRSSNodes = extras
+				.getParcelableArrayList(AppController.RSS_ELEMS_TAG);
+		mRssNodes = ParcelableRSSElement.getRSSElements(pRSSNodes);
+		// Randomize the RSS feeds :
+		// http://stackoverflow.com/questions/4228975/how-to-randomize-arraylist?answertab=votes#tab-top
+		long seed = System.nanoTime();
+		Collections.shuffle(mRssNodes, new Random(seed));
+		// ArrayList<ParcelableTrend> parcelableTrends = extras.getParcelableArrayList(
+		// AppController.TRENDS_TAG);
 		// retrieve the parcelable polls and trends
 		mParcelPolls = new LinkedList<ParcelablePoll>(parcelablePolls);
-		mTrends = new ArrayList<Trend>(ParcelableTrend.getTrends(parcelableTrends));
+		// mTrends = new ArrayList<Trend>(ParcelableTrend.getTrends(parcelableTrends));
 		pollService = new PollService(getActivity());
 	}
 
@@ -93,25 +104,49 @@ public class PollListFragment extends Fragment {
 					// if the end of the list or the getCount limit is not reached we search
 					// for then potentially create a new poll for the current polls list before
 					// returning the current poll to the view
-					if (mTrends.size() > getCount()) {
+					// if (mTrends.size() > getCount()) {
+					// int start = mParcelPolls.size() + position + 2;
+					// int end = start + 1;
+					// pollService.createPolls(mTrends, start, end, new ServiceCallback() {
+					//
+					// @Override
+					// public void onServiceDone(Object response) {
+					// if (response != null) {
+					// @SuppressWarnings("unchecked")
+					// ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>)
+					// response;
+					// for (ParcelablePoll pPoll : parcelPolls) {
+					// mParcelPolls.add(pPoll);
+					// // Toast.makeText(getActivity(),
+					// // "new Poll added: " + pPoll.getPoll().getTheme(),
+					// // Toast.LENGTH_SHORT).show();
+					// }
+					// }
+					// }
+					// });
+					// }
+					if (mRssNodes.size() > getCount()) {
 						int start = mParcelPolls.size() + position + 2;
-						int end = start + 1;
-						pollService.createPolls(mTrends, start, end, new ServiceCallback() {
+						int end = start + 5;
+						pollService.createPollsFromRssNodes(mRssNodes, start, end,
+								new ServiceCallback() {
 
-							@Override
-							public void onServiceDone(Object response) {
-								if (response != null) {
-									@SuppressWarnings("unchecked")
-									ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
-									for (ParcelablePoll pPoll : parcelPolls) {
-										mParcelPolls.add(pPoll);
-										// Toast.makeText(getActivity(),
-										// "new Poll added: " + pPoll.getPoll().getTheme(),
-										// Toast.LENGTH_SHORT).show();
+									@Override
+									public void onServiceDone(Object response) {
+										@SuppressWarnings("unchecked")
+										ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
+										for (ParcelablePoll pPoll : parcelPolls) {
+											mParcelPolls.add(pPoll);
+											Toast.makeText(
+													getActivity(),
+													"new Poll added: "
+															+ pPoll.getPoll().getTheme()
+															+ "size of list:"
+															+ mParcelPolls.size(),
+													Toast.LENGTH_SHORT).show();
+										}
 									}
-								}
-							}
-						});
+								});
 					}
 					return PollFragment.newInstance(mParcelPolls.get(position));
 				} else {

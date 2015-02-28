@@ -31,9 +31,7 @@ import com.pipoll.data.Poll;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
 import com.pipoll.data.parcelable.ParcelableTrendNews;
-import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TrendNewsCallback;
-import com.pipoll.service.CategoryService;
 import com.pipoll.service.GoogleService;
 
 /**
@@ -111,15 +109,15 @@ public class PollFragment extends Fragment {
 		String trendName = mPoll.getTheme();
 		mTvTitle.setText(trendName);
 
-		CategoryService catService = new CategoryService(getActivity());
-		catService.getFBStringCategory(trendName, new ServiceCallback() {
-
-			@Override
-			public void onServiceDone(Object response) {
-
-				mTvCategory.setText((String) response);
-			}
-		});
+		// CategoryService catService = new CategoryService(getActivity());
+		// catService.getFBStringCategory(trendName, new ServiceCallback() {
+		//
+		// @Override
+		// public void onServiceDone(Object response) {
+		//
+		// mTvCategory.setText((String) response);
+		// }
+		// });
 
 		mTvDescription.setText(mPoll.getTheme());
 
@@ -131,6 +129,12 @@ public class PollFragment extends Fragment {
 		Resources r = getActivity().getResources();
 		// final String moreInfos = r.getString(R.string.more_infos);
 
+		// Trendnews from the RSS FEED filled in the poll creation
+		TrendNews firstTrendnews = mPoll.getTrend().getTrendNews().get(0);
+		mTvDescription.setText(Html.fromHtml("<a href=\"" + firstTrendnews.getUrl() + "\">"
+				+ firstTrendnews.getTitle() + "</a>"));
+		mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
+		mTvDescription.setVisibility(View.VISIBLE);
 		GoogleService googleService = new GoogleService(getActivity());
 		googleService.getDataFromGoogleNews(trendName, new TrendNewsCallback() {
 
@@ -138,21 +142,20 @@ public class PollFragment extends Fragment {
 			public void onNewsRetrieved(final List<TrendNews> trendNewsList) {
 
 				if (trendNewsList != null && !trendNewsList.isEmpty()) {
-					mTvDescription.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(0).getUrl() + "\">"
-							+ trendNewsList.get(0).getTitle() + "</a>"));
-					mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
-					mTvDescription.setVisibility(View.VISIBLE);
+					// populate the list with other source
 					if (trendNewsList.size() > 1) {
-						mTvDescription2.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(1).getUrl() + "\">"
-								+ trendNewsList.get(1).getTitle() + "</a>"));
+						mTvDescription2.setText(Html.fromHtml("<a href=\""
+								+ trendNewsList.get(0).getUrl() + "\">"
+								+ trendNewsList.get(0).getTitle() + "</a>"));
+						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 						mTvDescription2.setVisibility(View.VISIBLE);
 					}
 					if (trendNewsList.size() > 2) {
-						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 
-						mTvDescription3.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(2).getUrl() + "\">"
-								+ trendNewsList.get(2).getTitle() + "</a>"));
-
+						mTvDescription3.setText(Html.fromHtml("<a href=\""
+								+ trendNewsList.get(1).getUrl() + "\">"
+								+ trendNewsList.get(1).getTitle() + "</a>"));
+						mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
 						mTvDescription3.setVisibility(View.VISIBLE);
 					}
 
@@ -189,8 +192,6 @@ public class PollFragment extends Fragment {
 				}
 			}
 		});
-
-		mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
 
 		mImgBtnYes.setOnClickListener(new OnClickListener() {
 

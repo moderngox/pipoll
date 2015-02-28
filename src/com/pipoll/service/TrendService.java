@@ -4,6 +4,7 @@
 package com.pipoll.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
@@ -25,6 +26,9 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -33,6 +37,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Like;
+import com.pipoll.data.RSSNode;
+import com.pipoll.data.RSSFeed;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.google.GoogleResult;
@@ -237,7 +243,6 @@ public class TrendService implements ITrend {
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -371,5 +376,81 @@ public class TrendService implements ITrend {
 			}
 		}.execute();
 		return trends;
+	}
+
+	@Override
+	public List<RSSNode> getRSSNode(List<RSSFeed> rssFeeds, final TaskCallback taskcallback) {
+		final List<RSSNode> rssNodes = new ArrayList<RSSNode>();
+		new AsyncTask<RSSFeed, Void, List<RSSNode>>() {
+
+			protected List<RSSNode> doInBackground(RSSFeed... rssFeeds) {
+
+				for (RSSFeed rssFeed : rssFeeds) {
+					try {
+						URL url = new URL(rssFeed.getFeedEntry());
+						InputStream in;
+						in = url.openStream(); // <=> in =
+												// url.openConnection().getInputStream();
+						XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+						factory.setNamespaceAware(false);
+						XmlPullParser xpp = factory.newPullParser();
+						xpp.setInput(in, "UTF_8");
+						/*
+						 * RSS Parsing from :
+						 * http://androidresearch.wordpress.com/2012/01/21/creating
+						 * -a-simple-rss-application-in-android/
+						 */
+						boolean insideItem = false;
+						List<String> titles = new ArrayList<String>();
+						List<String> links = new ArrayList<String>();
+						List<String> descriptions = new ArrayList<String>();
+						// Returns the type of current event: START_TAG, END_TAG, etc..
+						int eventType = xpp.getEventType();
+						while (eventType != XmlPullParser.END_DOCUMENT) {
+							if (eventType == XmlPullParser.START_TAG) {
+
+								if (xpp.getName().equalsIgnoreCase("item")) {
+									insideItem = true;
+								} else if (xpp.getName().equalsIgnoreCase("title")) {
+									if (insideItem)
+										titles.add(xpp.nextText()); // extract the title
+								} else if (xpp.getName().equalsIgnoreCase("link")) {
+									if (insideItem)
+										links.add(xpp.nextText()); // extract the link of
+																	// article
+								} else if (xpp.getName().equalsIgnoreCase("description")) {
+									if (insideItem)
+										descriptions.add(xpp.nextText()); // extract the
+																			// description
+								}
+							} else if (eventType == XmlPullParser.END_TAG
+									&& xpp.getName().equalsIgnoreCase("item")) {
+								insideItem = false;
+							}
+							eventType = xpp.next(); // move to next element
+						}
+						for (int i = 0; i < titles.size(); i++) {
+							rssNodes.add(new RSSNode(titles.get(i), descriptions.get(i),
+									links.get(i), rssFeed.getCategory()));
+						}
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (XmlPullParserException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				return rssNodes;
+			}
+
+			// after downloading
+			protected void onPostExecute(List<RSSNode> result) {
+				if (!result.isEmpty()) {
+					taskcallback.onSuccess();
+				}
+			}
+		}.execute(rssFeeds.toArray(new RSSFeed[rssFeeds.size()]));
+		return rssNodes;
 	}
 }

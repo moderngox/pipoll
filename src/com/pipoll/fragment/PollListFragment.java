@@ -9,9 +9,13 @@ import java.util.Random;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -38,6 +42,9 @@ public class PollListFragment extends Fragment {
 
 	public static final String KEY_FRAGMENT_TITLE = "keyFragmentTitle";
 	public static final int POLLS_COUNT = 50;
+	private static final String DIALOG_FILTER = "filter";
+	private static final int REQUEST_FILTER = 0;
+	
 	TextView mTextView;
 	CustomViewPager mPollViewPager;
 
@@ -56,6 +63,7 @@ public class PollListFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 
 		// TODO : null exception hero when coming back from webView
 		Bundle extras = getArguments();
@@ -176,4 +184,34 @@ public class PollListFragment extends Fragment {
 		}
 
 	}
+	
+
+	@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_poll_list, menu);
+        
+        // TODO : how to put settings menu items everywhere ?
+        MenuItem settings = menu.findItem(R.id.menu_item_setting);
+        
+    }
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_filter:
+                // Show FilterDialogFragment
+            	FragmentManager fm = getActivity().getSupportFragmentManager();
+        		FilterDialogFragment dialog = FilterDialogFragment.newInstance(true);
+        		dialog.setTargetFragment(this, REQUEST_FILTER);
+        		dialog.show(fm, DIALOG_FILTER);
+        		
+                return true;
+            case R.id.menu_item_setting:
+            	// TODO start settingsActivity
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        } 
+    }
 }

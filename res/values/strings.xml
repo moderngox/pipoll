@@ -32,4 +32,6 @@
     <string name="btn_previous">previous</string>
     <string name="btn_next">next</string>
     <string name="web_slide">Slide or click</string>
+    <string name="menu_filter">Filter</string>
+    <string name="menu_setting">Settings...</string>
 </resources>

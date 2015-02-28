@@ -101,9 +101,9 @@ public class TabActivity extends FragmentActivity {
 				case 0:
 					return PollListFragment.newInstance(extras);
 				case 1:
-					return NotificationFragment.newInstance();
-				case 2:
 					return TopTrendsFragment.newInstance();
+				case 2:
+					return NotificationFragment.newInstance();
 				case 3:
 					return ProfileFragment.newInstance();
 				default:
@@ -119,9 +119,9 @@ public class TabActivity extends FragmentActivity {
 				case 0:
 					return r.getString(R.string.tab_poll_list_short_name);
 				case 1:
-					return r.getString(R.string.tab_notification_short_name);
-				case 2:
 					return r.getString(R.string.tab_top_trends_short_name);
+				case 2:
+					return r.getString(R.string.tab_notification_short_name);
 				case 3:
 					return r.getString(R.string.tab_profile_short_name);
 				default:
@@ -190,33 +190,14 @@ public class TabActivity extends FragmentActivity {
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.tab, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	private int getActionBarTitleResource(int position) {
 		switch (position) {
 		case 0:
 			return R.string.tab_poll_list_name;
 		case 1:
-			return R.string.tab_notification_name;
-		case 2:
 			return R.string.tab_top_trends_name;
+		case 2:
+			return R.string.tab_notification_name;
 		case 3:
 			return R.string.tab_profile_name;
 		default:

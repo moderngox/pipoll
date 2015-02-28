@@ -13,6 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -131,8 +134,8 @@ public class PollFragment extends Fragment {
 
 		// Trendnews from the RSS FEED filled in the poll creation
 		TrendNews firstTrendnews = mPoll.getTrend().getTrendNews().get(0);
-		mTvDescription.setText(Html.fromHtml("<a href=\"" + firstTrendnews.getUrl() + "\">"
-				+ firstTrendnews.getTitle() + "</a>"));
+		mTvDescription.setText(Html.fromHtml("<a href=\"" + firstTrendnews.getUrl() + "\">" + firstTrendnews.getTitle()
+				+ "</a>"));
 		mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());
 		mTvDescription.setVisibility(View.VISIBLE);
 		GoogleService googleService = new GoogleService(getActivity());
@@ -144,16 +147,14 @@ public class PollFragment extends Fragment {
 				if (trendNewsList != null && !trendNewsList.isEmpty()) {
 					// populate the list with other source
 					if (trendNewsList.size() > 1) {
-						mTvDescription2.setText(Html.fromHtml("<a href=\""
-								+ trendNewsList.get(0).getUrl() + "\">"
+						mTvDescription2.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(0).getUrl() + "\">"
 								+ trendNewsList.get(0).getTitle() + "</a>"));
 						mTvDescription2.setMovementMethod(LinkMovementMethod.getInstance());
 						mTvDescription2.setVisibility(View.VISIBLE);
 					}
 					if (trendNewsList.size() > 2) {
 
-						mTvDescription3.setText(Html.fromHtml("<a href=\""
-								+ trendNewsList.get(1).getUrl() + "\">"
+						mTvDescription3.setText(Html.fromHtml("<a href=\"" + trendNewsList.get(1).getUrl() + "\">"
 								+ trendNewsList.get(1).getTitle() + "</a>"));
 						mTvDescription3.setMovementMethod(LinkMovementMethod.getInstance());
 						mTvDescription3.setVisibility(View.VISIBLE);
@@ -171,9 +172,9 @@ public class PollFragment extends Fragment {
 							}
 
 							// start pager
-//							Intent i = new Intent(getActivity(), WebPagerActivity.class);
-//							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
-							
+							// Intent i = new Intent(getActivity(), WebPagerActivity.class);
+							// i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
+
 							// start tab
 							// Intent i = new Intent(getActivity(), WebTabActivity.class);
 							// i.putParcelableArrayListExtra(WebTabActivity.EXTRA_TREND_NEWS, data);
@@ -181,11 +182,10 @@ public class PollFragment extends Fragment {
 							// start single WebView
 							Intent i = new Intent(getActivity(), WebActivity.class);
 							i.putParcelableArrayListExtra(WebPagerActivity.EXTRA_TREND_NEWS, data);
-							//String url = data.get(0).getTrendNews().getUrl();
-							//i.putExtra(WebFragment.EXTRA_URL, url);
-							
-							startActivity(i);
+							// String url = data.get(0).getTrendNews().getUrl();
+							// i.putExtra(WebFragment.EXTRA_URL, url);
 
+							startActivity(i);
 
 						}
 					});

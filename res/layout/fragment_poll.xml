@@ -48,8 +48,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:adjustViewBounds="false"
-        android:scaleType="fitXY"
-        android:src="@drawable/picture3" />
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:id="@id/vote_container"

@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.android.gms.common.AccountPicker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -84,6 +85,9 @@ public class AppController extends Application {
 	public static final String FOOTBALL_CAT = "Football";
 	// SharedPreferences
 	public static final String LOCAL_PREFERENCES = "localPreferences";
+	// Pick account
+	public static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
+
 	private SharedPreferences sharedPreferences;
 	private static AppController mInstance;
 	private ImageLoader mImageLoader;
@@ -105,6 +109,13 @@ public class AppController extends Application {
 					Activity.MODE_PRIVATE);
 		}
 		return sharedPreferences;
+	}
+
+	public void pickUserAccount(Activity activity) {
+		String[] accountTypes = new String[] { "com.google" };
+		Intent intent = AccountPicker.newChooseAccountIntent(null, null, accountTypes, false,
+				null, null, null, null);
+		activity.startActivityForResult(intent, REQUEST_CODE_PICK_ACCOUNT);
 	}
 
 	public void clearLocalPolls(Activity activity) {

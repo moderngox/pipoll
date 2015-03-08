@@ -22,6 +22,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -277,8 +278,15 @@ public class GoogleService implements IGoogle {
 					JSONObject responseData = jsonResponse.isNull("responseData") ? null
 							: jsonResponse.getJSONObject("responseData");
 					if (responseData != null) {
-						imgURL = responseData.getJSONArray("results").getJSONObject(0)
-								.getString("url");
+						int i = 0;
+						JSONArray results = responseData.getJSONArray("results");
+						while (i < results.length()
+								&& (!imgURL.contains(".jpg") || !imgURL.contains(".JPG")
+										|| !imgURL.contains(".png") || !imgURL
+											.contains(".PNG"))) {
+							imgURL = results.getJSONObject(0).getString("url");
+							i++;
+						}
 					}
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();

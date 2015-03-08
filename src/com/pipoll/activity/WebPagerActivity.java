@@ -13,19 +13,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelableTrendNews;
-import com.pipoll.fragment.NotificationFragment;
 import com.pipoll.fragment.WebFragment;
 
 /**
  * @author Bulbi
  * 
- *         This activity displays the news associated to the current Poll in a set of WebView inside a
- *         ViewPager.
+ *         This activity displays the news associated to the current Poll in a set of WebView
+ *         inside a ViewPager.
  */
 
 public class WebPagerActivity extends FragmentActivity {
@@ -36,14 +34,14 @@ public class WebPagerActivity extends FragmentActivity {
 	private ViewPager mViewPager;
 	private ArrayList<TrendNews> mTrendNews;
 	private int mIndex;
-	private int currentIndex;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_web_pager);
 
-		ArrayList<ParcelableTrendNews> trendNewsParcelable = getIntent().getParcelableArrayListExtra(EXTRA_TREND_NEWS);
+		ArrayList<ParcelableTrendNews> trendNewsParcelable = getIntent()
+				.getParcelableArrayListExtra(EXTRA_TREND_NEWS);
 		if (trendNewsParcelable != null) {
 			mTrendNews = ParcelableTrendNews.toTrendNewsList(trendNewsParcelable);
 		}
@@ -61,18 +59,20 @@ public class WebPagerActivity extends FragmentActivity {
 
 			@Override
 			public Fragment getItem(int pos) {
-				//if (pos != currentIndex) {
-				if (pos == mViewPager.getCurrentItem()) {
-					
-					Toast.makeText(WebPagerActivity.this, "getItem web fragment", Toast.LENGTH_SHORT).show();
-					
-					return WebFragment.newInstance(mTrendNews.get(pos).getUrl());
-				} else {
-					Toast.makeText(WebPagerActivity.this, "getItem empty fragment", Toast.LENGTH_SHORT).show();
-					return NotificationFragment.newInstance();
-				}
-
+				// if (pos != currentIndex) {
+				// if (pos == mViewPager.getCurrentItem()) {
+				//
+				// Toast.makeText(WebPagerActivity.this, "getItem web fragment",
+				// Toast.LENGTH_SHORT).show();
+				//
 				// return WebFragment.newInstance(mTrendNews.get(pos).getUrl());
+				// } else {
+				// Toast.makeText(WebPagerActivity.this, "getItem empty fragment",
+				// Toast.LENGTH_SHORT).show();
+				// return NotificationFragment.newInstance();
+				// }
+
+				return WebFragment.newInstance(mTrendNews.get(pos).getUrl());
 			}
 
 			@Override
@@ -84,10 +84,6 @@ public class WebPagerActivity extends FragmentActivity {
 		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
-				Toast.makeText(WebPagerActivity.this, "onPageSelected " + position, Toast.LENGTH_SHORT).show();
-
-				//currentIndex = position;
-				
 				getActionBar().setTitle(mTrendNews.get(position).getTitle().toString());
 			}
 		});

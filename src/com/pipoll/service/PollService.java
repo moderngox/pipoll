@@ -260,7 +260,7 @@ public class PollService implements IPoll {
 							String responseText = null;
 							HttpResponse httpresponse = httpclient.execute(httpgetreq);
 							responseText = EntityUtils.toString(httpresponse.getEntity());
-							Log.d("Response: ", responseText);
+							//Log.d("Response: ", responseText);
 							if (responseText != null) { // if image URL present (normally it's
 														// always present)
 								JSONObject jsonResp = new JSONObject(responseText);

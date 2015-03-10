@@ -24,6 +24,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  */
 public class AppController extends Application {
 
+	// testing counters
+	public static int Register_Count;
+	public static int Unregister_Count;
+	
 	// TAGS
 
 	private static final String STRING_SPACE = " ";

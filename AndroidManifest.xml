@@ -8,9 +8,14 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
+    <permission
+        android:name="com.pipoll.PRIVATE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.pipoll.PRIVATE" />
 
     <application
         android:name="com.pipoll.app.AppController"
@@ -18,7 +23,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
         <activity
             android:name="com.pipoll.activity.MainActivity"
             android:label="@string/app_name"
@@ -45,12 +49,14 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
-        <!--<activity
+        <!--
+            <activity
             android:name="com.pipoll.activity.WebActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="change title"
             android:parentActivityName="com.pipoll.activity.TabActivity"
-            android:screenOrientation="portrait" >-->
+            android:screenOrientation="portrait" >
+        -->
         <activity
             android:name="com.pipoll.activity.WebActivity"
             android:label="change title"
@@ -93,9 +99,18 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <service android:name="com.pipoll.background.PipollService" />
+
         <receiver android:name="com.pipoll.background.StartupReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.pipoll.background.NotificationReceiver"
+            android:exported="false" >
+            <intent-filter android:priority="-999" >
+                <action android:name="com.pipoll.SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
 

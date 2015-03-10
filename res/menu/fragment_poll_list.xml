@@ -7,6 +7,10 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/menu_filter"/>
     <item
+        android:id="@+id/menu_item_toggle_alarm"
+        android:showAsAction="never"
+        android:title="@string/menu_start_alarm"/>
+    <item
         android:id="@+id/menu_item_setting"
         android:showAsAction="never"
         android:title="@string/menu_setting"/>

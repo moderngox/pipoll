@@ -47,7 +47,7 @@
 
     <EditText
         android:id="@+id/editTextCommentTitle"
-        style="@style/TextViewDefault.Light"
+        style="@style/TextViewDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -58,7 +58,7 @@
 
     <EditText
         android:id="@+id/editTextCommentDescription"
-        style="@style/TextViewDefault.Light"
+        style="@style/TextViewDefault"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

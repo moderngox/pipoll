@@ -34,4 +34,12 @@
     <string name="web_slide">Slide or click</string>
     <string name="menu_filter">Filter</string>
     <string name="menu_setting">Settings...</string>
+    
+    <!-- In the Menu for now, move to SettingActivity later -->
+    <string name="menu_start_alarm">Start background search</string>
+    <string name="menu_stop_alarm">Stop background search</string>
+    
+    <string name="notification_new_polls_title">New polls available</string>
+    <string name="notification_new_polls_text">There are news polls that may interest you.</string>
+    
 </resources>

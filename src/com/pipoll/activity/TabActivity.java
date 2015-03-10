@@ -1,15 +1,7 @@
 package com.pipoll.activity;
 
-import java.util.Calendar;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,9 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.fragment.NotificationFragment;
@@ -36,49 +25,12 @@ import com.pipoll.fragment.TopTrendsFragment;
 public class TabActivity extends FragmentActivity {
 	private static final int TAB_COUNT = 4;
 	private ViewPager mViewPager;
-
-	// Alarm Test
-	private void processAlarm() {
-		BroadcastReceiver receiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				Toast.makeText(context, "!!!!!!!", Toast.LENGTH_SHORT).show();
-			}
-		};
-		IntentFilter filter = new IntentFilter();
-		this.registerReceiver(receiver, filter);
-
-		PendingIntent receiverPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(
-				this, receiver.getClass()), 0);
-
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.add(Calendar.SECOND, 2);
-
-		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-				10 * 1000, receiverPendingIntent);
-
-		// ProcessReceiver.Listener listener = new ProcessReceiver.Listener() {
-		//
-		// @Override
-		// public void onReceiveCompleted(String result) {
-		// Toast.makeText(context, "ProcessReceiver Received something",
-		// Toast.LENGTH_SHORT).show();
-		// }
-		// };
-	}
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_tab);
-
-		// alarm test
-		processAlarm();
 
 		mViewPager = (ViewPager) findViewById(R.id.view_pager_tab);
 		mViewPager.setOffscreenPageLimit(TAB_COUNT - 1);

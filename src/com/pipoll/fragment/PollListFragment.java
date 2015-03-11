@@ -46,7 +46,7 @@ public class PollListFragment extends VisibleFragment {
 	public static final int POLLS_COUNT = 50;
 	private static final String DIALOG_FILTER = "filter";
 	private static final int REQUEST_FILTER = 0;
-	
+
 	TextView mTextView;
 	CustomViewPager mPollViewPager;
 
@@ -147,13 +147,13 @@ public class PollListFragment extends VisibleFragment {
 										ArrayList<ParcelablePoll> parcelPolls = (ArrayList<ParcelablePoll>) response;
 										for (ParcelablePoll pPoll : parcelPolls) {
 											mParcelPolls.add(pPoll);
-											Toast.makeText(
-													getActivity(),
-													"new Poll added: "
-															+ pPoll.getPoll().getTheme()
-															+ "size of list:"
-															+ mParcelPolls.size(),
-													Toast.LENGTH_SHORT).show();
+											// Toast.makeText(
+											// getActivity(),
+											// "new Poll added: "
+											// + pPoll.getPoll().getTheme()
+											// + "size of list:"
+											// + mParcelPolls.size(),
+											// Toast.LENGTH_SHORT).show();
 										}
 									}
 								});
@@ -186,7 +186,6 @@ public class PollListFragment extends VisibleFragment {
 		}
 
 	}
-	
 
 	@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -237,4 +236,6 @@ public class PollListFragment extends VisibleFragment {
             toggleItem.setTitle(R.string.menu_start_alarm);
         }
     }
+
+
 }

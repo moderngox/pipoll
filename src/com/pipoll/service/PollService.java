@@ -36,6 +36,10 @@ import com.facebook.Request;
 import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.pipoll.app.AppController;
 import com.pipoll.data.Category;
 import com.pipoll.data.Like;
@@ -44,6 +48,7 @@ import com.pipoll.data.RSSNode;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
+import com.pipoll.entity.pollendpoint.Pollendpoint;
 import com.pipoll.interfaces.IPoll;
 import com.pipoll.interfaces.callback.GetImgCallback;
 import com.pipoll.interfaces.callback.ServiceCallback;
@@ -503,31 +508,46 @@ public class PollService implements IPoll {
 							Date rawDate = new Date();
 							String formattedDate = new SimpleDateFormat("yyyy-MM-dd")
 									.format(rawDate);
-							if (!application.isTopicAlreadyPresentToday(topic, formattedDate)) {
-								// Control if the poll is already created for the day
-								long date = rawDate.getTime();
-								poll.setId(String.valueOf(date));
-								poll.setCreatedAt(date);
-								poll.setUpdatedAt(date);
+							// if (!application.isTopicAlreadyPresentToday(topic,
+							// formattedDate)) {
+							// Control if the poll is already created for the day
+							Pollendpoint.Builder endpointBuilder = new Pollendpoint.Builder(
+									AndroidHttp.newCompatibleTransport(),
+									new JacksonFactory(), new HttpRequestInitializer() {
+										public void initialize(HttpRequest httpRequest) {
+										}
+									})
+									.setRootUrl("https://nimble-lead-87107.appspot.com/_ah/api/");
+							;
+							Pollendpoint endpoint = endpointBuilder.build();
+							com.pipoll.entity.pollendpoint.model.Poll pollAE = new com.pipoll.entity.pollendpoint.model.Poll();
+							long date = rawDate.getTime();
+							// pollAE.setId(String.valueOf(date));
+							// pollAE.setTheme(topic);
+							// com.pipoll.entity.pollendpoint.model.Poll result = endpoint
+							// .insertPoll(pollAE).execute();
+							poll.setId(String.valueOf(date));
+							poll.setCreatedAt(date);
+							poll.setUpdatedAt(date);
 
-								poll.setTheme(topic);
-								poll.setImage(imgURL);
-								Category category = new Category();
-								category.setName(rssNode.getCategory());
-								poll.setCategory(category);
-								Trend trend = new Trend();
-								// 1st Trend news from the rss node
-								TrendNews trendNews = new TrendNews();
-								trendNews.setTitle(rssNode.getTitle());
-								trendNews.setUrl(rssNode.getLink());
-								trend.setTrendNews(new ArrayList<TrendNews>());
-								trend.getTrendNews().add(trendNews);
-								poll.setTrend(trend);
-								// save poll(topic) info on local sharedPref
-								sharedPrefEdit.putString(topic, topic + " - " + formattedDate);
-								sharedPrefEdit.commit();
-								polls.add(new ParcelablePoll(poll));
-							}
+							poll.setTheme(topic);
+							poll.setImage(imgURL);
+							Category category = new Category();
+							category.setName(rssNode.getCategory());
+							poll.setCategory(category);
+							Trend trend = new Trend();
+							// 1st Trend news from the rss node
+							TrendNews trendNews = new TrendNews();
+							trendNews.setTitle(rssNode.getTitle());
+							trendNews.setUrl(rssNode.getLink());
+							trend.setTrendNews(new ArrayList<TrendNews>());
+							trend.getTrendNews().add(trendNews);
+							poll.setTrend(trend);
+							// save poll(topic) info on local sharedPref
+							// sharedPrefEdit.putString(topic, topic + " - " + formattedDate);
+							// sharedPrefEdit.commit();
+							polls.add(new ParcelablePoll(poll));
+							// }
 						}
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();

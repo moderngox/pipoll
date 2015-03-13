@@ -203,7 +203,7 @@ public class PollListFragment extends VisibleFragment {
             case R.id.menu_item_filter:
                 // Show FilterDialogFragment
             	FragmentManager fm = getActivity().getSupportFragmentManager();
-        		FilterDialogFragment dialog = FilterDialogFragment.newInstance(true);
+        		FilterDialogFragment dialog = FilterDialogFragment.newInstance();
         		dialog.setTargetFragment(this, REQUEST_FILTER);
         		dialog.show(fm, DIALOG_FILTER);
         		

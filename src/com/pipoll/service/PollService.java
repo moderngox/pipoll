@@ -48,7 +48,7 @@ import com.pipoll.data.RSSNode;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
-//import com.pipoll.entity.pollendpoint.Pollendpoint;
+import com.pipoll.entity.pollendpoint.Pollendpoint;
 import com.pipoll.interfaces.IPoll;
 import com.pipoll.interfaces.callback.GetImgCallback;
 import com.pipoll.interfaces.callback.ServiceCallback;
@@ -265,7 +265,7 @@ public class PollService implements IPoll {
 							String responseText = null;
 							HttpResponse httpresponse = httpclient.execute(httpgetreq);
 							responseText = EntityUtils.toString(httpresponse.getEntity());
-							//Log.d("Response: ", responseText);
+							Log.d("Response: ", responseText);
 							if (responseText != null) { // if image URL present (normally it's
 														// always present)
 								JSONObject jsonResp = new JSONObject(responseText);
@@ -511,16 +511,16 @@ public class PollService implements IPoll {
 							// if (!application.isTopicAlreadyPresentToday(topic,
 							// formattedDate)) {
 							// Control if the poll is already created for the day
-//							Pollendpoint.Builder endpointBuilder = new Pollendpoint.Builder(
-//									AndroidHttp.newCompatibleTransport(),
-//									new JacksonFactory(), new HttpRequestInitializer() {
-//										public void initialize(HttpRequest httpRequest) {
-//										}
-//									})
-//									.setRootUrl("https://nimble-lead-87107.appspot.com/_ah/api/");
-//							;
-//							Pollendpoint endpoint = endpointBuilder.build();
-//							com.pipoll.entity.pollendpoint.model.Poll pollAE = new com.pipoll.entity.pollendpoint.model.Poll();
+							Pollendpoint.Builder endpointBuilder = new Pollendpoint.Builder(
+									AndroidHttp.newCompatibleTransport(),
+									new JacksonFactory(), new HttpRequestInitializer() {
+										public void initialize(HttpRequest httpRequest) {
+										}
+									})
+									.setRootUrl("https://nimble-lead-87107.appspot.com/_ah/api/");
+							;
+							Pollendpoint endpoint = endpointBuilder.build();
+							com.pipoll.entity.pollendpoint.model.Poll pollAE = new com.pipoll.entity.pollendpoint.model.Poll();
 							long date = rawDate.getTime();
 							// pollAE.setId(String.valueOf(date));
 							// pollAE.setTheme(topic);

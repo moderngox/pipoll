@@ -1,5 +1,8 @@
 package com.pipoll.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.pipoll.R;
@@ -32,6 +36,11 @@ public class FilterDialogFragment extends DialogFragment {
 	private String mCategory, mPeriod, mCountry;
 	private Spinner mSpinCategory, mSpinPeriod, mSpinCountry;
 
+	// TODO : temporary data for spinner
+	private String[] mCategories = { "cat1", "cat2", "cat3 " };
+	private String[] mPeriods = { "aujourd'hui", "cette semaine", "ce mois-ci" };
+	private String[] mCountries = { "France", "Tous" };
+
 	// public static CommentDialogFragment newInstance() {
 	// TextView textViewLike = (TextV CommentDialogFragment fragment = new
 	// CommentDialogFragment();
@@ -39,7 +48,7 @@ public class FilterDialogFragment extends DialogFragment {
 	// EditText edtCommentDescription}
 
 	public static FilterDialogFragment newInstance() {
-		FilterDialogFragment fragment = new FilterDialogFragment();
+		FilterDialogFragment fragment = FilterDialogFragment.newInstance("", "", "");
 
 		return fragment;
 	}
@@ -84,6 +93,13 @@ public class FilterDialogFragment extends DialogFragment {
 		mSpinCountry = (Spinner) v.findViewById(R.id.spinner_country);
 
 		// TODO : populate the spinners
+		List<String> spinnerCategories = new ArrayList<String>();
+		spinnerCategories.add("item1");
+		spinnerCategories.add("item2");
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_spinner_item, spinnerCategories);
+		mSpinCategory.setAdapter(adapter);
 
 		mSpinCategory.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -108,5 +124,4 @@ public class FilterDialogFragment extends DialogFragment {
 					}
 				}).create();
 	}
-
 }

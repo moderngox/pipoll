@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Pipoll</string>
+    <string name="app_name">IMOO</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">336627273204303</string>
@@ -23,11 +23,11 @@
     <string name="tab_profile_short_name">Profile</string>
     <string name="tab_top_trends_short_name">Trends</string>
     <string name="poll_end_thanks">Thanks for answering the polls of the day.</string>
-    <string name="comment_dialog_title">Give your comment</string>
+    <string name="comment_dialog_title">Share your opinion</string>
     <string name="comment_like">I like.</string>
     <string name="comment_dislike">I dislike.</string>
     <string name="comment_title">Title</string>
-    <string name="comment_description">Decription</string>
+    <string name="comment_description">Opinion</string>
     
     <string name="filter_dialog_title">Filter the polls</string>
     <string name="filter_category">Category</string>

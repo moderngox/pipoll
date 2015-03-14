@@ -55,12 +55,15 @@ public class StartupActivity extends Activity {
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
 
-			mRssFeeds.add(new RSSFeed(AppController.FASHION_CAT,
-					AppController.FASHION_WEEKLY_FEED));
+			// mRssFeeds.add(new RSSFeed(AppController.FASHION_CAT,
+			// AppController.FASHION_WEEKLY_FEED));
 			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT, AppController.REUTERS_FEED));
 			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT, AppController.AFP_FEED));
-			mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT,
-					AppController.F365_PLEAGUE_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.BUSINESS_CAT,
+					AppController.ECONOMIST_BUSINESS_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.TECH_CAT, AppController.WSJ_TECH_FEED));
+			// mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT,
+			// AppController.F365_PLEAGUE_FEED));
 
 			mRssEls = trendService.getRSSNode(mRssFeeds, new TaskCallback() {
 

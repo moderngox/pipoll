@@ -28,7 +28,7 @@ public class AppController extends Application {
 	// testing counters
 	public static int Register_Count;
 	public static int Unregister_Count;
-	
+
 	// TAGS
 
 	private static final String STRING_SPACE = " ";
@@ -80,6 +80,9 @@ public class AppController extends Application {
 	public static final String FASHION_WEEKLY_FEED = "http://fashionweekdaily.com/feed/";
 	public static final String SELECTISM_FEED = "http://feeds.feedburner.com/selectism/rss?format=xml";
 	public static final String F365_PLEAGUE_FEED = "http://www.football365.com/premier-league/rss";
+	public static final String ECONOMIST_BUSINESS_FEED = "http://www.economist.com/sections/business-finance/rss.xml";
+	public static final String WSJ_TECH_FEED = "http://online.wsj.com/xml/rss/3_7455.xml";
+
 	private static final String AFP = "AFP";
 	private static final String REUTERS = "Reuters";
 
@@ -87,6 +90,9 @@ public class AppController extends Application {
 	public static final String GLOBAL_CAT = "Global news";
 	public static final String SPORT_CAT = "Sport";
 	public static final String FOOTBALL_CAT = "Football";
+	public static final String BUSINESS_CAT = "Business";
+	public static final String TECH_CAT = "Tech";
+
 	// SharedPreferences
 	public static final String LOCAL_PREFERENCES = "localPreferences";
 	// Pick account

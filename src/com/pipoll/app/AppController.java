@@ -30,6 +30,10 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class AppController extends Application {
 
+	// testing counters
+	public static int Register_Count;
+	public static int Unregister_Count;
+
 	// TAGS
 
 	private static final String STRING_SPACE = " ";
@@ -83,6 +87,9 @@ public class AppController extends Application {
 	public static final String FASHION_WEEKLY_FEED = "http://fashionweekdaily.com/feed/";
 	public static final String SELECTISM_FEED = "http://feeds.feedburner.com/selectism/rss?format=xml";
 	public static final String F365_PLEAGUE_FEED = "http://www.football365.com/premier-league/rss";
+	public static final String ECONOMIST_BUSINESS_FEED = "http://www.economist.com/sections/business-finance/rss.xml";
+	public static final String WSJ_TECH_FEED = "http://online.wsj.com/xml/rss/3_7455.xml";
+
 	private static final String AFP = "AFP";
 	private static final String REUTERS = "Reuters";
 
@@ -106,6 +113,13 @@ public class AppController extends Application {
 	public static final int FASHION_CAT_ID = 1;
 	public static final int SPORT_CAT_ID = 2;
 	public static final int FOOTBALL_CAT_ID = 3;
+	public static final int AFP_CAT_ID = 4;
+	public static final int REUTERS_CAT_ID = 5;
+	public static final int BUSINESS_CAT_ID = 6;
+	public static final int TECH_CAT_ID = 7;
+
+	public static final String BUSINESS_CAT = "Business";
+	public static final String TECH_CAT = "Tech";
 
 	// SharedPreferences
 	public static final String LOCAL_PREFERENCES = "localPreferences";

@@ -508,6 +508,7 @@ public class PollService implements IPoll {
 								// Control if the poll is already created for the day
 
 								long date = rawDate.getTime();
+
 								poll.setId(String.valueOf(date));
 								poll.setCreatedAt(date);
 								poll.setUpdatedAt(date);
@@ -518,11 +519,14 @@ public class PollService implements IPoll {
 								category.setName(AppController.CATEGORIES.get(rssNode
 										.getCategory()));
 								poll.setCategory(category);
+								Trend trend = new Trend();
 								// 1st Trend news from the rss node
 								TrendNews trendNews = new TrendNews();
 								trendNews.setTitle(rssNode.getTitle());
 								trendNews.setUrl(rssNode.getLink());
 								poll.getTrendNews().add(trendNews);
+								trend.setTrendNews(new ArrayList<TrendNews>());
+								trend.getTrendNews().add(trendNews);
 								// save poll(topic) info on local sharedPref
 								sharedPrefEdit.putString(topic, topic + " - " + formattedDate);
 								sharedPrefEdit.commit();
@@ -581,11 +585,12 @@ public class PollService implements IPoll {
 							category.setId(rssNode.getCategory());
 							category.setName(AppController.CATEGORIES.get(rssNode
 									.getCategory()));
+
+							com.pipoll.entity.pollendpoint.model.Poll poll = endpoint
+									.getBEPoll(rssNode.getTopic(), rssNode.getLink(),
+											category.getId(), category.getName()).execute();
+							polls.add(new ParcelablePoll(ObjectMapper.mapPoll(poll)));
 						}
-						com.pipoll.entity.pollendpoint.model.Poll poll = endpoint.getBEPoll(
-								rssNode.getTopic(), rssNode.getLink(), category.getId(),
-								category.getName()).execute();
-						polls.add(new ParcelablePoll(ObjectMapper.mapPoll(poll)));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}

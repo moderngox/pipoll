@@ -58,9 +58,17 @@ public class StartupActivity extends Activity {
 					AppController.FASHION_WEEKLY_FEED));
 			mRssFeeds
 					.add(new RSSFeed(AppController.GLOBAL_CAT_ID, AppController.REUTERS_FEED));
-			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT_ID, AppController.AFP_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.AFP_CAT_ID, AppController.AFP_FEED));
 			mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT_ID,
 					AppController.F365_PLEAGUE_FEED));
+
+			mRssFeeds.add(new RSSFeed(AppController.FASHION_CAT_ID,
+					AppController.FASHION_WEEKLY_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.BUSINESS_CAT_ID,
+					AppController.ECONOMIST_BUSINESS_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.TECH_CAT_ID, AppController.WSJ_TECH_FEED));
+			// mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT,
+			// AppController.F365_PLEAGUE_FEED));
 
 			mRssNodes = trendService.getBackendNodes(mRssFeeds, new TaskCallback() {
 

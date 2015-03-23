@@ -11,24 +11,33 @@
     android:paddingTop="@dimen/dim_16dp" >
 
     <TextView
-        android:id="@+id/textViewCategory"
-        style="@style/TextViewDefault"
+        style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dim_16dp"
-        android:layout_marginTop="@dimen/dim_16dp"
-        android:text="dummy"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold" />
-
+        android:text="@string/filter_category" />
+    
     <Spinner
         android:id="@+id/spinner_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    
+    <TextView
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_period" />
+    
     <Spinner
-        android:id="@+id/spinner_date"
+        android:id="@+id/spinner_period"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    
+    <TextView
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_country" />
+    
     <Spinner
         android:id="@+id/spinner_country"
         android:layout_width="match_parent"

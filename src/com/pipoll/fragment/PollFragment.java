@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.pipoll.R;
@@ -250,11 +249,11 @@ public class PollFragment extends Fragment {
 			// TODO : replace Toast by a save comment function
 			// Toast.makeText(getActivity(), "Thanks for your critic",
 			// Toast.LENGTH_SHORT).show();
-			Toast.makeText(
-					getActivity(),
-					mPoll.getTheme() + " liked: " + liked + "\ncommentTitle: " + commentTitle
-							+ "\ncommentDescription: " + commentDescription,
-					Toast.LENGTH_SHORT).show();
+			// Toast.makeText(
+			// getActivity(),
+			// mPoll.getTheme() + " liked: " + liked + "\ncommentTitle: " + commentTitle
+			// + "\ncommentDescription: " + commentDescription,
+			// Toast.LENGTH_SHORT).show();
 			changePage(getActivity());
 
 		}

@@ -76,7 +76,7 @@ public class CommentDialogFragment extends DialogFragment {
 		View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_comment, null);
 
 		// Set the appearance of the buttons according to user's choice ?
-		mLiked = (boolean) getArguments().getBoolean(EXTRA_KEY_LIKED);
+		mLiked = getArguments().getBoolean(EXTRA_KEY_LIKED);
 
 		mImgBtnNo = (ImageButton) v.findViewById(R.id.imageButtonNo);
 		// onClick() does not work to keep a button at state pressed.

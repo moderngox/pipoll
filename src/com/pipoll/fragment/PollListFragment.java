@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,9 +22,11 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pipoll.R;
 import com.pipoll.app.AppController;
+import com.pipoll.background.PipollService;
 import com.pipoll.customview.CustomViewPager;
 import com.pipoll.customview.FixedSpeedScroller;
 import com.pipoll.data.parcelable.ParcelablePoll;
@@ -36,7 +39,7 @@ import com.pipoll.service.PollService;
  * 
  *         Fragment managing a list of Polls. Uses a Custom ViewPager.
  */
-public class PollListFragment extends Fragment {
+public class PollListFragment extends VisibleFragment {
 
 	public static final String KEY_FRAGMENT_TITLE = "keyFragmentTitle";
 	public static final int POLLS_COUNT = 50;
@@ -184,31 +187,54 @@ public class PollListFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.fragment_poll_list, menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_poll_list, menu);
+        
+        // TODO : how to put settings menu items everywhere ? -> inheritance
+//        MenuItem settings = menu.findItem(R.id.menu_item_setting);
+        
+    }
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_filter:
+                // Show FilterDialogFragment
+            	FragmentManager fm = getActivity().getSupportFragmentManager();
+        		FilterDialogFragment dialog = FilterDialogFragment.newInstance();
+        		dialog.setTargetFragment(this, REQUEST_FILTER);
+        		dialog.show(fm, DIALOG_FILTER);
+        		
+                return true;
+            case R.id.menu_item_toggle_alarm:
+            	// Toggle alarm for background search
+                boolean shouldStartAlarm = !PipollService.isServiceAlarmOn(getActivity());
+                PipollService.setServiceAlarm(getActivity(), shouldStartAlarm);
+                
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    getActivity().invalidateOptionsMenu();
 
-		// TODO : how to put settings menu items everywhere ?
-		MenuItem settings = menu.findItem(R.id.menu_item_setting);
+                return true;
+            case R.id.menu_item_setting:
+            	Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        } 
+    }
+    
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
 
-	}
+        MenuItem toggleItem = menu.findItem(R.id.menu_item_toggle_alarm);
+        if (PipollService.isServiceAlarmOn(getActivity())) {
+            toggleItem.setTitle(R.string.menu_stop_alarm);
+        } else {
+            toggleItem.setTitle(R.string.menu_start_alarm);
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_item_filter:
-			// Show FilterDialogFragment
-			FragmentManager fm = getActivity().getSupportFragmentManager();
-			FilterDialogFragment dialog = FilterDialogFragment.newInstance(true);
-			dialog.setTargetFragment(this, REQUEST_FILTER);
-			dialog.show(fm, DIALOG_FILTER);
 
-			return true;
-		case R.id.menu_item_setting:
-			// TODO start settingsActivity
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
 }

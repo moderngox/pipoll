@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Pipoll</string>
+    <string name="app_name">IMOO</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">336627273204303</string>
@@ -23,15 +23,28 @@
     <string name="tab_profile_short_name">Profile</string>
     <string name="tab_top_trends_short_name">Trends</string>
     <string name="poll_end_thanks">Thanks for answering the polls of the day.</string>
-    <string name="comment_dialog_title">Give your comment</string>
+    <string name="comment_dialog_title">Share your opinion</string>
     <string name="comment_like">I like.</string>
     <string name="comment_dislike">I dislike.</string>
     <string name="comment_title">Title</string>
-    <string name="comment_description">Decription</string>
+    <string name="comment_description">Opinion</string>
+    
+    <string name="filter_dialog_title">Filter the polls</string>
+    <string name="filter_category">Category</string>
+    <string name="filter_period">Date</string>
+    <string name="filter_country">Country</string>
 
     <string name="btn_previous">previous</string>
     <string name="btn_next">next</string>
     <string name="web_slide">Slide or click</string>
     <string name="menu_filter">Filter</string>
     <string name="menu_setting">Settings...</string>
+    
+    <!-- In the Menu for now, move to SettingActivity later -->
+    <string name="menu_start_alarm">Start background search</string>
+    <string name="menu_stop_alarm">Stop background search</string>
+    
+    <string name="notification_new_polls_title">New polls available</string>
+    <string name="notification_new_polls_text">There are news polls that may interest you.</string>
+    
 </resources>

@@ -8,16 +8,20 @@
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
+    <permission
+        android:name="com.pipoll.PRIVATE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="com.pipoll.PRIVATE" />
+
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
-
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
 
     <application
         android:name="com.pipoll.app.AppController"
@@ -25,16 +29,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-
-        <!--
-             <activity
-            android:name="com.pipoll.activity.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-        -->
-       
-        
         <activity
             android:name="com.pipoll.activity.MainActivity"
             android:label="@string/app_name"
@@ -63,6 +57,7 @@
         </activity>
         <activity
             android:name="com.pipoll.activity.WebActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="change title"
             android:parentActivityName="com.pipoll.activity.TabActivity" >
             <meta-data
@@ -71,8 +66,8 @@
         </activity>
         <activity
             android:name="com.pipoll.activity.WebActivity2"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Test multiple Webview" >
-
         </activity>
         <activity
             android:name="com.pipoll.activity.WebTabActivity"
@@ -104,9 +99,18 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <service android:name="com.pipoll.background.PipollService" />
+
         <receiver android:name="com.pipoll.background.StartupReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.pipoll.background.NotificationReceiver"
+            android:exported="false" >
+            <intent-filter android:priority="-999" >
+                <action android:name="com.pipoll.SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
 

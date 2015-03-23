@@ -1,56 +1,64 @@
 package com.pipoll.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.pipoll.R;
 
 /**
  * @author Bulbi
  * 
- *         This custom DialogFragment manage the poll comment posted by user. Caller must overrides
- *         onActivityResult() althought this is a fragment, not an Activity. The data is send back to caller
- *         in the Extras whose keys are EXTRA_KEY_LIKED, EXTRA_KEY_COMMENT_TITLE and
- *         EXTRA_KEY_COMMENT_DESCRIPTION
+ *         This custom DialogFragment manage the poll comment posted by user. Caller must
+ *         overrides onActivityResult() althought this is a fragment, not an Activity. The data
+ *         is send back to caller in the Extras whose keys are EXTRA_KEY_LIKED,
+ *         EXTRA_KEY_COMMENT_TITLE and EXTRA_KEY_COMMENT_DESCRIPTION
  */
 public class FilterDialogFragment extends DialogFragment {
-	public static final String EXTRA_KEY_LIKED = "CommentFragment.keyLiked";
-	public static final String EXTRA_KEY_COMMENT_TITLE = "CommentFragment.keyCommentTitle";
-	public static final String EXTRA_KEY_COMMENT_DESCRIPTION = "CommentFragment.keyComment";
+	public static final String EXTRA_KEY_CATEGORY = "FilterFragment.Category";
+	public static final String EXTRA_KEY_PERIOD = "FilterFragment.Period";
+	public static final String EXTRA_KEY_COUNTRY = "FilterFragment.Country";
 
-	private boolean mLiked;
-	private String mCommentTitle;
-	private String mCommentDescription;
+	// TODO : not sure what type to use yet
+	private String mCategory, mPeriod, mCountry;
+	private Spinner mSpinCategory, mSpinPeriod, mSpinCountry;
 
-	private ImageButton mImgBtnNo;
-	private ImageButton mImgBtnYes;
-
-	private TextView mTvLike;
-	private EditText mEdtCommentTitle;
-	private EditText mEdtCommentDescription;
+	// TODO : temporary data for spinner
+	private String[] mCategories = { "cat1", "cat2", "cat3 " };
+	private String[] mPeriods = { "aujourd'hui", "cette semaine", "ce mois-ci" };
+	private String[] mCountries = { "France", "Tous" };
 
 	// public static CommentDialogFragment newInstance() {
-	// TextView textViewLike = (TextV CommentDialogFragment fragment = new CommentDialogFragment();
+	// TextView textViewLike = (TextV CommentDialogFragment fragment = new
+	// CommentDialogFragment();
 	// EditText edtCommentTitle = (Ed return fragment;
 	// EditText edtCommentDescription}
 
-	public static FilterDialogFragment newInstance(boolean liked) {
+	public static FilterDialogFragment newInstance() {
+		FilterDialogFragment fragment = FilterDialogFragment.newInstance("", "", "");
+
+		return fragment;
+	}
+
+	public static FilterDialogFragment newInstance(String category, String period,
+			String country) {
 		Bundle args = new Bundle();
-		args.putSerializable(EXTRA_KEY_LIKED, liked);
+		args.putSerializable(EXTRA_KEY_CATEGORY, category);
+		args.putSerializable(EXTRA_KEY_PERIOD, period);
+		args.putSerializable(EXTRA_KEY_COUNTRY, country);
 
 		FilterDialogFragment fragment = new FilterDialogFragment();
 		fragment.setArguments(args);
@@ -63,9 +71,9 @@ public class FilterDialogFragment extends DialogFragment {
 			return;
 
 		Intent i = new Intent();
-		i.putExtra(EXTRA_KEY_LIKED, mLiked);
-		i.putExtra(EXTRA_KEY_COMMENT_TITLE, mCommentTitle);
-		i.putExtra(EXTRA_KEY_COMMENT_DESCRIPTION, mCommentDescription);
+		i.putExtra(EXTRA_KEY_CATEGORY, mCategory);
+		i.putExtra(EXTRA_KEY_PERIOD, mPeriod);
+		i.putExtra(EXTRA_KEY_COUNTRY, mCountry);
 
 		getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
 	}
@@ -73,94 +81,47 @@ public class FilterDialogFragment extends DialogFragment {
 	@SuppressLint("InflateParams")
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_comment, null);
+		View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter, null);
 
 		// Set the appearance of the buttons according to user's choice ?
-		mLiked = (boolean) getArguments().getBoolean(EXTRA_KEY_LIKED);
+		mCategory = getArguments().getString(EXTRA_KEY_CATEGORY);
+		mPeriod = getArguments().getString(EXTRA_KEY_PERIOD);
+		mCountry = getArguments().getString(EXTRA_KEY_COUNTRY);
 
-		mImgBtnNo = (ImageButton) v.findViewById(R.id.imageButtonNo);
-		// onClick() does not work to keep a button at state pressed.
-		mImgBtnNo.setOnTouchListener(new View.OnTouchListener() {
+		mSpinCategory = (Spinner) v.findViewById(R.id.spinner_category);
+		mSpinPeriod = (Spinner) v.findViewById(R.id.spinner_period);
+		mSpinCountry = (Spinner) v.findViewById(R.id.spinner_country);
+
+		// TODO : populate the spinners
+		List<String> spinnerCategories = new ArrayList<String>();
+		spinnerCategories.add("item1");
+		spinnerCategories.add("item2");
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_spinner_item, spinnerCategories);
+		mSpinCategory.setAdapter(adapter);
+
+		mSpinCategory.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				mLiked = false;
-				// getArguments().putBoolean(EXTRA_KEY_LIKED, mLiked);
-				updateLike();
-				v.performClick();
-				return true;
-			}
-		});
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-		mImgBtnYes = (ImageButton) v.findViewById(R.id.imageButtonYes);
-		mImgBtnYes.setOnTouchListener(new View.OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				mLiked = true;
-				updateLike();
-				v.performClick();
-				return true;
-			}
-		});
-
-		mTvLike = (TextView) v.findViewById(R.id.textViewLike);
-		mEdtCommentTitle = (EditText) v.findViewById(R.id.editTextCommentTitle);
-		mEdtCommentTitle.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mCommentTitle = s.toString();
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+			public void onNothingSelected(AdapterView<?> arg0) {
 
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-		mEdtCommentDescription = (EditText) v.findViewById(R.id.editTextCommentDescription);
-		mEdtCommentDescription.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mCommentDescription = s.toString();
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
 			}
 		});
 
 		// TODO : do stuff to preserve data on rotation ? => Check DialogDate in CriminalIntent
 
-		updateLike();
-
-		return new AlertDialog.Builder(getActivity()).setView(v).setTitle(R.string.comment_dialog_title)
+		return new AlertDialog.Builder(getActivity()).setView(v)
+				.setTitle(R.string.filter_dialog_title)
 				.setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						sendResult(Activity.RESULT_OK);
 					}
 				}).create();
-	}
-
-	private void updateLike() {
-		Resources r = getActivity().getResources();
-		if (mLiked) {
-			mTvLike.setText(R.string.comment_like);
-			mTvLike.setTextColor(r.getColor(android.R.color.holo_green_dark));
-			mImgBtnYes.setPressed(true);
-			mImgBtnNo.setPressed(false);
-		} else {
-			mTvLike.setText(R.string.comment_dislike);
-			mTvLike.setTextColor(r.getColor(android.R.color.holo_orange_dark));
-			mImgBtnYes.setPressed(false);
-			mImgBtnNo.setPressed(true);
-		}
 	}
 }

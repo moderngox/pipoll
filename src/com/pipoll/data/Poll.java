@@ -4,6 +4,7 @@
 package com.pipoll.data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author moderngox
@@ -18,7 +19,7 @@ public class Poll implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id, theme, image;
 	private int upvotes, downvotes;
-	private Trend trend; // recent and relevant trend about the theme
+	private List<TrendNews> trendNews; // recent and relevant trend about the theme
 	private Category category;
 	private long createdAt, updatedAt;
 
@@ -70,14 +71,6 @@ public class Poll implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public Trend getTrend() {
-		return trend;
-	}
-
-	public void setTrend(Trend trend) {
-		this.trend = trend;
-	}
-
 	public Category getCategory() {
 		return category;
 	}
@@ -100,4 +93,20 @@ public class Poll implements Serializable {
 	public void setImage(String image) {
 		this.image = image;
 	}
+
+	/**
+	 * @return the trendNews
+	 */
+	public List<TrendNews> getTrendNews() {
+		return trendNews;
+	}
+
+	/**
+	 * @param trendNews
+	 *            the trendNews to set
+	 */
+	public void setTrendNews(List<TrendNews> trendNews) {
+		this.trendNews = trendNews;
+	}
+
 }

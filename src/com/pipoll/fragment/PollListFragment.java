@@ -26,9 +26,8 @@ import com.pipoll.R;
 import com.pipoll.app.AppController;
 import com.pipoll.customview.CustomViewPager;
 import com.pipoll.customview.FixedSpeedScroller;
-import com.pipoll.data.RSSNode;
 import com.pipoll.data.parcelable.ParcelablePoll;
-import com.pipoll.data.parcelable.ParcelableRSSElement;
+import com.pipoll.data.parcelable.ParcelableRSSNode;
 import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.service.PollService;
 
@@ -49,7 +48,7 @@ public class PollListFragment extends Fragment {
 
 	private LinkedList<ParcelablePoll> mParcelPolls;
 	// private ArrayList<Trend> mTrends;
-	private ArrayList<RSSNode> mRssNodes;
+	private ArrayList<com.pipoll.entity.rssnodeendpoint.model.RSSNode> mRssNodes;
 	private PollService pollService;
 
 	public static PollListFragment newInstance(Bundle extras) {
@@ -68,9 +67,9 @@ public class PollListFragment extends Fragment {
 		Bundle extras = getArguments();
 		ArrayList<ParcelablePoll> parcelablePolls = extras
 				.getParcelableArrayList(AppController.POLLS_TAG);
-		ArrayList<ParcelableRSSElement> pRSSNodes = extras
+		ArrayList<ParcelableRSSNode> pRSSNodes = extras
 				.getParcelableArrayList(AppController.RSS_ELEMS_TAG);
-		mRssNodes = ParcelableRSSElement.getRSSElements(pRSSNodes);
+		mRssNodes = ParcelableRSSNode.getBERSSNodes(pRSSNodes);
 		// Randomize the RSS feeds :
 		// http://stackoverflow.com/questions/4228975/how-to-randomize-arraylist?answertab=votes#tab-top
 		long seed = System.nanoTime();
@@ -135,7 +134,7 @@ public class PollListFragment extends Fragment {
 					if (mRssNodes.size() > getCount()) {
 						int start = mParcelPolls.size() + position + 2;
 						int end = start + 5;
-						pollService.createPollsFromRssNodes(mRssNodes, start, end,
+						pollService.listBackendPolls(mRssNodes, start, end,
 								new ServiceCallback() {
 
 									@Override

@@ -3,7 +3,6 @@
  */
 package com.pipoll.data;
 
-
 /**
  * @author moderngox
  * 
@@ -11,20 +10,20 @@ package com.pipoll.data;
  */
 public class RSSFeed {
 
-	private String category;
+	private int category;
 
 	private String feedEntry;
 
-	public RSSFeed(String category, String feedEntry) {
+	public RSSFeed(int category, String feedEntry) {
 		this.category = category;
 		this.feedEntry = feedEntry;
 	}
 
-	public String getCategory() {
+	public int getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(int category) {
 		this.category = category;
 	}
 

@@ -98,4 +98,14 @@ public interface IPoll {
 	 */
 	void createPollsFromRssNodes(List<RSSNode> rssNodes, int start, int end,
 			final ServiceCallback serviceCallback);
+
+	/**
+	 * lists Polls from the backend
+	 * 
+	 * @param rssNodes
+	 * @param start
+	 * @param end
+	 */
+	void listBackendPolls(List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> rssNodes,
+			int start, int end, final ServiceCallback serviceCallback);
 }

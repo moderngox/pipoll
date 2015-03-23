@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/trendnewsendpoint/v1/20150304220412/java/1.18.0-rc/pipoll.com-trendnewsendpoint-v1-20150304220412-java-1.18.0-rc-sources.jar", 
-      "path": "pipoll.com-trendnewsendpoint-v1-20150304220412-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/trendnewsendpoint/v1/20150314003501/java/1.18.0-rc/pipoll.com-trendnewsendpoint-v1-20150314003501-java-1.18.0-rc-sources.jar", 
+      "path": "pipoll.com-trendnewsendpoint-v1-20150314003501-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-03-04 22:04"
+      "timestamp": "2015-03-14 00:35"
     }, 
     {
-      "path": "pipoll.com-trendnewsendpoint-v1-20150304220412-java-1.18.0-rc.jar.properties", 
+      "path": "pipoll.com-trendnewsendpoint-v1-20150314003501-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "entity", 
   "language_version": "1.18.0-rc", 
   "id": "trendnewsendpoint:v1", 
-  "revision": 20150304220412
+  "revision": 20150314003501
 }

@@ -19,7 +19,7 @@
 package com.pipoll.entity.rssnodeendpoint.model;
 
 /**
- * Model definition for CollectionResponseRSSNode.
+ * Model definition for RSSNodeCollection.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the rssnodeendpoint. For a detailed explanation see:
@@ -29,19 +29,13 @@ package com.pipoll.entity.rssnodeendpoint.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class CollectionResponseRSSNode extends com.google.api.client.json.GenericJson {
+public final class RSSNodeCollection extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
   private java.util.List<RSSNode> items;
-
-  /**
-   * The value may be {@code null}.
-   */
-  @com.google.api.client.util.Key
-  private java.lang.String nextPageToken;
 
   /**
    * @return value or {@code null} for none
@@ -53,34 +47,19 @@ public final class CollectionResponseRSSNode extends com.google.api.client.json.
   /**
    * @param items items or {@code null} for none
    */
-  public CollectionResponseRSSNode setItems(java.util.List<RSSNode> items) {
+  public RSSNodeCollection setItems(java.util.List<RSSNode> items) {
     this.items = items;
     return this;
   }
 
-  /**
-   * @return value or {@code null} for none
-   */
-  public java.lang.String getNextPageToken() {
-    return nextPageToken;
-  }
-
-  /**
-   * @param nextPageToken nextPageToken or {@code null} for none
-   */
-  public CollectionResponseRSSNode setNextPageToken(java.lang.String nextPageToken) {
-    this.nextPageToken = nextPageToken;
-    return this;
+  @Override
+  public RSSNodeCollection set(String fieldName, Object value) {
+    return (RSSNodeCollection) super.set(fieldName, value);
   }
 
   @Override
-  public CollectionResponseRSSNode set(String fieldName, Object value) {
-    return (CollectionResponseRSSNode) super.set(fieldName, value);
-  }
-
-  @Override
-  public CollectionResponseRSSNode clone() {
-    return (CollectionResponseRSSNode) super.clone();
+  public RSSNodeCollection clone() {
+    return (RSSNodeCollection) super.clone();
   }
 
 }

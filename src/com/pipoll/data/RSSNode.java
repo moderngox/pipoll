@@ -22,14 +22,14 @@ public class RSSNode implements Serializable {
 	private String title;
 	private String description;
 	private String link;
-	private String category;
+	private int category;
 	private String topic;
 
-	public RSSNode(String title, String description, String link, String category) {
+	public RSSNode(String title, String description, String link, int category) {
 		this.title = title;
 		this.description = description;
 		this.link = link;
-		this.setCategory(category);
+		this.category = category;
 		topic = AppController.extractTopic(title);
 	}
 
@@ -48,7 +48,7 @@ public class RSSNode implements Serializable {
 	/**
 	 * @return the category
 	 */
-	public String getCategory() {
+	public int getCategory() {
 		return category;
 	}
 
@@ -56,7 +56,7 @@ public class RSSNode implements Serializable {
 	 * @param category
 	 *            the category to set
 	 */
-	public void setCategory(String category) {
+	public void setCategory(int category) {
 		this.category = category;
 	}
 

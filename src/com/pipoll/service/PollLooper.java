@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -19,22 +18,18 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.util.Log;
+
 import com.pipoll.app.AppController;
 import com.pipoll.data.Category;
 import com.pipoll.data.Poll;
 import com.pipoll.data.Trend;
 import com.pipoll.data.TrendNews;
 import com.pipoll.data.parcelable.ParcelablePoll;
-import com.pipoll.interfaces.callback.ServiceCallback;
-
-import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
-import android.util.Log;
 
 public class PollLooper extends HandlerThread {
 	private static final String TAG = "PollFactory";
@@ -75,24 +70,24 @@ public class PollLooper extends HandlerThread {
 	}
 
 	private void handleRequest(final Trend handle) {
-        final Trend trend = requestMap.get(handle);
-		if (trend == null) 
-		    return;
-		
+		final Trend trend = requestMap.get(handle);
+		if (trend == null)
+			return;
+
 		// long task here
-		//byte[] bitmapBytes = new FlickrFetchr().getUrlBytes(url);
-		final ParcelablePoll ppoll = createGPoll(trend);            
-		
+		// byte[] bitmapBytes = new FlickrFetchr().getUrlBytes(url);
+		final ParcelablePoll ppoll = createGPoll(trend);
+
 		mResponseHandler.post(new Runnable() {
-		    public void run() {
-		        if (requestMap.get(handle) != trend)
-		            return;
-		        
-		        requestMap.remove(handle);
-		        mListener.onPollsCreated(handle, ppoll);
-		    }
+			public void run() {
+				if (requestMap.get(handle) != trend)
+					return;
+
+				requestMap.remove(handle);
+				mListener.onPollsCreated(handle, ppoll);
+			}
 		});
-    }
+	}
 
 	public void queuePoll(Trend handle, Trend trend) {
 		requestMap.put(handle, trend);
@@ -104,7 +99,7 @@ public class PollLooper extends HandlerThread {
 		mHandler.removeMessages(MESSAGE_DOWNLOAD);
 		requestMap.clear();
 	}
-	
+
 	public ParcelablePoll createGPoll(Trend trend) {
 		ParcelablePoll res = null;
 
@@ -122,10 +117,11 @@ public class PollLooper extends HandlerThread {
 			responseText = EntityUtils.toString(httpresponse.getEntity());
 			Log.d("Response: ", responseText);
 			JSONObject jsonResponse = new JSONObject(responseText);
-			JSONObject responseData = jsonResponse.isNull("responseData") ? null : jsonResponse
-					.getJSONObject("responseData");
+			JSONObject responseData = jsonResponse.isNull("responseData") ? null
+					: jsonResponse.getJSONObject("responseData");
 			if (responseData != null) {
-				String imgURL = responseData.getJSONArray("results").getJSONObject(0).getString("url");
+				String imgURL = responseData.getJSONArray("results").getJSONObject(0)
+						.getString("url");
 				Poll poll = new Poll();
 				long date = new Date().getTime();
 				poll.setId(String.valueOf(date));
@@ -134,8 +130,7 @@ public class PollLooper extends HandlerThread {
 				poll.setTheme(trend.getName());
 				poll.setImage(imgURL);
 				poll.setCategory(new Category());
-				trend.setTrendNews(new ArrayList<TrendNews>());
-				poll.setTrend(trend);
+				poll.setTrendNews(new ArrayList<TrendNews>());
 
 				res = new ParcelablePoll(poll);
 			}

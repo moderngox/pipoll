@@ -5,12 +5,9 @@ package com.pipoll.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,16 +31,16 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.Gson;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.pipoll.app.AppController;
-import com.pipoll.data.Like;
-import com.pipoll.data.RSSNode;
 import com.pipoll.data.RSSFeed;
+import com.pipoll.data.RSSNode;
 import com.pipoll.data.Trend;
-import com.pipoll.data.TrendNews;
-import com.pipoll.data.google.GoogleResult;
-import com.pipoll.data.google.ResponseData;
-import com.pipoll.data.google.Result;
+import com.pipoll.entity.rssnodeendpoint.Rssnodeendpoint;
+import com.pipoll.entity.rssnodeendpoint.model.RSSNodeCollection;
 import com.pipoll.interfaces.ITrend;
 import com.pipoll.interfaces.callback.TaskCallback;
 
@@ -140,70 +137,6 @@ public class TrendService implements ITrend {
 
 		}.execute();
 		return trends;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.pipoll.interfaces.ITrend#getTrends4Like(com.pipoll.data.Like)
-	 */
-	@Override
-	@Deprecated
-	public List<Trend> getTrends4Like(final Like userLike) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setNews(final List<Trend> trends, final TaskCallback taskcallback) {
-		new AsyncTask<Trend[], Void, Void>() {
-
-			@Override
-			protected void onPostExecute(Void result) {
-				super.onPostExecute(result);
-				if (result == null)
-					taskcallback.onSuccess();
-			}
-
-			@Override
-			protected Void doInBackground(Trend[]... params) {
-				for (Trend trend : params[0]) {
-					for (int i = 0; i < 20; i = i + 4) {
-						String address = AppController.GOOGLE_ENDPOINT + i + "&q=";
-
-						String charset = AppController.UTF_8;
-
-						URL url;
-						try {
-							url = new URL(address
-									+ URLEncoder.encode(trend.getName(), charset));
-							Reader reader = new InputStreamReader(url.openStream(), charset);
-							GoogleResult googleResult = new Gson().fromJson(reader,
-									GoogleResult.class);
-							if (googleResult != null) {
-								ResponseData responseData = googleResult.getResponseData();
-								if (responseData != null) {
-									List<Result> results = responseData.getResults();
-									for (Result result : results) {
-										TrendNews trendNews = new TrendNews();
-										trendNews.setUrl(result.getUrl());
-										trend.getTrendNews().add(trendNews);
-									}
-								}
-							}
-						} catch (MalformedURLException e) {
-							e.printStackTrace();
-						} catch (UnsupportedEncodingException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				return null;
-			}
-		}.execute(trends.toArray(new Trend[trends.size()]));
-
 	}
 
 	@Override
@@ -430,8 +363,8 @@ public class TrendService implements ITrend {
 							eventType = xpp.next(); // move to next element
 						}
 						for (int i = 0; i < titles.size(); i++) {
-							rssNodes.add(new RSSNode(titles.get(i), descriptions.get(i),
-									links.get(i), rssFeed.getCategory()));
+							rssNodes.add(new RSSNode(titles.get(i), descriptions.get(i), links
+									.get(i), rssFeed.getCategory()));
 						}
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
@@ -446,6 +379,50 @@ public class TrendService implements ITrend {
 
 			// after downloading
 			protected void onPostExecute(List<RSSNode> result) {
+				if (!result.isEmpty()) {
+					taskcallback.onSuccess();
+				}
+			}
+		}.execute(rssFeeds.toArray(new RSSFeed[rssFeeds.size()]));
+		return rssNodes;
+	}
+
+	@Override
+	public List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> getBackendNodes(
+			List<RSSFeed> rssFeeds, final TaskCallback taskcallback) {
+		final List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> rssNodes = new ArrayList<com.pipoll.entity.rssnodeendpoint.model.RSSNode>();
+		new AsyncTask<RSSFeed, Void, List<com.pipoll.entity.rssnodeendpoint.model.RSSNode>>() {
+			Rssnodeendpoint.Builder endpointBuilder = new Rssnodeendpoint.Builder(
+					AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+					new HttpRequestInitializer() {
+						public void initialize(HttpRequest httpRequest) {
+						}
+					}).setRootUrl(AppController.BACKEND_ENDPOINT);
+			Rssnodeendpoint endpoint = endpointBuilder.build();
+			RSSNodeCollection rssNodeColl;
+
+			protected List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> doInBackground(
+					RSSFeed... rssFeeds) {
+
+				for (RSSFeed rssFeed : rssFeeds) {
+					try {
+						rssNodeColl = endpoint.listFeedsNodes(rssFeed.getFeedEntry(),
+								rssFeed.getCategory()).execute();
+						for (com.pipoll.entity.rssnodeendpoint.model.RSSNode rssNode : rssNodeColl
+								.getItems()) {
+							rssNode.setTopic(AppController.extractTopic(rssNode.getTitle()));
+							rssNodes.add(rssNode);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				return rssNodes;
+			}
+
+			// after downloading
+			protected void onPostExecute(
+					List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> result) {
 				if (!result.isEmpty()) {
 					taskcallback.onSuccess();
 				}

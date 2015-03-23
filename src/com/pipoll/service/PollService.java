@@ -107,10 +107,10 @@ public class PollService implements IPoll {
 											@Override
 											public void onNewsRetrieved(
 													List<TrendNews> trendsnews) {
-												trend.setTrendNews(trendsnews);
+												// trend.setTrendNews(trendsnews);
 												// then populate the poll with this trend, the
 												// created/updated date
-												poll.setTrend(trend);
+												poll.setTrendNews(trendsnews);
 												// the poll is ready to be sent
 												serviceCallback.onServiceDone(poll);
 											}
@@ -215,7 +215,7 @@ public class PollService implements IPoll {
 				trend.setTrendNews(new ArrayList<TrendNews>(trendsnews));
 				// then populate the poll with this trend, the
 				// created/updated date
-				poll.setTrend(trend);
+				poll.setTrendNews(trendsnews);
 				// finally get the image URL for the trend
 				getLike(session, trend.getName(), new ServiceCallback() {
 
@@ -283,9 +283,7 @@ public class PollService implements IPoll {
 						poll.setTheme(like.getName());
 						poll.setImage(imgURL);
 						poll.setCategory(like.getCategory());
-						Trend trend = new Trend();
-						trend.setTrendNews(new ArrayList<TrendNews>());
-						poll.setTrend(trend);
+						poll.setTrendNews(new ArrayList<TrendNews>());
 						polls.add(new ParcelablePoll(poll));
 					}
 				} catch (UnsupportedEncodingException e) {
@@ -416,8 +414,7 @@ public class PollService implements IPoll {
 							poll.setTheme(trend.getName());
 							poll.setImage(imgURL);
 							poll.setCategory(new Category());
-							trend.setTrendNews(new ArrayList<TrendNews>());
-							poll.setTrend(trend);
+							poll.setTrendNews(new ArrayList<TrendNews>());
 							polls.add(new ParcelablePoll(poll));
 						}
 					} catch (UnsupportedEncodingException e) {
@@ -462,8 +459,7 @@ public class PollService implements IPoll {
 			poll.setUpdatedAt(date);
 			poll.setTheme(trend.getName());
 			poll.setCategory(new Category());
-			trend.setTrendNews(new ArrayList<TrendNews>());
-			poll.setTrend(trend);
+			poll.setTrendNews(new ArrayList<TrendNews>());
 			polls.add(new ParcelablePoll(poll));
 		}
 		return polls;
@@ -508,46 +504,30 @@ public class PollService implements IPoll {
 							Date rawDate = new Date();
 							String formattedDate = new SimpleDateFormat("yyyy-MM-dd")
 									.format(rawDate);
-							// if (!application.isTopicAlreadyPresentToday(topic,
-							// formattedDate)) {
-							// Control if the poll is already created for the day
-							Pollendpoint.Builder endpointBuilder = new Pollendpoint.Builder(
-									AndroidHttp.newCompatibleTransport(),
-									new JacksonFactory(), new HttpRequestInitializer() {
-										public void initialize(HttpRequest httpRequest) {
-										}
-									})
-									.setRootUrl("https://nimble-lead-87107.appspot.com/_ah/api/");
-							;
-							Pollendpoint endpoint = endpointBuilder.build();
-							com.pipoll.entity.pollendpoint.model.Poll pollAE = new com.pipoll.entity.pollendpoint.model.Poll();
-							long date = rawDate.getTime();
-							// pollAE.setId(String.valueOf(date));
-							// pollAE.setTheme(topic);
-							// com.pipoll.entity.pollendpoint.model.Poll result = endpoint
-							// .insertPoll(pollAE).execute();
-							poll.setId(String.valueOf(date));
-							poll.setCreatedAt(date);
-							poll.setUpdatedAt(date);
+							if (!application.isTopicAlreadyPresentToday(topic, formattedDate)) {
+								// Control if the poll is already created for the day
 
-							poll.setTheme(topic);
-							poll.setImage(imgURL);
-							Category category = new Category();
-							category.setName(rssNode.getCategory());
-							poll.setCategory(category);
-							Trend trend = new Trend();
-							// 1st Trend news from the rss node
-							TrendNews trendNews = new TrendNews();
-							trendNews.setTitle(rssNode.getTitle());
-							trendNews.setUrl(rssNode.getLink());
-							trend.setTrendNews(new ArrayList<TrendNews>());
-							trend.getTrendNews().add(trendNews);
-							poll.setTrend(trend);
-							// save poll(topic) info on local sharedPref
-							// sharedPrefEdit.putString(topic, topic + " - " + formattedDate);
-							// sharedPrefEdit.commit();
-							polls.add(new ParcelablePoll(poll));
-							// }
+								long date = rawDate.getTime();
+								poll.setId(String.valueOf(date));
+								poll.setCreatedAt(date);
+								poll.setUpdatedAt(date);
+
+								poll.setTheme(topic);
+								poll.setImage(imgURL);
+								Category category = new Category();
+								category.setName(AppController.CATEGORIES.get(rssNode
+										.getCategory()));
+								poll.setCategory(category);
+								// 1st Trend news from the rss node
+								TrendNews trendNews = new TrendNews();
+								trendNews.setTitle(rssNode.getTitle());
+								trendNews.setUrl(rssNode.getLink());
+								poll.getTrendNews().add(trendNews);
+								// save poll(topic) info on local sharedPref
+								sharedPrefEdit.putString(topic, topic + " - " + formattedDate);
+								sharedPrefEdit.commit();
+								polls.add(new ParcelablePoll(poll));
+							}
 						}
 					} catch (UnsupportedEncodingException e) {
 						e.printStackTrace();
@@ -575,4 +555,52 @@ public class PollService implements IPoll {
 
 	}
 
+	@Override
+	public void listBackendPolls(
+			List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> rssNodes, int start,
+			int end, final ServiceCallback serviceCallback) {
+		final List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> rssSublist = rssNodes
+				.subList(start, end);
+		new AsyncTask<com.pipoll.entity.rssnodeendpoint.model.RSSNode, Void, List<ParcelablePoll>>() {
+
+			@Override
+			protected List<ParcelablePoll> doInBackground(
+					com.pipoll.entity.rssnodeendpoint.model.RSSNode... rssNodes) {
+				List<ParcelablePoll> polls = new ArrayList<ParcelablePoll>();
+				Pollendpoint.Builder endpointBuilder = new Pollendpoint.Builder(
+						AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+						new HttpRequestInitializer() {
+							public void initialize(HttpRequest httpRequest) {
+							}
+						}).setRootUrl(AppController.BACKEND_ENDPOINT);
+				Pollendpoint endpoint = endpointBuilder.build();
+				for (com.pipoll.entity.rssnodeendpoint.model.RSSNode rssNode : rssNodes) {
+					try {
+						com.pipoll.entity.pollendpoint.model.Category category = new com.pipoll.entity.pollendpoint.model.Category();
+						if (AppController.CATEGORIES.containsKey(rssNode.getCategory())) {
+							category.setId(rssNode.getCategory());
+							category.setName(AppController.CATEGORIES.get(rssNode
+									.getCategory()));
+						}
+						com.pipoll.entity.pollendpoint.model.Poll poll = endpoint.getBEPoll(
+								rssNode.getTopic(), rssNode.getLink(), category.getId(),
+								category.getName()).execute();
+						polls.add(new ParcelablePoll(ObjectMapper.mapPoll(poll)));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				return polls;
+			}
+
+			@Override
+			protected void onPostExecute(List<ParcelablePoll> result) {
+				super.onPostExecute(result);
+				serviceCallback.onServiceDone(result);
+			}
+
+		}.execute(rssSublist
+				.toArray(new com.pipoll.entity.rssnodeendpoint.model.RSSNode[rssSublist.size()]));
+
+	}
 }

@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/categoryendpoint/v1/20150304220408/java/1.18.0-rc/pipoll.com-categoryendpoint-v1-20150304220408-java-1.18.0-rc-sources.jar", 
-      "path": "pipoll.com-categoryendpoint-v1-20150304220408-java-1.18.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/categoryendpoint/v1/20150314003457/java/1.18.0-rc/pipoll.com-categoryendpoint-v1-20150314003457-java-1.18.0-rc-sources.jar", 
+      "path": "pipoll.com-categoryendpoint-v1-20150314003457-java-1.18.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2015-03-04 22:04"
+      "timestamp": "2015-03-14 00:34"
     }, 
     {
-      "path": "pipoll.com-categoryendpoint-v1-20150304220408-java-1.18.0-rc.jar.properties", 
+      "path": "pipoll.com-categoryendpoint-v1-20150314003457-java-1.18.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -675,5 +675,5 @@
   "packagePath": "entity", 
   "language_version": "1.18.0-rc", 
   "id": "categoryendpoint:v1", 
-  "revision": 20150304220408
+  "revision": 20150314003457
 }

@@ -3,8 +3,12 @@
  */
 package com.pipoll.app;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
@@ -23,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  *         Globals are defined and initialized in this singleton class.
  * 
  */
+
 public class AppController extends Application {
 
 	// TAGS
@@ -56,6 +61,8 @@ public class AppController extends Application {
 	public static final String GOOGLE_ENDPOINT = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&start=";
 	public static final String GOOGLE_SEARCH_ENDPOINT = "https://www.google.com/search?q=";
 	public static final String GOOGLE_NEWS_ENDPOINT = "http://news.google.com/news?q=";
+	public static final String BACKEND_ENDPOINT = "https://nimble-lead-87107.appspot.com/_ah/api/";
+
 	// Keys
 	public static final String GCS_API_KEY = "AIzaSyB0H_CHXE6ZrpMstY4jGSVcLytDr9TfGN0";
 	public static final String SEARCH_ENGINE_ID = "008262435911699479698:kytdbffa034";
@@ -79,10 +86,27 @@ public class AppController extends Application {
 	private static final String AFP = "AFP";
 	private static final String REUTERS = "Reuters";
 
+	@SuppressLint("UseSparseArrays")
+	@SuppressWarnings("serial")
+	public static final Map<Integer, String> CATEGORIES = new HashMap<Integer, String>() {
+		{
+			put(FASHION_CAT_ID, FASHION_CAT);
+			put(GLOBAL_CAT_ID, GLOBAL_CAT);
+			put(SPORT_CAT_ID, SPORT_CAT);
+			put(FOOTBALL_CAT_ID, FOOTBALL_CAT);
+		}
+	};
+
 	public static final String FASHION_CAT = "Fashion";
 	public static final String GLOBAL_CAT = "Global news";
 	public static final String SPORT_CAT = "Sport";
 	public static final String FOOTBALL_CAT = "Football";
+
+	public static final int GLOBAL_CAT_ID = 0;
+	public static final int FASHION_CAT_ID = 1;
+	public static final int SPORT_CAT_ID = 2;
+	public static final int FOOTBALL_CAT_ID = 3;
+
 	// SharedPreferences
 	public static final String LOCAL_PREFERENCES = "localPreferences";
 	// Pick account
@@ -181,5 +205,14 @@ public class AppController extends Application {
 
 		return sb.toString();
 
+	}
+
+	public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+		for (Entry<T, E> entry : map.entrySet()) {
+			if (value.equals(entry.getValue())) {
+				return entry.getKey();
+			}
+		}
+		return null;
 	}
 }

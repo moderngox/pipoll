@@ -130,7 +130,7 @@ public class PollFragment extends Fragment {
 		// final String moreInfos = r.getString(R.string.more_infos);
 
 		// Trendnews from the RSS FEED filled in the poll creation
-		TrendNews firstTrendnews = mPoll.getTrend().getTrendNews().get(0);
+		TrendNews firstTrendnews = mPoll.getTrendNews().get(0);
 		mTvDescription.setText(Html.fromHtml("<a href=\"" + firstTrendnews.getUrl() + "\">"
 				+ firstTrendnews.getTitle() + "</a>"));
 		mTvDescription.setMovementMethod(LinkMovementMethod.getInstance());

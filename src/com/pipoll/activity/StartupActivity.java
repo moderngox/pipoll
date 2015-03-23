@@ -16,8 +16,7 @@ import com.facebook.Session;
 import com.pipoll.R;
 import com.pipoll.app.AppController;
 import com.pipoll.data.RSSFeed;
-import com.pipoll.data.RSSNode;
-import com.pipoll.data.parcelable.ParcelableRSSElement;
+import com.pipoll.data.parcelable.ParcelableRSSNode;
 import com.pipoll.interfaces.callback.ServiceCallback;
 import com.pipoll.interfaces.callback.TaskCallback;
 import com.pipoll.service.PollService;
@@ -31,7 +30,7 @@ import com.pipoll.service.TrendService;
  */
 public class StartupActivity extends Activity {
 	// private List<Trend> mTrends;
-	private List<RSSNode> mRssEls;
+	private List<com.pipoll.entity.rssnodeendpoint.model.RSSNode> mRssNodes;
 	private List<RSSFeed> mRssFeeds = new ArrayList<RSSFeed>();
 	private Session session;
 	private AppController application = AppController.getInstance();
@@ -55,19 +54,21 @@ public class StartupActivity extends Activity {
 			activity = this;
 			final TrendService trendService = new TrendService(activity);
 
-			mRssFeeds.add(new RSSFeed(AppController.FASHION_CAT,
+			mRssFeeds.add(new RSSFeed(AppController.FASHION_CAT_ID,
 					AppController.FASHION_WEEKLY_FEED));
-			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT, AppController.REUTERS_FEED));
-			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT, AppController.AFP_FEED));
-			mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT,
+			mRssFeeds
+					.add(new RSSFeed(AppController.GLOBAL_CAT_ID, AppController.REUTERS_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.GLOBAL_CAT_ID, AppController.AFP_FEED));
+			mRssFeeds.add(new RSSFeed(AppController.FOOTBALL_CAT_ID,
 					AppController.F365_PLEAGUE_FEED));
 
-			mRssEls = trendService.getRSSNode(mRssFeeds, new TaskCallback() {
+			mRssNodes = trendService.getBackendNodes(mRssFeeds, new TaskCallback() {
 
 				@Override
 				public void onSuccess() {
 					final PollService pollService = new PollService(activity);
-					pollService.createPollsFromRssNodes(mRssEls, 0, 3, new ServiceCallback() {
+
+					pollService.listBackendPolls(mRssNodes, 0, 3, new ServiceCallback() {
 
 						@SuppressWarnings("unchecked")
 						@Override
@@ -76,8 +77,8 @@ public class StartupActivity extends Activity {
 							ArrayList<? extends Parcelable> Parcelresp = (ArrayList<? extends Parcelable>) response;
 							extras.putParcelableArrayList(AppController.POLLS_TAG, Parcelresp);
 							extras.putParcelableArrayList(AppController.RSS_ELEMS_TAG,
-									(ArrayList<? extends Parcelable>) ParcelableRSSElement
-											.getParcelRSSElements(mRssEls));
+									(ArrayList<? extends Parcelable>) ParcelableRSSNode
+											.getParcelNodesFromBE(mRssNodes));
 							// extras.putParcelableArrayList(AppController.TRENDS_TAG,
 							// (ArrayList<? extends Parcelable>) ParcelableTrend
 							// .getParcelTrends(mTrends));
@@ -89,6 +90,7 @@ public class StartupActivity extends Activity {
 									.goToActivity(activity, TabActivity.class, extras, true);
 
 						}
+
 					});
 				}
 			});

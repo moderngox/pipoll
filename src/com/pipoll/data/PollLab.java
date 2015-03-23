@@ -34,7 +34,7 @@ public class PollLab {
 			news.add(trendNews2);
 			t.setTrendNews(news);
 
-			p.setTrend(t);
+			// p.setTrend(t);
 			p.setId("poll #" + i);
 
 			mPolls.add(p);
